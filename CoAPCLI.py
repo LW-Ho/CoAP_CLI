@@ -81,8 +81,8 @@ class CoAPCLI(Cmd):
         for index in range(0,len(self.mote_lists)):
           if self.mote_lists[index] == node:
             if len(agrs) < 2:
-               try:
-              restCoAP.startObserve(node,resource)
+              try:
+                restCoAP.startObserve(node,resource)
               except:
                 self.stdout.write("Error from observe.\n")
             else:
