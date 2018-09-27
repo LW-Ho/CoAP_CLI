@@ -1,7 +1,7 @@
 import os
 from cmd import Cmd
-from getMotes import getmotes
-from restCoAP import coap
+from getBRMotes import getAllMotes
+import restCoAP
 
 class CollectCLI(Cmd):
   def __init__(self):
@@ -32,13 +32,13 @@ class CollectCLI(Cmd):
     for index in range(0,len(self.mote_lists)):
       if self.mote_lists[index] == node:
         if len(args) < 3: # if no query
-          coap.getToNode(node,resource)
+          restCoAP.getToNode(node,resource)
         elif len(agrs) > 4:
           self.stdout.write("Most too arguments, Please check it.\n")
           return
         else:
           query = args[2]
-          coap.getQueryToNode(node,resource,query)
+          restCoAP.getQueryToNode(node,resource,query)
       else:
         self.stdout.write("Please check your typing mac address.\n")
         
