@@ -5,7 +5,7 @@ import restCoAP
 
 class CollectCLI(Cmd):
   def __init__(self):
-    
+
     Cmd.__init__(self)
     self.doc_header = 'Commands: \ngetallmotes \nget \ngetall'
     self.prompt = '>'
@@ -17,7 +17,7 @@ class CollectCLI(Cmd):
     if not arg:
       self.stdout.write("Please provide Border router's mac address.\n")
       return
-    mote_lists = getmotes(arg) # get motes from border router website.
+    mote_lists = getAllMotes(arg) # get motes from border router website.
     self.stdout.write("====== End of List =======\n")
 
   def do_get(self, arg):
