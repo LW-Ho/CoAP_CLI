@@ -33,7 +33,7 @@ class CollectCLI(Cmd):
       if self.mote_lists[index] == node:
         if len(args) < 3: # if no query
           coap.getToNode(node,resource)
-        else if len(agrs) > 4:
+        elif len(agrs) > 4:
           self.stdout.write("Most too arguments, Please check it.\n")
           return
         else:
