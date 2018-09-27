@@ -1,6 +1,6 @@
 import os
 from cmd import Cmd
-from getBRMotes import getAllMotes
+from getMotes import getAllMotes
 import restCoAP
 
 class CollectCLI(Cmd):
