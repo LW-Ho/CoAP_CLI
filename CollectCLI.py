@@ -5,8 +5,7 @@ import restCoAP
 
 class CollectCLI(Cmd):
   def __init__(self):
-    log.info("Starting CollectCLI")
-
+    
     Cmd.__init__(self)
     self.doc_header = 'Commands: \ngetallmotes \nget \ngetall'
     self.prompt = '>'
