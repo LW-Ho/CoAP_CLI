@@ -26,7 +26,7 @@ class CollectCLI(Cmd):
       return
 
     args = arg.split(' ')
-    if len(args) < 1:
+    if len(args) == 1:
       self.stdout.write("Need to typing resource.\n")
     else:
       node = args[0]
