@@ -12,7 +12,7 @@ class CoAPCLI(Cmd):
     self.intro = '\nCollectCLI, Welcome!'
 
     self.mote_lists = []
-  
+
   def do_getallmotes(self, arg):
     if not arg:
       self.stdout.write("Please provide Border router's mac address.\n")
@@ -29,48 +29,49 @@ class CoAPCLI(Cmd):
       return
 
     args = arg.split(' ')
-    try:
-      if len(args) < 2:
-        self.stdout.write("Need to typing resource.\n")
-        return
-      else:
-        node = args[0]
-        resource = args[1]
-        for index in range(0,len(self.mote_lists)):
-          if self.mote_lists[index] == node:
-            if len(agrs) == 3:
+    
+    if len(args) < 2:
+      self.stdout.write("Need to typing resource.\n")
+      return
+    else:
+      node = args[0]
+      resource = args[1]
+      for index in range(0,len(self.mote_lists)):
+        if self.mote_lists[index] == node:
+          if len(agrs) == 3:
+            try:
               query = args[2]
               restCoAP.getQueryToNode(node,resource,query)
-            else:
-              self.stdout.write("Most too arguments, Please check it.\n")
+            except:
+              self.stdout.write("Error from get.\n")
           else:
-            self.stdout.write("Please check your typing mac address or query.\n")
-    except:
-      self.stdout.write("Error from get.\n")
-  
+            self.stdout.write("Most too arguments, Please check it.\n")
+        else:
+          self.stdout.write("Please check your typing mac address or query.\n")
+
   def do_getall(self, arg):
     if not arg:
       self.stdout.write("Please provide node's mac address.\n")
       return
     
     args = arg.split(' ')
-    try:
-      if len(args) < 1:
-        self.stdout.write("Need to typing resource.\n")
-        return
-      else:
+    
+    if len(args) < 1:
+      self.stdout.write("Need to typing resource.\n")
+      return
+    else:
+      try:
         resource = args[0]
         query = args[1]
         restCoAP.getToAllNode(mote_lists, resource, query)
-    except:
-      self.stdout.write("Error from getall.\n")
-    
+      except:
+        self.stdout.write("Error from getall.\n")
+
   def do_observe(self, arg):
     if not arg:
       self.stdout.write("Please provide node's mac address.\n")
       return
-    
-    try:
+
       if len(args) < 2:
         self.stdout.write("Need to typing resource.\n")
         return
@@ -80,13 +81,15 @@ class CoAPCLI(Cmd):
         for index in range(0,len(self.mote_lists)):
           if self.mote_lists[index] == node:
             if len(agrs) < 2:
+               try:
               restCoAP.startObserve(node,resource)
+              except:
+                self.stdout.write("Error from observe.\n")
             else:
               self.stdout.write("Most too arguments, Please check it.\n")
           else:
             self.stdout.write("Please check your typing mac address or query.\n")
-    except:
-      self.stdout.write("Error from observe.\n")
+    
         
 if __name__=="__main__":
   collect_cli = CoAPCLI()
