@@ -101,6 +101,12 @@ class CoAPCLI(Cmd):
         index.getName()
         print arg
         print "end of list ..."
+        if index.getName() == arg:
+          index.stop()
+          self.mote_observe_lists.remove(index)
+          print "Delete got %s" %(str(arg))
+        else:
+          self.stdout.write("Not found the mote, please check it out again.\n")
 
       # for index in self.mote_observe_lists:
       #   temp = index.getName()
