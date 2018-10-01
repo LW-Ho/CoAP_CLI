@@ -2,11 +2,11 @@ import subprocess, sys
 import threading
 
 class StartObserve(threading.Thread):
-  def __init__(self, node, resource, coapProcess=None):
-    threading.Thread.__init__(self, coapProcess=coapProcess)
+  def __init__(self, node, resource):
+    threading.Thread.__init__(self)
     self.node = node
     self.resource = resource
-    self.coapProcess = coapProcess
+    self.coapProcess = None
     return
 
   def run(self):
