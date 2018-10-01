@@ -90,10 +90,8 @@ class CoAPCLI(Cmd):
         mote.stop()
         self.mote_observe_lists.remove(mote)
       else:
-        self.stdout.write("Not found the mote, please check it out again.")
+        self.stdout.write("Not found the mote, please check it out again.\n")
     
-
-
   def do_quit(self, arg):
     return True
       
