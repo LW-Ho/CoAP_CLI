@@ -83,6 +83,7 @@ class CoAPCLI(Cmd):
       print "Testing OB List ... "
       print self.mote_observe_lists
       for index in self.mote_observe_lists:
+        print "mote of list : "+str(index.getName())
         index.getName()
 
   def do_delete(self, arg):
