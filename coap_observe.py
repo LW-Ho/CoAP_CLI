@@ -11,13 +11,17 @@ class StartObserve(threading.Thread):
   def run(self):
     get_cmd = 'coap -o \"coap://['+self.node+']:5683/g/'+self.resource+'\"'
     try:
-      # retcode = subprocess.call(get_cmd, shell=True)
-      retcode = subprocess.call(get_cmd)
+      subprocess.call(get_cmd, shell=True)
+      # retcode = subprocess.call(get_cmd)
       # log.debug(retcode)
       return
     except:
-      print "Not success for send out."
+      print "Not success for send out.\n"
       pass
 
   def stop(self):
+    subprocess.kill()
     self._is_running = False
+
+  def getName(self):
+    print self.node
