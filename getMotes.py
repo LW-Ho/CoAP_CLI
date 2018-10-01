@@ -2,8 +2,6 @@ from bs4 import BeautifulSoup
 import requests
 import string
 
-
-
 def getAllMotes(host):
   motes_List = []
 

@@ -22,7 +22,7 @@ class CoAPCLI(Cmd):
       mote_lists = getAllMotes(arg) # get motes from border router website.
       self.stdout.write("====== End of List =======\n")
     except:
-      self.stdout.write("Error from getallmotes.")
+      self.stdout.write("Error from getallmotes.\n")
 
   def do_post(self, arg):
     if not arg:
