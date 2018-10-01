@@ -2,17 +2,19 @@ import os
 from cmd import Cmd
 from getMotes import getAllMotes
 import restCoAP
+from coap_observe import StartObserve
 import logging
 
 class CoAPCLI(Cmd):
   def __init__(self):
 
     Cmd.__init__(self)
-    self.doc_header = 'Commands: \ngetallmotes \npost \npostall \nobserve'
+    self.doc_header = 'Commands: \ngetallmotes \npost \npostall \nobserve \nquit'
     self.prompt = '>'
     self.intro = '\nCollectCLI, Welcome!'
 
     self.mote_lists = []
+    self.mote_observe_lists = []
 
   def do_getallmotes(self, arg):
     if not arg:
@@ -64,9 +66,17 @@ class CoAPCLI(Cmd):
     try:
       node = args[0]
       resource = args[1]
-      restCoAP.startObserve(node, resource)
+      coapObserve = StartObserve(host=node, path=resource, name=node, is_observer=True)
+      coapObserve.getName()
+      coapObserve.start()
+      self.mote_observe_lists.append(coapObserve)
+        #restCoAP.startObserve(node, resource)
+      self.stdout.write("Successful delivery.\n")
     except:
       self.stdout.write("Error from observe.\n")
+
+  def do_quit(self, arg):
+    return True
       
         
 if __name__=="__main__":

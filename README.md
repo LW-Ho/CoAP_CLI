@@ -5,6 +5,7 @@
 * pip
 
 ## Installing
+* pip install CoAPthon (4.0.2)
 * pip install requests (2.19.1)
 * pip install beautifulsoup4 (4.6.3)
 * npm install coap-cli -g (use sudo to install it.)
