@@ -11,7 +11,7 @@ class StartObserve(threading.Thread):
   def run(self):
     get_cmd = 'coap -o \"coap://['+self.node+']:5683/g/'+self.resource+'\"'
     try:
-      subprocess.call(get_cmd, shell=True)
+      coapProcess = subprocess.call(get_cmd, shell=True)
       # retcode = subprocess.call(get_cmd)
       # log.debug(retcode)
       return
@@ -20,7 +20,7 @@ class StartObserve(threading.Thread):
       pass
 
   def stop(self):
-    subprocess.terminate()
+    coapProcess.terminate()
     self._is_running = False
 
   def printName(self):
