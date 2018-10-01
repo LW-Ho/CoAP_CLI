@@ -20,7 +20,7 @@ class StartObserve(threading.Thread):
       pass
 
   def stop(self):
-    subprocess.kill()
+    subprocess.terminate()
     self._is_running = False
 
   def getName(self):
