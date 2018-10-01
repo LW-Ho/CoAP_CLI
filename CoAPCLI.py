@@ -1,7 +1,7 @@
 import os
 from cmd import Cmd
-import getMotes
-import restCoAP
+from getMotes import getMotes
+from restCoAP import restCoAP
 import logging
 
 class CoAPCLI(Cmd):
