@@ -23,5 +23,9 @@ class StartObserve(threading.Thread):
     subprocess.terminate()
     self._is_running = False
 
-  def getName(self):
+  def printName(self):
     print self.node
+
+  def getName(self):
+    return self.node
+    
