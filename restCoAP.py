@@ -11,6 +11,7 @@ def postQueryToNode(node,resource,query):
     return
   except:
     log.debug("Not success for send out.")
+    pass
     
 
 def postToAllNode(List,resource,query):
@@ -22,6 +23,7 @@ def postToAllNode(List,resource,query):
       return
     except:
       log.debug("Not success for send out.")
+      pass
       
 
 def startObserve(node,resource):
@@ -32,4 +34,5 @@ def startObserve(node,resource):
       return
     except:
       log.debug("Not success for send out.")
+      pass
       
