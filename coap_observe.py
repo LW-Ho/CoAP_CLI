@@ -25,7 +25,7 @@ class StartObserve(threading.Thread):
     try:
       # self.coapProcess.send_signal(signal.SIGINT)
       # self.coapProcess.terminate()
-      os.killpg(os.getpgid(pro.pid), signal.SIGTERM)
+      os.killpg(os.getpgid(self.coapProcess.pid), signal.SIGTERM)
       self._is_running = False
     except:
       print "Error of terminate()"
