@@ -1,6 +1,6 @@
 import os
 from cmd import Cmd
-from getMotes import getMotes
+from getMotes import getAllMotes
 from restCoAP import restCoAP
 import logging
 
