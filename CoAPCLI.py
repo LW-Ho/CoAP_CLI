@@ -86,7 +86,7 @@ class CoAPCLI(Cmd):
     
     node = arg
     for mote in self.mote_observe_lists:
-      if mote == node:
+      if mote.getName() == node:
         mote.stop()
         self.mote_observe_lists.remove(mote)
       else:
