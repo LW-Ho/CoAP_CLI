@@ -6,7 +6,7 @@ log = logging.getLogger("MoteObserving")
 
 
 class StartObserve(threading.Thread):
-    def __init__(self, host, path, port=5683, is_observer=False, group=None, target=None, name=None, kwargs=None, verbose=None, object_callback=None):
+    def __init__(self, host, path, port=5683, is_observer=False, group=None, target=None, name=None, kwargs=None, verbose=None):
         threading.Thread.__init__(self, group=group, target=target, name=name, verbose=verbose)
         self.coap_client = None
         self.kwargs = kwargs
@@ -14,7 +14,6 @@ class StartObserve(threading.Thread):
         self.path = path
         self.port = port
         self.is_observer = is_observer
-        self.object_callback = object_callback
         return
 
     def message_callback(self, response):
