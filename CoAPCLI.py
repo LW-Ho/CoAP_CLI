@@ -26,8 +26,7 @@ class CoAPCLI(Cmd):
       self.stdout.write("Error from getallmotes.\n")
 
   def do_list(self, arg):
-    for index in range(0,len(self.mote_lists)):
-      print self.mote_lists
+    print self.mote_lists
 
   def do_post(self, arg):
     if not arg:
