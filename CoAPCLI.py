@@ -91,17 +91,18 @@ class CoAPCLI(Cmd):
     print "Testing ... "
     print self.mote_observe_lists
 
-    for mote in self.mote_observe_lists:
-      print "Hello ~ "
-      print "mote : "+str(mote.getName())
-      print "arg : "+str(arg)
-      print "Done."
-      if mote.getName() == arg:
-        mote.stop()
-        self.mote_observe_lists.remove(mote)
-        print "Delete got %s" %(str(arg))
-      else:
-        self.stdout.write("Not found the mote, please check it out again.\n")
+    if len(self.mote_observe_lists) != 0:
+      for index in self.mote_observe_lists:
+        print "Hello ~ "
+        print "mote : "+str(index.getName())
+        print "arg : "+str(arg)
+        print "Done."
+        if index.getName() == arg:
+          index.stop()
+          self.mote_observe_lists.remove(index)
+          print "Delete got %s" %(str(arg))
+        else:
+          self.stdout.write("Not found the mote, please check it out again.\n")
     
   def do_quit(self, arg):
     return True
