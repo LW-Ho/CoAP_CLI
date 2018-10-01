@@ -15,7 +15,7 @@ class StartObserve(threading.Thread):
       # log.debug(retcode)
       return
     except:
-      log.debug("Not success for send out."
+      log.debug("Not success for send out.")
       pass
 
   def stop(self):
