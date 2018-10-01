@@ -70,7 +70,7 @@ class CoAPCLI(Cmd):
       node = args[0]
       resource = args[1]
       coapObserve = StartObserve(node=node, resource=resource)
-      coapObserve.getName()
+      coapObserve.printName()
       coapObserve.start()
       self.mote_observe_lists.append(coapObserve)
         #restCoAP.startObserve(node, resource)
