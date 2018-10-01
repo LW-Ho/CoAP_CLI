@@ -9,7 +9,7 @@ class CoAPCLI(Cmd):
   def __init__(self):
 
     Cmd.__init__(self)
-    self.doc_header = 'Commands: \ngetallmotes \npost \npostall \nobserve \nquit'
+    self.doc_header = 'Commands: \ngetallmotes \npost \npostall \nobserve \ndelete \nquit'
     self.prompt = '>'
     self.intro = '\nCollectCLI, Welcome!'
 
@@ -66,7 +66,7 @@ class CoAPCLI(Cmd):
     try:
       node = args[0]
       resource = args[1]
-      coapObserve = StartObserve(host=node, path=resource, name=node, is_observer=True)
+      coapObserve = StartObserve(node=node, resource=resource)
       coapObserve.getName()
       coapObserve.start()
       self.mote_observe_lists.append(coapObserve)
@@ -74,6 +74,17 @@ class CoAPCLI(Cmd):
       self.stdout.write("Successful delivery.\n")
     except:
       self.stdout.write("Error from observe.\n")
+
+  def do_delete(self, arg):
+    if not arg:
+      self.stdout.write("Please provide node's mac address.\n")
+      return
+    
+    node = arg
+    for node in self.mote_observe_lists:
+      node.stop()
+    
+
 
   def do_quit(self, arg):
     return True
