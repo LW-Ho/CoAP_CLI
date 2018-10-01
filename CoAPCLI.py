@@ -3,13 +3,12 @@ from cmd import Cmd
 from getMotes import getAllMotes
 import restCoAP
 from coap_observe import StartObserve
-import logging
 
 class CoAPCLI(Cmd):
   def __init__(self):
 
     Cmd.__init__(self)
-    self.doc_header = 'Commands: \ngetallmotes \npost \npostall \nobserve \ndelete \nquit'
+    self.doc_header = 'Commands: \ngetallmotes \npost \npostall \nobserve \nobservelist \ndelete \nquit'
     self.prompt = '>'
     self.intro = '\nCollectCLI, Welcome!'
 
@@ -74,6 +73,11 @@ class CoAPCLI(Cmd):
       self.stdout.write("Successful delivery.\n")
     except:
       self.stdout.write("Error from observe.\n")
+  
+  def do_observelist(self, arg):
+    if len(self.mote_observe_lists) != 0:
+      for index in self.mote_observe_lists:
+        index.getName()
 
   def do_delete(self, arg):
     if not arg:
@@ -81,8 +85,12 @@ class CoAPCLI(Cmd):
       return
     
     node = arg
-    for node in self.mote_observe_lists:
-      node.stop()
+    for mote in self.mote_observe_lists:
+      if mote == node:
+        mote.stop()
+        self.mote_observe_lists.remove(mote)
+      else:
+        self.stdout.write("Not found the mote, please check it out again.")
     
 
 
