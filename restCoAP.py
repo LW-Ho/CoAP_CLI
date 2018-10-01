@@ -7,23 +7,29 @@ def postQueryToNode(node,resource,query):
   get_cmd = 'echo -n \'POST\' | coap post \"coap://['+node+']:5683/g/'+resource+'?'+query+'\"'
   try:
     retcode = subprocess.call(get_cmd, shell=True)
-    log.debug(retcode)
+    # log.debug(retcode)
+    return
   except:
     log.debug("Not success for send out.")
+    
 
 def postToAllNode(List,resource,query):
   for node in List:
     get_cmd = 'echo -n \'POST\' | coap post \"coap://['+node+']:5683/g/'+resource+'?'+query+'\"'
     try:
       retcode = subprocess.call(get_cmd, shell=True)
-      log.debug(retcode)
+      # log.debug(retcode)
+      return
     except:
       log.debug("Not success for send out.")
+      
 
 def startObserve(node,resource):
     get_cmd = 'coap -o \"coap://['+node+']:5683/g/'+resource+'\"'
     try:
       retcode = subprocess.call(get_cmd, shell=True)
-      log.debug(retcode)
+      # log.debug(retcode)
+      return
     except:
       log.debug("Not success for send out.")
+      

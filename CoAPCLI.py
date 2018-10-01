@@ -30,12 +30,14 @@ class CoAPCLI(Cmd):
       return
 
     args = arg.split(' ')
-    
+
     try:
       node = args[0]
       resource = args[1]
       query = args[2]
       restCoAP.postQueryToNode(node, resource, query)
+      self.stdout.write("Successful delivery.\n")
+      break
     except:
       self.stdout.write("Error from get.\n")
      
@@ -50,6 +52,8 @@ class CoAPCLI(Cmd):
       resource = args[0]
       query = args[1]
       restCoAP.postToAllNode(mote_lists, resource, query)
+      self.stdout.write("Successful delivery.\n")
+      break
     except:
       self.stdout.write("Error from getall.\n")
 
@@ -63,6 +67,7 @@ class CoAPCLI(Cmd):
       node = args[0]
       resource = args[1]
       restCoAP.startObserve(node,resource)
+      break
     except:
       self.stdout.write("Error from observe.\n")
       
