@@ -9,7 +9,7 @@ def postQueryToNode(node,resource,query):
     # log.debug(retcode)
     return
   except:
-    self.stdout.write("Not success for send out.")
+    print "Not success for send out."
     pass
     
 
@@ -21,7 +21,7 @@ def postToAllNode(List,resource,query):
       # log.debug(retcode)
       return
     except:
-      self.stdout.write("Not success for send out.")
+      print "Not success for send out."
       pass
       
 
@@ -32,6 +32,6 @@ def startObserve(node,resource):
       # log.debug(retcode)
       return
     except:
-      self.stdout.write("Not success for send out.")
+      print "Not success for send out."
       pass
       
