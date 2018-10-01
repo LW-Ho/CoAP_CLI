@@ -20,13 +20,14 @@ class CoAPCLI(Cmd):
       self.stdout.write("Please provide Border router's mac address.\n")
       return
     try:
-      mote_lists = getAllMotes(arg) # get motes from border router website.
+      self.mote_lists = getAllMotes(arg) # get motes from border router website.
       self.stdout.write("====== End of List =======\n")
     except:
       self.stdout.write("Error from getallmotes.\n")
 
   def do_list(self, arg):
-    print self.mote_lists
+    for index in range(0,len(self.mote_lists)):
+      print "%d : %s" %(index+1, self.mote_lists[index])
 
   def do_post(self, arg):
     if not arg:
