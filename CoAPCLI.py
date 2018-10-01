@@ -88,6 +88,9 @@ class CoAPCLI(Cmd):
       self.stdout.write("Please provide node's mac address.\n")
       return
 
+    print "Testing ... "
+    print self.mote_observe_lists
+
     for mote in self.mote_observe_lists:
       print "Hello ~ "
       print "mote : "+str(mote.getName())
@@ -96,6 +99,7 @@ class CoAPCLI(Cmd):
       if mote.getName() == arg:
         mote.stop()
         self.mote_observe_lists.remove(mote)
+        self.stdout.write("Delete got %s",%(str(arg)))
       else:
         self.stdout.write("Not found the mote, please check it out again.\n")
     
