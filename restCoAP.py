@@ -1,5 +1,4 @@
 import subprocess, sys
-import logging
 
 # coap get "coap://[fd00::212:4b00:615:a736]:5683/g/sht21?pp=2&thd=20"
 
@@ -10,7 +9,7 @@ def postQueryToNode(node,resource,query):
     # log.debug(retcode)
     return
   except:
-    log.debug("Not success for send out.")
+    self.stdout.write("Not success for send out.")
     pass
     
 
@@ -22,7 +21,7 @@ def postToAllNode(List,resource,query):
       # log.debug(retcode)
       return
     except:
-      log.debug("Not success for send out.")
+      self.stdout.write("Not success for send out.")
       pass
       
 
@@ -33,6 +32,6 @@ def startObserve(node,resource):
       # log.debug(retcode)
       return
     except:
-      log.debug("Not success for send out.")
+      self.stdout.write("Not success for send out.")
       pass
       

@@ -1,5 +1,5 @@
+import subprocess, sys
 import threading
-import logging
 
 class StartObserve(threading.Thread):
   def __init__(self, node, resource):
@@ -15,7 +15,7 @@ class StartObserve(threading.Thread):
       # log.debug(retcode)
       return
     except:
-      log.debug("Not success for send out.")
+      self.stdout.write("Not success for send out.")
       pass
 
   def stop(self):
