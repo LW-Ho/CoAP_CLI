@@ -12,7 +12,7 @@ class StartObserve(threading.Thread):
   def run(self):
     get_cmd = 'coap -o \"coap://['+self.node+']:5683/g/'+self.resource+'\"'
     try:
-      self.coapProcess = subprocess.call(get_cmd, shell=True)
+      self.coapProcess = subprocess.Popen(get_cmd, shell=True)
       # retcode = subprocess.call(get_cmd)
       # log.debug(retcode)
       return
