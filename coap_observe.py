@@ -8,7 +8,7 @@ class StartObserve(threading.Thread):
     return
 
   def run(self):
-    get_cmd = 'coap -o \"coap://['+node+']:5683/g/'+resource+'\"'
+    get_cmd = 'coap -o \"coap://['+self.node+']:5683/g/'+self.resource+'\"'
     try:
       retcode = subprocess.call(get_cmd, shell=True)
       # log.debug(retcode)
