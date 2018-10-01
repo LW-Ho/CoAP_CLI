@@ -15,16 +15,12 @@ class StartObserve(threading.Thread):
     get_cmd = 'coap -o \"coap://['+self.node+']:5683/g/'+self.resource+'\"'
     try:
       self.coapProcess = subprocess.Popen(get_cmd, stdout=subprocess.PIPE, shell=True, preexec_fn=os.setsid)
-      # retcode = subprocess.call(get_cmd)
-      # log.debug(retcode)
     except:
       print "Not success for send out.\n"
       pass
 
   def stop(self):
     try:
-      # self.coapProcess.send_signal(signal.SIGINT)
-      # self.coapProcess.terminate()
       os.killpg(os.getpgid(self.coapProcess.pid), signal.SIGTERM)
       self._is_running = False
     except:
