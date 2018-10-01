@@ -1,4 +1,6 @@
 import subprocess, sys
+import os
+import signal
 import threading
 
 class StartObserve(threading.Thread):
@@ -12,21 +14,23 @@ class StartObserve(threading.Thread):
   def run(self):
     get_cmd = 'coap -o \"coap://['+self.node+']:5683/g/'+self.resource+'\"'
     try:
-      self.coapProcess = subprocess.Popen(get_cmd, shell=True)
+      self.coapProcess = subprocess.Popen(get_cmd, stdout=subprocess.PIPE, shell=True, preexec_fn=os.setsid)
       # retcode = subprocess.call(get_cmd)
       # log.debug(retcode)
-      return
     except:
       print "Not success for send out.\n"
       pass
 
   def stop(self):
     try:
-      self.coapProcess.send_signal(signal.SIGINT)
+      # self.coapProcess.send_signal(signal.SIGINT)
+      # self.coapProcess.terminate()
+      os.killpg(os.getpgid(pro.pid), signal.SIGTERM)
+      self._is_running = False
     except:
       print "Error of terminate()"
-    self._is_running = False
-
+      return
+    
   def printName(self):
     print self.node
 
