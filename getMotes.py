@@ -25,10 +25,3 @@ def getAllMotes(host):
   return motesStr # return mote lists
 
 #getAllMotes Done.
-
-
-  
-
-# def getlist():
-#   return motes_List
-
