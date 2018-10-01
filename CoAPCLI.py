@@ -99,7 +99,7 @@ class CoAPCLI(Cmd):
       if mote.getName() == arg:
         mote.stop()
         self.mote_observe_lists.remove(mote)
-        self.stdout.write("Delete got %s",%(str(arg)))
+        print "Delete got %s" %(str(arg))
       else:
         self.stdout.write("Not found the mote, please check it out again.\n")
     
