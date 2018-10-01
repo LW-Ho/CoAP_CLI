@@ -25,7 +25,7 @@ class StartObserve(threading.Thread):
             if log.isEnabledFor(logging.DEBUG):
                 packet_content = ":".join("{:02x}".format(ord(c)) for c in response.payload)
                 log.debug(packet_content)
-            log.debug("Payload length: {0}".format(len(response.payload)))
+            #log.debug("Payload length: {0}".format(len(response.payload)))
 
             log.debug("=================================")
 
