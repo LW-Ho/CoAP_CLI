@@ -21,7 +21,13 @@ class StartObserve(threading.Thread):
       pass
 
   def stop(self):
-    self.coapProcess.terminate()
+    try:
+      if self.coapProcess is not None:
+        self.coapProcess.send_signal(signal.SIGINT)
+      else:
+        print "Error of send_signal"
+    except:
+      print "Error of terminate()"
     self._is_running = False
 
   def printName(self):
