@@ -24,14 +24,4 @@ def postToAllNode(List,resource,query):
       print "Not success for send out."
       pass
       
-
-def startObserve(node,resource):
-    get_cmd = 'coap -o \"coap://['+node+']:5683/g/'+resource+'\"'
-    try:
-      retcode = subprocess.call(get_cmd, shell=True)
-      # log.debug(retcode)
-      return
-    except:
-      print "Not success for send out."
-      pass
       
