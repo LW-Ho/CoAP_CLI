@@ -8,7 +8,7 @@ class CoAPCLI(Cmd):
   def __init__(self):
 
     Cmd.__init__(self)
-    self.doc_header = 'Commands: \ngetallmotes \npost \npostall \nobserve \nobservelist \ndelete \nquit'
+    self.doc_header = 'Commands: \ngetallmotes \nlist \npost \nobserve \nobservelist \ndelete \nquit'
     self.prompt = '>'
     self.intro = '\nCollectCLI, Welcome!'
 
@@ -24,6 +24,10 @@ class CoAPCLI(Cmd):
       self.stdout.write("====== End of List =======\n")
     except:
       self.stdout.write("Error from getallmotes.\n")
+
+  def do_list(self, arg):
+    for index in range(0,len(self.mote_lists)):
+      print mote_lists[index]
 
   def do_post(self, arg):
     if not arg:
@@ -83,10 +87,9 @@ class CoAPCLI(Cmd):
     if not arg:
       self.stdout.write("Please provide node's mac address.\n")
       return
-    
-    node = arg
+
     for mote in self.mote_observe_lists:
-      if mote.getName() == node:
+      if mote.getName() == arg:
         mote.stop()
         self.mote_observe_lists.remove(mote)
       else:

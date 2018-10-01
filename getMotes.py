@@ -20,6 +20,6 @@ def getAllMotes(host):
     motes_List.append(motesStr[index])
     print motesStr[index]
   
-  return motesStr # return mote lists
+  return motes_List # return mote lists
 
 #getAllMotes Done.
