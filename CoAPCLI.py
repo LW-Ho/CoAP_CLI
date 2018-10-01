@@ -80,6 +80,8 @@ class CoAPCLI(Cmd):
   
   def do_observelist(self, arg):
     if len(self.mote_observe_lists) != 0:
+      print "Testing OB List ... "
+      print self.mote_observe_lists
       for index in self.mote_observe_lists:
         index.getName()
 
@@ -88,7 +90,7 @@ class CoAPCLI(Cmd):
       self.stdout.write("Please provide node's mac address.\n")
       return
 
-    print "Testing ... "
+    print "Testing delete ... "
     print self.mote_observe_lists
 
     if len(self.mote_observe_lists) != 0:
@@ -103,7 +105,7 @@ class CoAPCLI(Cmd):
           print "Delete got %s" %(str(arg))
         else:
           self.stdout.write("Not found the mote, please check it out again.\n")
-    
+
   def do_quit(self, arg):
     return True
       
