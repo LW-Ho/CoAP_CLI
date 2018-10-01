@@ -27,7 +27,7 @@ class CoAPCLI(Cmd):
 
   def do_list(self, arg):
     for index in range(0,len(self.mote_lists)):
-      print mote_lists[index]
+      print self.mote_lists
 
   def do_post(self, arg):
     if not arg:
