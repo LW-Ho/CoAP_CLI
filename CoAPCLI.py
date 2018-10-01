@@ -85,6 +85,7 @@ class CoAPCLI(Cmd):
       for index in self.mote_observe_lists:
         print "mote of list : "+str(index.getName())
         index.getName()
+        print "end of list ..."
 
   def do_delete(self, arg):
     if not arg:
@@ -96,6 +97,9 @@ class CoAPCLI(Cmd):
 
     if len(self.mote_observe_lists) != 0:
       for index in self.mote_observe_lists:
+        temp = index.getName()
+        print "Hi !"
+        print temp
         print "Hello ~ "
         print "mote : "+str(index.getName())
         print "arg : "+str(arg)
