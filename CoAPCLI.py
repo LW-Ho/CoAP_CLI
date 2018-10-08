@@ -43,7 +43,7 @@ class CoAPCLI(Cmd):
       restCoAP.postQueryToNode(node, resource, query)
       self.stdout.write("Successful delivery.\n")
     except:
-      self.stdout.write("Error from get.\n")
+      self.stdout.write("Error from post.\n")
      
   def do_postall(self, arg):
     if not arg:
