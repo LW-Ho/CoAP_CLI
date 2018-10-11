@@ -10,14 +10,14 @@ class CoAPCLI(Cmd):
     Cmd.__init__(self)
     self.doc_header = 'Commands: \ngetallmotes \nlist \npost \nobserve \nobservelist \ndelete \nquit'
     self.prompt = '>'
-    self.intro = '\nCollectCLI, Welcome!'
+    self.intro = '\nCoAP Command Line Tool, Welcome to use it!'
 
     self.mote_lists = []
     self.mote_observe_lists = []
 
   def do_getallmotes(self, arg):
     if not arg:
-      self.stdout.write("Please provide Border router's mac address.\n")
+      self.stdout.write("Please provide Border router's IP address.\n")
       return
     try:
       self.mote_lists = getAllMotes(arg) # get motes from border router website.
@@ -31,7 +31,7 @@ class CoAPCLI(Cmd):
 
   def do_post(self, arg):
     if not arg:
-      self.stdout.write("Please provide node's mac address.\n")
+      self.stdout.write("Please provide node's IP address.\n")
       return
 
     args = arg.split(' ')
@@ -62,7 +62,7 @@ class CoAPCLI(Cmd):
 
   def do_observe(self, arg):
     if not arg:
-      self.stdout.write("Please provide node's mac address.\n")
+      self.stdout.write("Please provide node's IP address.\n")
       return
 
     args = arg.split(' ')
@@ -85,7 +85,7 @@ class CoAPCLI(Cmd):
 
   def do_delete(self, arg):
     if not arg:
-      self.stdout.write("Please provide node's mac address.\n")
+      self.stdout.write("Please provide node's IP address.\n")
       return
 
     if len(self.mote_observe_lists) != 0:
