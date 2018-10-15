@@ -20,7 +20,11 @@
 
 * post
     * Ex : post fd00::202:2:2:2 bcollect thd=5&pp=2
-    * (post resource and query to node)
+    * (post node's resource and query to node)
+
+* postall
+    * Ex : postall bcollect thd=5&pp=2
+    * (postall resource and query to node)
 
 * observe
     * Ex : observe fd00::202:2:2:2 bcollect
@@ -36,4 +40,4 @@
 
 * quit
     * Ex : quit
-    * (exiting tool, if you want exit, need delete all done)
+    * (exiting tool, if you want exit, need delete to all motes)
