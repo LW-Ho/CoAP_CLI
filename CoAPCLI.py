@@ -8,7 +8,7 @@ class CoAPCLI(Cmd):
   def __init__(self):
 
     Cmd.__init__(self)
-    self.doc_header = 'Commands: \ngetallmotes \nlist \npost \nobserve \nobserveall \nobservelist \ndelete \nquit'
+    self.doc_header = 'Commands: \ngetallmotes \nlist \npost \npostall \nobserve \nobservelist \ndelete \nquit'
     self.prompt = '>'
     self.intro = '\nCoAP Command Line Tool, Welcome to use it!'
 
