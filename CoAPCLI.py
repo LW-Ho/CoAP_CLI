@@ -55,7 +55,7 @@ class CoAPCLI(Cmd):
     try:
       resource = args[0]
       query = args[1]
-      restCoAP.postToAllNode(mote_lists, resource, query)
+      restCoAP.postToAllNode(self.mote_lists, resource, query)
       #print "Successful delivery."
     except:
       print "Error from postall."
