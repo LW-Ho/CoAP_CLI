@@ -20,7 +20,8 @@ def getAllMotes(host):
   motesStr = motesStr.split()
 
   for index in range(0,len(motesStr),4):
-    fo.write("add "+motesStr[index]+" bcollect\n")
+    #fo.write("add "+motesStr[index]+" bcollect\n")
+    fo.write(motesStr[index]+"\n")
     motes_List.append(motesStr[index])
     print motesStr[index]
   
