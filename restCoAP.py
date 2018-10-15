@@ -19,9 +19,9 @@ def postToAllNode(List,resource,query):
     try:
       retcode = subprocess.call(get_cmd, shell=True)
       print "Successful delivery."
-      return
+      
     except:
       print "Not success for send out."
       pass
       
-      
+  return
