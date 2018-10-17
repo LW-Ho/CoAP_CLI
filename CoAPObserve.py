@@ -1,6 +1,3 @@
-import subprocess, sys
-import os
-import signal
 import threading
 from coapthon.client.helperclient import HelperClient
 
@@ -9,9 +6,10 @@ import logging
 log = logging.getLogger("CoAP Observe")
 
 class CoAPObserve(threading.Thread):
-  def __init__(self, node, resource, port=5683, kwargs=None, object_callback=None):
-    threading.Thread.__init__(self,name=node)
+  def __init__(self, node, resource, port=5683, kwargs=None, group=None, target=None, kwargs=None, verbose=None, object_callback=None):
+    threading.Thread.__init__(self, group=group, target=target, name=node, verbose=verbose)
     self.coap_client = None
+    self.kwargs = kwargs
     self.node = node
     self.resource = resource
     self.port = port
@@ -59,6 +57,7 @@ class CoAPObserve(threading.Thread):
     
   def printName(self):
     log.info("Node Name : {0}".format(self.node))
+    print self.node
 
   def getName(self):
     return self.node
