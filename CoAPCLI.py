@@ -49,9 +49,11 @@ def optional_mysqlDB():
     if db == "Y" or db == "y" :
       self.stdout.write("You press Yes.\n")
       flag_DB = True
+      break
     elif db == "N" or db =="n" :
       self.stdout.write("You press No.\n")
       flag_DB = False
+      break
     else :
       self.stdout.write("Enter again.\n")
       flag_DB = None
