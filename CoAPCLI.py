@@ -69,6 +69,8 @@ class CoAPCLI(Cmd):
     if not arg:
       self.stdout.write("Please provide Border router's IP address.\n")
       return
+    self.mote_lists = GetMotes.getAllMotes(arg) # get motes from border router website.
+    
     try:
       slef.stdout.write("Current Motes List : \n")
       self.mote_lists = GetMotes.getAllMotes(arg) # get motes from border router website.
