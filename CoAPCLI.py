@@ -28,10 +28,10 @@ Session = scoped_session(session_factory)
 
 def object_callback(mote_data):
     try:
-        log.info("Got new object_callback")
-        log.debug(mote_data)
+        #log.info("Got new object_callback")
+        #log.debug(mote_data)
         if flag_DB :
-          log.info("Got new object_callback in flag_DB")
+          #log.info("Got new object_callback in flag_DB")
           session = Session()
           session.add(mote_data)
           session.commit()
@@ -44,9 +44,10 @@ def object_callback(mote_data):
 def optional_mysqlDB():
   global flag_DB
   #self.stdout.write("Would you want access mysql DB ? ")
-  db = raw_input("Would you want access data to MySQL DB ?(Y/N) ")
-
+  
   while flag_DB is None:
+    db = raw_input("Would you want access data to MySQL DB ?(Y/N) ")
+
     if db == "Y" or db == "y" :
       print "You press Yes."
       flag_DB = True
@@ -139,6 +140,23 @@ class CoAPCLI(Cmd):
     except:
       self.stdout.write("Error from observe.\n")
   
+  def do_observeall(self, arg):
+    if self.mote_lists is None:
+      self.stdout.write("Please run getallmotes command.\n")
+      return
+    
+    try :
+      cli = CoAPCLI()
+            
+      for line in self.mote_lists:
+        line = "observe "+str(line)+" bcollect"
+        cli.do_observe(line)
+                
+        except :
+            self.stdout.write("Do not found moteAddress text.\n")
+            return
+
+  
   def do_observelist(self, arg):
     if len(self.mote_observe_lists) != 0:
       for index in self.mote_observe_lists:
@@ -162,8 +180,8 @@ class CoAPCLI(Cmd):
     log.info("Stopping CoAPCLI...")
 
     for index in self.mote_observe_lists:
-            log.info("Closing {0}!".format(index.getName()))
-            index.stop()
+      log.info("Closing {0}!".format(index.getName()))
+      index.stop()
     return True
       
         
