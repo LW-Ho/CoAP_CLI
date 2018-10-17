@@ -46,7 +46,7 @@ def optional_mysqlDB():
   #self.stdout.write("Would you want access mysql DB ? ")
   db = raw_input("Would you want access data to MySQL DB ?(Y/N) ")
 
-  while flag_DB != None:
+  while flag_DB is not None:
     if db == "Y" or db == "y" :
       self.stdout.write("You press Yes.\n")
       flag_DB = True
