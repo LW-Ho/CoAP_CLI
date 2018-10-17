@@ -6,7 +6,7 @@ import logging
 log = logging.getLogger("CoAP Observe")
 
 class CoAPObserve(threading.Thread):
-  def __init__(self, node, resource, port=5683, kwargs=None, group=None, target=None, kwargs=None, verbose=None, object_callback=None):
+  def __init__(self, node, resource, port=5683, group=None, target=None, kwargs=None, verbose=None, object_callback=None):
     threading.Thread.__init__(self, group=group, target=target, name=node, verbose=verbose)
     self.coap_client = None
     self.kwargs = kwargs
