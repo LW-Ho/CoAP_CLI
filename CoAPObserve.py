@@ -40,7 +40,7 @@ class CoAPObserve(threading.Thread):
     log.info("CoAP Observe \"{0}\" started.".format(self.name))
     self.coap_client = HelperClient(server=(self.node, self.port))
     self.coap_client.observe(path=self.resource, callback=self.message_callback)
-    
+    return
     # get_cmd = 'coap -o \"coap://['+self.node+']:5683/g/'+self.resource+'\"'
     # try:
     #   self.coapProcess = subprocess.Popen(get_cmd, stdout=subprocess.PIPE, shell=True, preexec_fn=os.setsid)
@@ -53,6 +53,9 @@ class CoAPObserve(threading.Thread):
     if self.coap_client is not None:
       self.flag = True
       self.coap_client.stop()
+    else :
+      log.info("Deleted Done !")
+      return
 
     # try:
     #   os.killpg(os.getpgid(self.coapProcess.pid), signal.SIGTERM)
