@@ -29,10 +29,12 @@ class CoAPObserve(threading.Thread):
                 packet_content = ":".join("{:02x}".format(ord(c)) for c in response.payload)
                 log.debug(packet_content)
             log.debug("Payload length: {0}".format(len(response.payload)))
-            mote_data = MoteData.make_from_bytes(response.source[0], response.payload)
-            if mote_data is not None and self.object_callback is not None:
-                self.object_callback(mote_data)
             log.debug("=================================")
+          
+          # will upload data to mysql server.
+          mote_data = MoteData.make_from_bytes(response.source[0], response.payload)
+          if mote_data is not None and self.object_callback is not None:
+              self.object_callback(mote_data)
 
   def run(self):
     log.info("CoAP Observe \"{0}\" started.".format(self.name))
