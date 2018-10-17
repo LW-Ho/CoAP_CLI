@@ -13,7 +13,7 @@ config = ConfigParser.RawConfigParser()
 config.read('config.cfg')
 
 # if false, data can't saving to db.
-flag_DB = None
+flag_DB = True
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -132,7 +132,7 @@ class CoAPCLI(Cmd):
     try:
       node = args[0]
       resource = "g/"+str(args[1])
-      coapObserve = CoAPObserve(node=node, resource=resource)
+      coapObserve = CoAPObserve(node=node, resource=resource, object_callback=object_callback)
       coapObserve.printName()
       coapObserve.start()
       self.mote_observe_lists.append(coapObserve)
