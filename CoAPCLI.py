@@ -45,7 +45,7 @@ def object_callback(mote_data):
 def optional_mysqlDB():
   global flag_DB
   #self.stdout.write("Would you want access mysql DB ? ")
-  db = input("Would you want access data to MySQL DB ?(Y/N) ")
+  db = raw_input("Would you want access data to MySQL DB ?(Y/N) ")
 
   while flag_DB != None:
     if db == "Y" or db == "y" :
