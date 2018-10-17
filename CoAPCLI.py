@@ -175,8 +175,8 @@ class CoAPCLI(Cmd):
           index.stop()
           self.mote_observe_lists.remove(index)
           self.stdout.write("Delete got %s\n" %(str(arg)))
-        else:
-          self.stdout.write("Not found the mote, please check it out again.\n")
+        # else:
+        #   self.stdout.write("Not found the mote, please check it out again.\n")
 
   def do_quit(self, arg):
     log.info("Stopping CoAPCLI...")
@@ -184,6 +184,7 @@ class CoAPCLI(Cmd):
     if len(self.mote_observe_lists) != 0:
       for index in self.mote_observe_lists:
         log.info("Closing {0}!".format(index.getName()))
+        self.mote_observe_lists.remove(index)
         index.stop()
     else :
       return True
