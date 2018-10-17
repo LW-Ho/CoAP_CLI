@@ -28,9 +28,10 @@ Session = scoped_session(session_factory)
 
 def object_callback(mote_data):
     try:
-        #log.info("Got new object_callback")
-        #log.debug(mote_data)
+        log.info("Got new object_callback")
+        log.debug(mote_data)
         if flag_DB :
+          log.info("Got new object_callback in flag_DB")
           session = Session()
           session.add(mote_data)
           session.commit()
@@ -84,10 +85,10 @@ class CoAPCLI(Cmd):
 
   def do_list(self, arg):
     try:
+      self.stdout.write("Current Motes List : \n")
       for index in range(0,len(self.mote_lists)):
-        self.stdout.write("Current Motes List : \n")
         self.stdout.write("%d : %s\n" %(index+1, self.mote_lists[index]))
-        self.stdout.write("====== End of List =======\n")
+      self.stdout.write("====== End of List =======\n")
     except:
       self.stdout.write("Error from list.\n")
 
@@ -161,6 +162,11 @@ class CoAPCLI(Cmd):
 
   def do_quit(self, arg):
     log.info("Stopping CoAPCLI...")
+
+    for index in self.mote_observe_lists:
+            log.info("Closing {0}!".format(index.getName()))
+            index.close()
+
     return True
       
         
