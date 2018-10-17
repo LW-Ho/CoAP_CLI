@@ -9,7 +9,7 @@ log = logging.getLogger("CoAP Observe")
 
 class CoAPObserve(threading.Thread):
   def __init__(self, node, resource, port=5683, kwargs=None, object_callback=None):
-  threading.Thread.__init__(self,name=node)
+    threading.Thread.__init__(self,name=node)
     self.coap_client = None
     self.node = node
     self.resource = resource
