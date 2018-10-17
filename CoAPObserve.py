@@ -3,7 +3,7 @@ from coapthon.client.helperclient import HelperClient
 
 from MoteData import MoteData
 import logging
-log = logging.getLogger("CoAP Observe")
+log = logging.getLogger("CoAPObserve")
 
 class CoAPObserve(threading.Thread):
   def __init__(self, node, resource, port=5683, group=None, target=None, kwargs=None, verbose=None, object_callback=None):
