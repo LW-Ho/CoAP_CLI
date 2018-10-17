@@ -5,6 +5,8 @@ from GetMotes import getAllMotes
 import RestCoAP
 from CoAPObserve import CoAPObserve
 
+import string
+
 logging.config.fileConfig(os.path.join('logging.conf'))
 log = logging.getLogger("root")
 
