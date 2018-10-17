@@ -13,7 +13,7 @@ config = ConfigParser.RawConfigParser()
 config.read('config.cfg')
 
 # if false, data can't saving to db.
-flag_DB = True
+flag_DB = None
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -46,17 +46,17 @@ def optional_mysqlDB():
   #self.stdout.write("Would you want access mysql DB ? ")
   db = raw_input("Would you want access data to MySQL DB ?(Y/N) ")
 
-  while flag_DB is not None:
+  while flag_DB is None:
     if db == "Y" or db == "y" :
-      self.stdout.write("You press Yes.\n")
+      print "You press Yes."
       flag_DB = True
       break
     elif db == "N" or db =="n" :
-      self.stdout.write("You press No.\n")
+      print("You press No."
       flag_DB = False
       break
     else :
-      self.stdout.write("Enter again.\n")
+      print("Enter again.")
       flag_DB = None
 
 class CoAPCLI(Cmd):
