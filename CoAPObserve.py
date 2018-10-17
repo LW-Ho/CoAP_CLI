@@ -66,7 +66,7 @@ class CoAPObserve(threading.Thread):
     
   def printName(self):
     log.info("Node Name : {0}".format(self.node))
-    print self.node
+    #print self.node
 
   def getName(self):
     return self.node
