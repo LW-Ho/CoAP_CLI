@@ -165,8 +165,7 @@ class CoAPCLI(Cmd):
 
     for index in self.mote_observe_lists:
             log.info("Closing {0}!".format(index.getName()))
-            index.close()
-
+            index.stop()
     return True
       
         
