@@ -3,7 +3,7 @@ import os
 from cmd import Cmd
 from GetMotes import getAllMotes
 import RestCoAP
-from CoAPObserve import StartObserve
+from CoAPObserve import CoAPObserve
 
 logging.config.fileConfig(os.path.join('logging.conf'))
 log = logging.getLogger("root")
