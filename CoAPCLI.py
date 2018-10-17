@@ -47,10 +47,13 @@ def optional_mysqlDB():
 
   while flag_DB != None:
     if db == "Y" or db == "y" :
+      self.stdout.write("You press Yes.\n")
       flag_DB = True
     elif db == "N" or db =="n" :
+      self.stdout.write("You press No.\n")
       flag_DB = False
     else :
+      self.stdout.write("Enter again.\n")
       flag_DB = None
 
 class CoAPCLI(Cmd):
@@ -80,7 +83,7 @@ class CoAPCLI(Cmd):
   def do_list(self, arg):
     try:
       for index in range(0,len(self.mote_lists)):
-        slef.stdout.write("Current Motes List : \n")
+        self.stdout.write("Current Motes List : \n")
         self.stdout.write("%d : %s\n" %(index+1, self.mote_lists[index]))
         self.stdout.write("====== End of List =======\n")
     except:
