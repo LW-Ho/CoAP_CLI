@@ -36,7 +36,7 @@ class CoAPObserve(threading.Thread):
   def run(self):
     log.info("CoAP Observe \"{0}\" started.".format(self.name))
     self.coap_client = HelperClient(server=(self.node, self.port))
-    self.coap_client.observe(path=resource, callback=self.message_callback)
+    self.coap_client.observe(path=self.resource, callback=self.message_callback)
     
     # get_cmd = 'coap -o \"coap://['+self.node+']:5683/g/'+self.resource+'\"'
     # try:
