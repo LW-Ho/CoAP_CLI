@@ -2,6 +2,7 @@ import subprocess, sys
 import os
 import signal
 import threading
+from coapthon.client.helperclient import HelperClient
 
 from MoteData import MoteData
 import logging
