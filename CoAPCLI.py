@@ -179,10 +179,12 @@ class CoAPCLI(Cmd):
   def do_quit(self, arg):
     log.info("Stopping CoAPCLI...")
 
-    for index in self.mote_observe_lists:
-      log.info("Closing {0}!".format(index.getName()))
-      index.stop()
-    return True
+    if len(self.mote_observe_lists) != 0:
+      for index in self.mote_observe_lists:
+        log.info("Closing {0}!".format(index.getName()))
+        index.stop()
+    else :
+      return True
       
         
 if __name__=="__main__":
