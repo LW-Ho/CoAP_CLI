@@ -9,6 +9,7 @@ class CoAPObserve(threading.Thread):
   def __init__(self, node, resource, port=5683, group=None, target=None, kwargs=None, verbose=None, object_callback=None):
     threading.Thread.__init__(self, group=group, target=target, name=node, verbose=verbose)
     self.coap_client = None
+    self.flag = True
     self.kwargs = kwargs
     self.node = node
     self.resource = resource
@@ -21,6 +22,8 @@ class CoAPObserve(threading.Thread):
         :type response: coapthon.messages.response.Response
         """
         if response is not None:
+          if self.flag:
+            self.flag = False
             log.debug("Got new message")
             if log.isEnabledFor(logging.DEBUG):
                 packet_content = ":".join("{:02x}".format(ord(c)) for c in response.payload)
@@ -46,6 +49,7 @@ class CoAPObserve(threading.Thread):
   def stop(self):
     log.info("Stoping CoAP Observe \"{0}\" .".format(self.name))
     if self.coap_client is not None:
+      self.flag = True
       self.coap_client.stop()
 
     # try:
