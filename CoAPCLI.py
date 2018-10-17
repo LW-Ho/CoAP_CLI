@@ -152,9 +152,9 @@ class CoAPCLI(Cmd):
         line = "observe "+str(line)+" bcollect"
         cli.do_observe(line)
                 
-        except :
-            self.stdout.write("Do not found moteAddress text.\n")
-            return
+    except :
+      self.stdout.write("Do not found moteAddress text.\n")
+      return
 
   
   def do_observelist(self, arg):
