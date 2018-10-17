@@ -1,7 +1,7 @@
 import logging.config
 import os
 from cmd import Cmd
-import GetMotes
+from GetMotes import getAllMotes
 import RestCoAP
 from CoAPObserve import CoAPObserve
 
@@ -73,7 +73,7 @@ class CoAPCLI(Cmd):
       return
     try:
       slef.stdout.write("Current Motes List : \n")
-      self.mote_lists = GetMotes.getAllMotes(arg) # get motes from border router website.
+      self.mote_lists = getAllMotes(arg) # get motes from border router website.
       self.stdout.write("====== End of List =======\n")
     except:
       self.stdout.write("Error from getallmotes.\n")
