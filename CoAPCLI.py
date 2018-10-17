@@ -149,7 +149,7 @@ class CoAPCLI(Cmd):
       cli = CoAPCLI()
             
       for line in self.mote_lists:
-        line = "observe "+str(line)+" bcollect"
+        line = str(line)+" bcollect"
         cli.do_observe(line)
                 
     except :
