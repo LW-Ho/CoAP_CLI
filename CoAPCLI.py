@@ -141,7 +141,7 @@ class CoAPCLI(Cmd):
       self.stdout.write("Error from observe.\n")
   
   def do_observeall(self, arg):
-    if self.mote_lists is None:
+    if len(self.mote_lists) == 0:
       self.stdout.write("Please run getallmotes command.\n")
       return
     
