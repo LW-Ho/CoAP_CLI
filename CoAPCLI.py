@@ -146,11 +146,12 @@ class CoAPCLI(Cmd):
       return
     
     try :
-      cli = CoAPCLI()
-            
       for line in self.mote_lists:
-        line = str(line)+" bcollect"
-        cli.do_observe(line)
+        coapObserve = CoAPObserve(node=line, resource="g/bcollect", object_callback=object_callback)
+        coapObserve.printName()
+        coapObserve.start()
+        self.mote_observe_lists.append(coapObserve)
+      self.stdout.write("Observe ALL Done.\n")
                 
     except :
       self.stdout.write("Do not found moteAddress text.\n")
