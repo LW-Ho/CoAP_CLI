@@ -50,13 +50,11 @@ def optional_mysqlDB():
     if db == "Y" or db == "y" :
       print "You press Yes."
       flag_DB = True
-      break
     elif db == "N" or db =="n" :
-      print("You press No."
+      print "You press No."
       flag_DB = False
-      break
     else :
-      print("Enter again.")
+      print "Enter again."
       flag_DB = None
 
 class CoAPCLI(Cmd):
