@@ -158,6 +158,7 @@ class CoAPCLI(Cmd):
 
   
   def do_observelist(self, arg):
+    self.stdout.write("Current Observing Mote of Numbers: %d \n" %(len(self.mote_observe_lists)))
     if len(self.mote_observe_lists) != 0:
       for index in self.mote_observe_lists:
         index.printName()
