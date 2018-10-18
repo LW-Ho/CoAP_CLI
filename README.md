@@ -5,9 +5,11 @@
 * pip
 
 ## Installing
-* pip install requests (2.19.1)
-* pip install beautifulsoup4 (4.6.3)
+* pip install -r requirements.txt
 * npm install coap-cli -g (use sudo to install it.)
+
+## Database Connection
+* Please copy `example.cfg` and rename it to `config.cfg`. The programe will read this file to connect the mysql database.
 
 ## Command Line
 * getallmotes
@@ -24,11 +26,15 @@
 
 * postall
     * Ex : postall bcollect thd=5&pp=2
-    * (postall resource and query to node)
+    * (postall resource and query to nodes)
 
 * observe
     * Ex : observe fd00::202:2:2:2 bcollect
     * (observing bcollect resource)
+
+* observeall
+    * Ex : observeall
+    * (First need to run getallmotes.)
 
 * observelist
     * Ex : observelist

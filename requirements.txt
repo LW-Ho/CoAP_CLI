@@ -1,0 +1,4 @@
+CoAPthon==4.0.2
+sqlalchemy==1.2.0b3
+requests==2.19.1
+beautifulsoup4==4.6.3
