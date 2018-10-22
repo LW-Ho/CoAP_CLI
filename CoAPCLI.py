@@ -63,7 +63,7 @@ class CoAPCLI(Cmd):
     log.info("Starting CoAPCLI...")
 
     Cmd.__init__(self)
-    self.doc_header = 'Commands: \ngetallmotes \nlist \npost \npostall \nobserve \nobserveall \nobservelist \ndelete \nquit'
+    self.doc_header = 'Commands: \ngetallmotes \nlist \npost \npostall \nobserve \nobserveall \nobservelist \ndelete \ntest \nquit'
     self.prompt = '>'
     self.intro = '\nCoAP Command Line Tool, Welcome to use it!'
 
@@ -102,7 +102,8 @@ class CoAPCLI(Cmd):
       node = args[0]
       resource = args[1]
       query = args[2]
-      RestCoAP.postQueryToNode(node, resource, query)
+      pst = RestCoAP.postQueryToNode(node, resource, query)
+      print "get %.2f seconds... " %(pst)
       #print "Successful delivery."
     except:
       self.stdout.write("Error from post.\n")
@@ -117,7 +118,8 @@ class CoAPCLI(Cmd):
     try:
       resource = args[0]
       query = args[1]
-      RestCoAP.postToAllNode(self.mote_lists, resource, query)
+      pst = RestCoAP.postToAllNode(self.mote_lists, resource, query)
+      print "get %.2f seconds... " %(pst)
       #print "Successful delivery."
     except:
       self.stdout.write("Error from postall.\n")
@@ -177,6 +179,10 @@ class CoAPCLI(Cmd):
           self.stdout.write("Delete got %s\n" %(str(arg)))
         # else:
         #   self.stdout.write("Not found the mote, please check it out again.\n")
+
+  def do_test(self, arg):
+    self.stdout.write("Testing post command response time.\n")
+    
 
   def do_quit(self, arg):
     log.info("Stopping CoAPCLI...")
