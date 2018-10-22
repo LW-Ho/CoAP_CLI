@@ -118,8 +118,8 @@ class CoAPCLI(Cmd):
     try:
       resource = args[0]
       query = args[1]
-      pst = RestCoAP.postToAllNode(self.mote_lists, resource, query)
-      print "get %.2f seconds... " %(pst)
+      RestCoAP.postToAllNode(self.mote_lists, resource, query)
+      #print "get %.2f seconds... " %(pst)
       #print "Successful delivery."
     except:
       self.stdout.write("Error from postall.\n")

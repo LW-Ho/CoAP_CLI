@@ -24,10 +24,11 @@ def postToAllNode(List,resource,query):
       retcode = subprocess.call(get_cmd, shell=True)
       elapsed = time.time() - start
       print "%s \nSuccessful delivery, %.2f" %(node, elapsed)
-      return elapsed
       
+
     except:
       print "Not success for send out."
       pass
 
+  return
   
