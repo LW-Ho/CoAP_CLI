@@ -5,8 +5,6 @@ from GetMotes import getAllMotes
 import RestCoAP
 from CoAPObserve import CoAPObserve
 
-import xlwt # just testing response time for POST.
-
 logging.config.fileConfig(os.path.join('logging.conf'))
 log = logging.getLogger("root")
 
@@ -181,10 +179,6 @@ class CoAPCLI(Cmd):
           self.stdout.write("Delete got %s\n" %(str(arg)))
         # else:
         #   self.stdout.write("Not found the mote, please check it out again.\n")
-
-  def do_test(self, arg):
-    self.stdout.write("Testing post command response time.\n")
-    
 
   def do_quit(self, arg):
     log.info("Stopping CoAPCLI...")
