@@ -12,7 +12,7 @@ def postQueryToNode(node,resource,query):
     print "Successful delivery, %.2f seconds." %(elapsed)
     return elapsed
   except:
-    print "Not success for send out."
+    print "Did not successfully send out."
     pass
     
 
@@ -26,7 +26,7 @@ def postToAllNode(List,resource,query):
       print "%s \nSuccessful delivery, %.2f seconds." %(node, elapsed)
       
     except:
-      print "Not success for send out."
+      print "Did not successfully send out."
       pass
 
   return

@@ -4,8 +4,7 @@ from cmd import Cmd
 from GetMotes import getAllMotes
 import RestCoAP
 from CoAPObserve import CoAPObserve
-
-import xlwt # just testing response time for POST.
+import Testing_responsetime
 
 logging.config.fileConfig(os.path.join('logging.conf'))
 log = logging.getLogger("root")
@@ -184,6 +183,9 @@ class CoAPCLI(Cmd):
 
   def do_test(self, arg):
     self.stdout.write("Testing post command response time.\n")
+
+    # input list, post command to each node.
+    Testing_responsetime.testingRspT(self.mote_lists)
     
 
   def do_quit(self, arg):
