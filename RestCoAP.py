@@ -9,7 +9,7 @@ def postQueryToNode(node,resource,query):
     start = time.time()
     retcode = subprocess.call(get_cmd, shell=True)
     elapsed = time.time() - start
-    print "Successful delivery, %.2f seconds." %(elapsed)
+    print "%s \nSuccessful delivery, %.2f seconds." %(node, elapsed)
     return elapsed
   except:
     print "Did not successfully send out."
