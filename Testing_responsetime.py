@@ -3,7 +3,7 @@ import xlwt # just testing response time for POST.
 import time
 
 def testingRspT(List):
-  ExcelName = "cal_rsptime.xls"
+  ExcelName = "cal_rsptime.xlsx"
   SheetName = "motes"
   TitleList = ["Counter","MoteName","ProcessTime"]
   DataList = []
