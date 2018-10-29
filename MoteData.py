@@ -16,7 +16,7 @@ class MoteData(Base):
     mote = Column(String(200))
     start_asn = Column(Integer)
     end_asn = Column(Integer)
-    priority = Column(Integer)
+    packet_tcflow = Column(Integer)
     event_counter = Column(Integer)
     event_threshold = Column(Integer)
     event_threshold_last_change = Column(Integer)
@@ -31,9 +31,9 @@ class MoteData(Base):
     def __str__(self):
         output = []
         output += ['mote    : {0}'.format(self.mote)]
+        output += ['priority: {0}'.format(self.packet_tcflow)]
         output += ['startAsn: {0}'.format(self.start_asn)]
         output += ['endAsn  : {0}'.format(self.end_asn)]
-        output += ['priority: {0}'.format(self.priority)]
         output += ['ec      : {0}'.format(self.event_counter)]
         output += ['et      : {0}'.format(self.event_threshold)]
         output += ['etlc    : {0}'.format(self.event_threshold_last_change)]
@@ -48,7 +48,7 @@ class MoteData(Base):
     def make_from_bytes(cls, mote, data):
         packet_format = [
             "<xx",  # start_flag
-            "I",    # priority
+            "B",    # packet_tcflow
             "x",   # alignment_padding[1]
             "I",    # start_asn
             "I",    # end_asn
@@ -68,7 +68,7 @@ class MoteData(Base):
         packet_item = struct.unpack(packet_format_str, data)
         mote_data = MoteData(
             mote=mote,
-            priority=packet_item[0],
+            packet_tcflow=packet_item[0],
             start_asn=packet_item[1],
             end_asn=packet_item[2],
             event_counter=packet_item[3],
