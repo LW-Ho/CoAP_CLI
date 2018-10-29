@@ -68,7 +68,7 @@ class MoteData(Base):
         packet_item = struct.unpack(packet_format_str, data)
         mote_data = MoteData(
             mote=mote,
-            priority=packet_item[0]
+            priority=packet_item[0],
             start_asn=packet_item[1],
             end_asn=packet_item[2],
             event_counter=packet_item[3],
