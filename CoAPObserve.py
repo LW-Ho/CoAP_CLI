@@ -31,14 +31,14 @@ class CoAPObserve(threading.Thread):
             log.debug("Payload length: {0}".format(len(response.payload)))
             log.debug("=================================")
           
-          # will upload data to mysql server.
-          try :
-            mote_data = MoteData.make_from_bytes(response.source[0], response.payload)
-            if mote_data is not None and self.object_callback is not None:
-                self.object_callback(mote_data)
-          except :
-            self.stdout.write("Unexpected error:", sys.exc_info()[0])
-            self.stdout.write("\n")
+            # will upload data to mysql server.
+            try :
+              mote_data = MoteData.make_from_bytes(response.source[0], response.payload)
+              if mote_data is not None and self.object_callback is not None:
+                  self.object_callback(mote_data)
+            except :
+              self.stdout.write("Unexpected error:", sys.exc_info()[0])
+              self.stdout.write("\n")
 
   def run(self):
     log.info("CoAP Observe \"{0}\" started.".format(self.name))
