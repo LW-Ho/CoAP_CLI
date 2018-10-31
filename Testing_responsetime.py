@@ -11,9 +11,9 @@ def testingRspT(List):
   response = "bcollect"
   query = "pp=2"
   for node in List:
-    for i in range(50): # run 10 times.
+    for i in range(30): # run 30 times.
       pst = RestCoAP.postQueryToNode(node, response, query) # get process time.
-      time.sleep(30) # sleep 5 seconds, for testing.
+      time.sleep(5) # sleep 5 seconds, for testing.
       DataList.append([count,node,pst])
       count = count+1
     # run 10 times
