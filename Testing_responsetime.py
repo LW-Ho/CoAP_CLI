@@ -3,17 +3,17 @@ import xlwt # just testing response time for POST.
 import time
 
 def testingRspT(List):
-  ExcelName = "cal_rsptime.xlsx"
+  ExcelName = "cal_rsptime.xls"
   SheetName = "motes"
   TitleList = ["Counter","MoteName","ProcessTime"]
   DataList = []
   count = 1 # count of Numbers
   response = "bcollect"
-  query = "pp=2"
+  query = "thd=10&pp=0"
   for node in List:
     for i in range(30): # run 30 times.
       pst = RestCoAP.postQueryToNode(node, response, query) # get process time.
-      time.sleep(5) # sleep 5 seconds, for testing.
+      time.sleep(5) # sleep 5 seconds,just for testing.
       DataList.append([count,node,pst])
       count = count+1
     # run 10 times
@@ -22,7 +22,7 @@ def testingRspT(List):
   buildExcel(ExcelName,SheetName,TitleList,DataList)
       
 
-    
+
 def buildExcel(ExcelName, SheetName, TitleList, DataList):
   workbook = xlwt.Workbook()
   sheet = workbook.add_sheet(SheetName)
