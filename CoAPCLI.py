@@ -98,16 +98,21 @@ class CoAPCLI(Cmd):
       return
 
     args = arg.split(' ')
+    node = args[0]
+    resource = args[1]
+    query = args[2]
+    pst = RestCoAP.postQueryToNode(node, resource, query)
+    print "get %.2f seconds... " %(pst)
   
-    try:
-      node = args[0]
-      resource = args[1]
-      query = args[2]
-      pst = RestCoAP.postQueryToNode(node, resource, query)
-      print "get %.2f seconds... " %(pst)
-      #print "Successful delivery."
-    except:
-      self.stdout.write("Error from post.\n")
+    # try:
+    #   node = args[0]
+    #   resource = args[1]
+    #   query = args[2]
+    #   pst = RestCoAP.postQueryToNode(node, resource, query)
+    #   print "get %.2f seconds... " %(pst)
+    #   #print "Successful delivery."
+    # except:
+    #   self.stdout.write("Error from post.\n")
      
   def do_postall(self, arg):
     if not arg:
