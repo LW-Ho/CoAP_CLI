@@ -87,7 +87,7 @@ class CoAPCLI(Cmd):
     try:
       self.stdout.write("Current Motes List : \n")
       for index in range(0,len(self.mote_lists)):
-        self.stdout.write("%d : %s\n" %(index+1, self.mote_lists[index]))
+        self.stdout.write("%2d : %s\n" %(index+1, self.mote_lists[index]))
       self.stdout.write("====== End of List =======\n")
     except:
       self.stdout.write("Error from list.\n")
