@@ -10,9 +10,9 @@ def postQueryToNode(node,resource,query):
   resource = "g/"+resource+query
   #log.info("CoAP Observe \"{0}\" started.".format(self.name))
   try:
-    self.coap_client = HelperClient(server=(node, port))
+    coap_client = HelperClient(server=(node, port))
     start = time.time()
-    self.coap_client.post(path=resource)
+    coap_client.post(path=resource)
     elapsed = time.time() - start
     print "%s \nSuccessful delivery, %.2f seconds." %(node, elapsed)
     return elapsed
