@@ -9,38 +9,32 @@ def postQueryToNode(node,resource,query):
   query = "?"+query
   resource = "g/"+resource+query
   #log.info("CoAP Observe \"{0}\" started.".format(self.name))
-  #try:
-  coap_client = HelperClient(server=(node, port))
-  start = time.time()
-  coap_client.post(resource, '')
-  coap_client.stop()
-  elapsed = time.time() - start
-  print "%s \nSuccessful delivery, %.2f seconds." %(node, elapsed)
-  return elapsed
-  # except:
-  #   print "Did not successfully send out."
-  #   pass
-  # get_cmd = 'echo -n \'POST\' | coap post \"coap://['+node+']:5683/g/'+resource+'?'+query+'\"'
-  # try:
-  #   start = time.time()
-  #   retcode = subprocess.call(get_cmd, shell=True)
-  #   elapsed = time.time() - start
-  #   print "%s \nSuccessful delivery, %.2f seconds." %(node, elapsed)
-  #   return elapsed
-  # except:
-  #   print "Did not successfully send out."
-  #   pass
-    
+  try:
+    coap_client = HelperClient(server=(node, port))
+    start = time.time()
+    coap_client.post(resource, '')
+    coap_client.stop()
+    elapsed = time.time() - start
+    print "%s \nSuccessful delivery, %.2f seconds." %(node, elapsed)
+    return elapsed
+  except:
+    print "Did not successfully send out."
+    pass  
 
 def postToAllNode(List,resource,query):
+  query = "?"+query
+  resource = "g/"+resource+query
+
   for node in List:
-    get_cmd = 'echo -n \'POST\' | coap post \"coap://['+node+']:5683/g/'+resource+'?'+query+'\"'
+    #get_cmd = 'echo -n \'POST\' | coap post \"coap://['+node+']:5683/g/'+resource+'?'+query+'\"'
     try:
+      coap_client = HelperClient(server=(node, port))
       start = time.time()
-      retcode = subprocess.call(get_cmd, shell=True)
+      coap_client.post(resource, '')
+      coap_client.stop()
       elapsed = time.time() - start
       print "%s \nSuccessful delivery, %.2f seconds." %(node, elapsed)
-      
+
     except:
       print "Did not successfully send out."
       pass
