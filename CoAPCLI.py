@@ -43,7 +43,6 @@ def object_callback(mote_data):
 
 def optional_mysqlDB():
   global flag_DB
-  #self.stdout.write("Would you want access mysql DB ? ")
   
   while flag_DB is None:
     db = raw_input("Would you want access data to MySQL DB ?(Y/N) ")
@@ -104,7 +103,6 @@ class CoAPCLI(Cmd):
       query = args[2]
       pst = RestCoAP.postQueryToNode(node, resource, query)
       print "get %.2f seconds... " %(pst)
-      #print "Successful delivery."
     except:
       self.stdout.write("Error from post.\n")
      
@@ -119,8 +117,6 @@ class CoAPCLI(Cmd):
       resource = args[0]
       query = args[1]
       RestCoAP.postToAllNode(self.mote_lists, resource, query)
-      #print "get %.2f seconds... " %(pst)
-      #print "Successful delivery."
     except:
       self.stdout.write("Error from postall.\n")
 
@@ -137,8 +133,6 @@ class CoAPCLI(Cmd):
       coapObserve.printName()
       coapObserve.start()
       self.mote_observe_lists.append(coapObserve)
-        #restCoAP.startObserve(node, resource)
-      #print "Successful delivery."
     except:
       self.stdout.write("Error from observe.\n")
   
@@ -177,9 +171,7 @@ class CoAPCLI(Cmd):
           index.stop()
           self.mote_observe_lists.remove(index)
           self.stdout.write("Delete got %s\n" %(str(arg)))
-        # else:
-        #   self.stdout.write("Not found the mote, please check it out again.\n")
-
+        
   def do_quit(self, arg):
     log.info("Stopping CoAPCLI...")
 

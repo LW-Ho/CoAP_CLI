@@ -6,7 +6,6 @@
 
 ## Installing
 * pip install -r requirements.txt
-* npm install coap-cli -g (use sudo to install it.)
 
 ## Database Connection
 * Please copy `example.cfg` and rename it to `config.cfg`. The programe will read this file to connect the mysql database.
@@ -14,7 +13,7 @@
 ## Command Line
 * getallmotes
     * Ex : getallmotes fd00::201:1:1:1
-    * (get all motes address to created list table)
+    * (get all motes address from host, then created list table)
 
 * list
     * Ex : list
@@ -46,4 +45,4 @@
 
 * quit
     * Ex : quit
-    * (exiting tool, if you want exit, need delete to all motes)
+    * (exiting tool, it will auto cancel observing nodes)
