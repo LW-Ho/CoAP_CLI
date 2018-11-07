@@ -6,7 +6,6 @@
 
 ## Installing
 * pip install -r requirements.txt
-* npm install coap-cli -g (use sudo to install it.)
 
 ## Database Connection
 * Please copy `example.cfg` and rename it to `config.cfg`. The programe will read this file to connect the mysql database.

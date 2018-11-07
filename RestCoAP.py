@@ -1,4 +1,3 @@
-#import subprocess, sys
 import time
 from coapthon.client.helperclient import HelperClient
 
@@ -8,7 +7,6 @@ port = 5683
 def postQueryToNode(node,resource,query):
   query = "?"+query
   resource = "g/"+resource+query
-  #log.info("CoAP Observe \"{0}\" started.".format(self.name))
   try:
     coap_client = HelperClient(server=(node, port))
     start = time.time()
@@ -26,7 +24,6 @@ def postToAllNode(List,resource,query):
   resource = "g/"+resource+query
 
   for node in List:
-    #get_cmd = 'echo -n \'POST\' | coap post \"coap://['+node+']:5683/g/'+resource+'?'+query+'\"'
     try:
       coap_client = HelperClient(server=(node, port))
       start = time.time()
