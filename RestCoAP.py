@@ -12,7 +12,7 @@ def postQueryToNode(node,resource,query):
   #try:
   coap_client = HelperClient(server=(node, port))
   start = time.time()
-  coap_client.post(resource)
+  coap_client.post(resource, '')
   coap_client.stop()
   elapsed = time.time() - start
   print "%s \nSuccessful delivery, %.2f seconds." %(node, elapsed)
