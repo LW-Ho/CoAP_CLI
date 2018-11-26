@@ -48,7 +48,7 @@ def testingSim():
   response = "bcollect"
   query = "thd=10&pp=0"
 
-  for i in range(1,32):
+  for i in range(2,32):
     j = format(i,'x')
     k = j.zfill(2)
     node = 'fd00::2'+k+':'+j+':'+j+':'+j
