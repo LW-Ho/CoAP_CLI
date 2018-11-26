@@ -51,7 +51,7 @@ def testingSim():
   for i in range(1,32):
     j = format(i,'x')
     k = j.zfill(2)
-    nodeAddr = 'fd00::2'+k+':'+j+':'+j+':'+j
+    node = 'fd00::2'+k+':'+j+':'+j+':'+j
     pst = RestCoAP.postQueryToNode(node, response, query) # get process time.
   
   print "Process over..."
