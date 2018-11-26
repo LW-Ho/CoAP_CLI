@@ -7,17 +7,17 @@ port = 5683
 def postQueryToNode(node,resource,query):
   query = "?"+query
   resource = "g/"+resource+query
-  try:
-    coap_client = HelperClient(server=(node, port))
-    start = time.time()
-    coap_client.post(path=resource, timeout=60)
-    coap_client.stop()
-    elapsed = time.time() - start
-    print "%s \nSuccessful delivery, %.2f seconds." %(node, elapsed)
-    return elapsed
-  except:
-    print "Did not successfully send out."
-    pass  
+  # try:
+  coap_client = HelperClient(server=(node, port))
+  start = time.time()
+  coap_client.post(path=resource, timeout=60)
+  coap_client.stop()
+  elapsed = time.time() - start
+  print "%s \nSuccessful delivery, %.2f seconds." %(node, elapsed)
+  return elapsed
+  # except:
+  #   print "Did not successfully send out."
+  #   pass  
 
 def postToAllNode(List,resource,query):
   query = "?"+query
