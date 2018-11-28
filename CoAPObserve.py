@@ -65,6 +65,6 @@ class CoAPObserve(threading.Thread):
   def getName(self):
     return self.node
 
-  def getFlag(slef):
+  def getFlag(self):
     return self.flag
     
