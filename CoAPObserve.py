@@ -24,13 +24,15 @@ class CoAPObserve(threading.Thread):
         if response is not None:
           if self.flag:
             self.flag = False
+            self.stdout.write("\n")
             log.debug("Got new message")
             if log.isEnabledFor(logging.DEBUG):
                 packet_content = ":".join("{:02x}".format(ord(c)) for c in response.payload)
                 log.debug(packet_content)
             log.debug("Payload length: {0}".format(len(response.payload)))
             log.debug("=================================")
-          
+            self.stdout.write("\n")
+
             # will upload data to mysql server.
           try :
             mote_data = MoteData.make_from_bytes(response.source[0], response.payload)
@@ -42,15 +44,10 @@ class CoAPObserve(threading.Thread):
 
   def run(self):
     log.info("CoAP Observe \"{0}\" started.".format(self.name))
+    self.stdout.write("\n")
     self.coap_client = HelperClient(server=(self.node, self.port))
-    self.coap_client.observe(path=self.resource, callback=self.message_callback)
+    self.coap_client.observe(path=self.resource, timeout=60, callback=self.message_callback)
     return
-    # get_cmd = 'coap -o \"coap://['+self.node+']:5683/g/'+self.resource+'\"'
-    # try:
-    #   self.coapProcess = subprocess.Popen(get_cmd, stdout=subprocess.PIPE, shell=True, preexec_fn=os.setsid)
-    # except:
-    #   print "Not success for send out.\n"
-    #   pass
 
   def stop(self):
     log.info("Stoping CoAP Observe \"{0}\" .".format(self.name))
@@ -61,17 +58,13 @@ class CoAPObserve(threading.Thread):
       log.info("Deleted Done !")
       return
 
-    # try:
-    #   os.killpg(os.getpgid(self.coapProcess.pid), signal.SIGTERM)
-    #   self._is_running = False
-    # except:
-    #   print "Error of terminate()"
-    #   return
-    
   def printName(self):
     log.info("Node Name : {0}".format(self.node))
     #print self.node
 
   def getName(self):
     return self.node
+
+  def getFlag(slef):
+    return self.flag
     

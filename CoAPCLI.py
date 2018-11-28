@@ -31,6 +31,7 @@ def object_callback(mote_data):
     try:
         #log.info("Got new object_callback")
         #log.debug(mote_data)
+
         if flag_DB :
           #log.info("Got new object_callback in flag_DB")
           session = Session()
@@ -104,8 +105,8 @@ class CoAPCLI(Cmd):
       resource = args[1]
       query = args[2]
       pst = RestCoAP.postQueryToNode(node, resource, query)
-      print "get %.2f seconds... " %(pst)
-      print "Successful delivery."
+      #print "get %.2f seconds... " %(pst)
+      #print "Successful delivery."
     except:
       self.stdout.write("Error from post.\n")
      
@@ -145,8 +146,8 @@ class CoAPCLI(Cmd):
       return
     
     try :
-      for line in self.mote_lists:
-        coapObserve = CoAPObserve(node=line, resource="g/bcollect", object_callback=object_callback)
+      for node in self.mote_lists:
+        coapObserve = CoAPObserve(node=node, resource="g/bcollect", object_callback=object_callback)
         coapObserve.printName()
         coapObserve.start()
         self.mote_observe_lists.append(coapObserve)
@@ -158,10 +159,14 @@ class CoAPCLI(Cmd):
 
   
   def do_observelist(self, arg):
-    self.stdout.write("Current Observing Mote of Numbers: %d \n" %(len(self.mote_observe_lists)))
     if len(self.mote_observe_lists) != 0:
       for index in self.mote_observe_lists:
-        index.printName()
+        if index.getFlag() is False:
+          index.printName()
+        else:
+          self.mote_observe_lists.remove(index)
+          
+    self.stdout.write("Current Observing Mote of Numbers: %d \n" %(len(self.mote_observe_lists)))
 
   def do_delete(self, arg):
     if not arg:
