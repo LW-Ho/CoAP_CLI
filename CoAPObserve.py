@@ -24,14 +24,14 @@ class CoAPObserve(threading.Thread):
         if response is not None:
           if self.flag:
             self.flag = False
-            self.stdout.write("\n")
+            print("")
             log.debug("Got new message")
             if log.isEnabledFor(logging.DEBUG):
                 packet_content = ":".join("{:02x}".format(ord(c)) for c in response.payload)
                 log.debug(packet_content)
             log.debug("Payload length: {0}".format(len(response.payload)))
             log.debug("=================================")
-            self.stdout.write("\n")
+            print("")
 
             # will upload data to mysql server.
           try :
@@ -40,11 +40,11 @@ class CoAPObserve(threading.Thread):
                 self.object_callback(mote_data)
           except :
             self.stdout.write("Unexpected error:", sys.exc_info()[0])
-            self.stdout.write("\n")
+            print("")
 
   def run(self):
     log.info("CoAP Observe \"{0}\" started.".format(self.name))
-    self.stdout.write("\n")
+    print("")
     self.coap_client = HelperClient(server=(self.node, self.port))
     self.coap_client.observe(path=self.resource, timeout=60, callback=self.message_callback)
     return
