@@ -39,14 +39,15 @@ class CoAPObserve(threading.Thread):
             if mote_data is not None and self.object_callback is not None:
                 self.object_callback(mote_data)
           except :
-            self.stdout.write("Unexpected error:", sys.exc_info()[0])
+            log.info("Unexpected error: {0}".format(sys.exc_info()[0]))
+            #self.stdout.write("Unexpected error:", sys.exc_info()[0])
             print("")
 
   def run(self):
     log.info("CoAP Observe \"{0}\" started.".format(self.name))
     print("")
     self.coap_client = HelperClient(server=(self.node, self.port))
-    self.coap_client.observe(path=self.resource, timeout=60, callback=self.message_callback)
+    self.coap_client.observe(path=self.resource, callback=self.message_callback)
     return
 
   def stop(self):
