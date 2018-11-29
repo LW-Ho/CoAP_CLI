@@ -25,7 +25,7 @@ class AutoOb(threading.Thread):
     print("")
     if self.countDown is None:
       self.countDown = 60
-    t = threading.Timer((self.countDown*10), freshBR)
+    t = threading.Timer((self.countDown*10), self.freshBR)
     t.start()
     while self.signal:
       s1 = set(self.mote_lists)
