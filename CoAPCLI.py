@@ -67,7 +67,7 @@ class CoAPCLI(Cmd):
     log.info("Starting CoAPCLI...")
 
     Cmd.__init__(self)
-    self.doc_header = 'Commands: \ngetallmotes \nlist \npost \npostall \nobserve \nobserveall \nobservelist \ndelete \ntest \nquit'
+    self.doc_header = 'Commands: \ngetallmotes \nlist \npost \npostall \nobserve \nobserveall \nobservelist \ndelete \nauto \ntest \nquit'
     self.prompt = '>'
     self.intro = '\nCoAP Command Line Tool, Welcome to use it!'
 
@@ -83,7 +83,7 @@ class CoAPCLI(Cmd):
     self.border_router_Addr = arg
     try:
       self.stdout.write("Current Motes List : \n")
-      self.mote_lists = getAllMotes(arg) # get motes from border router website.
+      self.mote_lists = getAllMotes(self.border_router_Addr) # get motes from border router website.
       self.stdout.write("====== End of List =======\n")
     except:
       self.stdout.write("Error from getallmotes.\n")
@@ -235,7 +235,7 @@ class CoAPCLI(Cmd):
     self.mote_observe_lists = mote_observe_Lists
 
     if refreshTopology is True :
-      self.mote_lists = getAllMotes(arg)
+      self.mote_lists = getAllMotes(self.border_router_Addr)
       self.stdout.write("Updating Topology...\n")
     else:
       return self.mote_lists

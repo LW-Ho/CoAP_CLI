@@ -33,7 +33,7 @@
 
 * observeall
     * Ex : observeall
-    * (First need to run getallmotes.)
+    * (auto observing all node's bcollect resource.)
 
 * observelist
     * Ex : observelist
@@ -42,6 +42,14 @@
 * delete
     * Ex : delete fd00::202:2:2:2
     * (cancel observing node)
+
+* auto
+    * Ex : auto start
+    * (will auto start observing node, if off-link node, can auto reobserve.)
+    * Ex : auto start 60
+    * (60 number is check observe timer, you can set any number, not string.)
+    * Ex : auto stop
+    * (canceling auto function.)
 
 * quit
     * Ex : quit
