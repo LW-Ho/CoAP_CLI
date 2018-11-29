@@ -24,7 +24,7 @@ class AutoOb(threading.Thread):
   def run(self):
     log.info("Starting auto observing nodes.")
     print("")
-    if self.countDown is None:
+    if self.countDown is None or self.countDown < 60:
       self.countDown = 60
 
     while self.signal:
@@ -56,7 +56,7 @@ class AutoOb(threading.Thread):
 
       for node in self.mote_observe_lists:
         print str(node.getName())+" -> Counter Ob : "+str(node.getCountOb())+", Counter Ck : "+str(node.getCountCk())
-        if (node.getCountOb() - node.getCountCk()) > 2: # threshold number.
+        if (node.getCountOb() - node.getCountCk()) > 1: # threshold number.
           node.saveCountCk(node.getCountOb()) # record fresh count number.
         else:
           node.stop()
