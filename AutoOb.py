@@ -8,7 +8,7 @@ import logging
 log = logging.getLogger("CoAPObserve")
 
 class AutoOb(threading.Thread):
-  def __init__(self, mote_lists, mote_observe_lists, node=None, group=None, target=None, verbose=None, autoOb_callback=None, object_callback=None):
+  def __init__(self, mote_lists, mote_observe_lists, countDown=None, node=None, group=None, target=None, verbose=None, autoOb_callback=None, object_callback=None):
     threading.Thread.__init__(self, group=group, target=target, name=node, verbose=verbose)
     self.auto_ob = None
     self.record_counter = 0
@@ -17,17 +17,20 @@ class AutoOb(threading.Thread):
     self.autoOb_callback = autoOb_callback
     self.object_callback = object_callback
     self.signal = True
+    self.countDown = countDown
     return
 
   def run(self):
     log.info("Starting auto observing nodes.")
     print("")
-    
+    if self.countDown is None:
+      self.countDown = 60
+    t = threading.Timer((self.countDown*10), freshBR)
+    t.start()
     while self.signal:
       s1 = set(self.mote_lists)
       temp = []
-      t = threading.Timer(3600, freshBR)
-      t.start()
+
       for obnode in self.mote_observe_lists: # to change element type, then save to oher list. (CoAP to string)
         temp.append(obnode.getName())
       s2 = set(temp)
@@ -40,7 +43,7 @@ class AutoOb(threading.Thread):
         coapObserve.start()
         self.mote_observe_lists.append(coapObserve)
 
-      time.sleep(60) # sleep 1mins.
+      time.sleep(self.countDown) # sleep 1mins.
       log.info("Observe ALL Done.")
 
       self.mote_lists = self.autoOb_callback(self.mote_observe_lists, False)
