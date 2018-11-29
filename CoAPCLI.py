@@ -217,7 +217,7 @@ class CoAPCLI(Cmd):
       self.stdout.write("Need type auto start or auto stop.\n")
       return
 
-  def autoOb_callback(mote_observe_Lists):
+  def autoOb_callback(self, mote_observe_Lists):
     # using callback function to maintain mote_lists and mote_observe_lists.
     self.mote_observe_lists = mote_observe_Lists
     return self.mote_lists
