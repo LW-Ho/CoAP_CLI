@@ -74,12 +74,13 @@ class CoAPCLI(Cmd):
     self.mote_lists = []
     self.mote_observe_lists = []
     self.autoObserve = None # save autoOb class
+    self.border_router_Addr
 
   def do_getallmotes(self, arg):
     if not arg:
       self.stdout.write("Please provide Border router's IP address.\n")
       return
-        
+    self.border_router_Addr = arg
     try:
       self.stdout.write("Current Motes List : \n")
       self.mote_lists = getAllMotes(arg) # get motes from border router website.
@@ -221,10 +222,15 @@ class CoAPCLI(Cmd):
       self.stdout.write("Need type auto start or auto stop.\n")
       return
 
-  def autoOb_callback(self, mote_observe_Lists):
+  def autoOb_callback(self, mote_observe_Lists, refreshTopology):
     # using callback function to maintain mote_lists and mote_observe_lists.
     self.mote_observe_lists = mote_observe_Lists
-    return self.mote_lists
+
+    if refreshTopology is True :
+      self.mote_lists = getAllMotes(arg)
+      self.stdout.write("Updating Topology...\n")
+    else:
+      return self.mote_lists
     
   def do_quit(self, arg):
     log.info("Stopping CoAPCLI...")

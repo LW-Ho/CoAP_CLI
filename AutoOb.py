@@ -2,6 +2,7 @@ import threading
 import time
 from coapthon.client.helperclient import HelperClient
 from CoAPObserve import CoAPObserve
+from GetMotes import getAllMotes
 
 import logging
 log = logging.getLogger("CoAPObserve")
@@ -21,10 +22,12 @@ class AutoOb(threading.Thread):
   def run(self):
     log.info("Starting auto observing nodes.")
     print("")
+    
     while self.signal:
       s1 = set(self.mote_lists)
       temp = []
-
+      t = threading.Timer(3600, freshBR)
+      t.start()
       for obnode in self.mote_observe_lists: # to change element type, then save to oher list. (CoAP to string)
         temp.append(obnode.getName())
       s2 = set(temp)
@@ -40,10 +43,10 @@ class AutoOb(threading.Thread):
       time.sleep(60) # sleep 1mins.
       log.info("Observe ALL Done.")
 
-      self.mote_lists = self.autoOb_callback(self.mote_observe_lists)
+      self.mote_lists = self.autoOb_callback(self.mote_observe_lists, False)
 
       for node in self.mote_observe_lists:
-        print str(node.getName())+"Counter Ob : "+str(node.getCountOb())+", Counter Ck : "+str(node.getCountCk())
+        print str(node.getName())+ "Counter Ob : "+str(node.getCountOb())+", Counter Ck : "+str(node.getCountCk())
         if (node.getCountOb() - node.getCountCk()) > 2: # 5 is offset number.
           node.saveCountCk(node.getCountOb()) # record fresh count number.
         else:
@@ -52,10 +55,13 @@ class AutoOb(threading.Thread):
 
       # except :
       #   log.info("Do not found moteAddress text.")
-        
+    t.cancel()
     return
 
   def stop(self):
     log.info("Stoping auto observing nodes.")
     self.signal = False
     return
+
+  def freshBR(self):
+    self.autoOb_callback(self.mote_observe_lists, True)
