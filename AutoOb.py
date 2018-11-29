@@ -25,7 +25,7 @@ class AutoOb(threading.Thread):
     print("")
     if self.countDown is None:
       self.countDown = 60
-    t = threading.Timer((self.countDown*10), self.freshBR)
+    t = threading.Timer((self.countDown*10.0), self.freshBR)
     t.start()
     while self.signal:
       s1 = set(self.mote_lists)
@@ -43,7 +43,7 @@ class AutoOb(threading.Thread):
         coapObserve.start()
         self.mote_observe_lists.append(coapObserve)
 
-      time.sleep(self.countDown) # sleep 1mins.
+      time.sleep((self.countDown)*1.0) # sleep 1mins.
       log.info("Observe ALL Done.")
 
       self.mote_lists = self.autoOb_callback(self.mote_observe_lists, False)
