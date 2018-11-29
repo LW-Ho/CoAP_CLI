@@ -1,5 +1,4 @@
 import threading
-import os
 from coapthon.client.helperclient import HelperClient
 from CoAPObserve import CoAPObserve
 
@@ -36,7 +35,7 @@ class AutoOb(threading.Thread):
           coapObserve.start()
           self.mote_observe_lists.append(coapObserve)
 
-        self.stdout.write("Observe ALL Done.\n")
+        log.info("Observe ALL Done.")
 
         sleep(60) # sleep 1mins.
 
@@ -52,7 +51,7 @@ class AutoOb(threading.Thread):
             node.start()
 
       except :
-        self.stdout.write("Do not found moteAddress text.\n")
+        log.info("Do not found moteAddress text.")
         
     return
 
