@@ -212,6 +212,9 @@ class CoAPCLI(Cmd):
         self.autoObserve = AutoOb(mote_lists=self.mote_lists, mote_observe_lists=self.mote_observe_lists, autoOb_callback=self.autoOb_callback, object_callback=object_callback)
         self.autoObserve.setDaemon(True)
         self.autoObserve.start()
+      elif len(self.mote_lists) == 0:
+        self.stdout.write("Please run getallmotes command.\n")
+        return
       else:
         self.stdout.write("Running... You can't run again.\n")
         self.stdout.write("You must stop before you can start again.\n")
