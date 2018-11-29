@@ -170,7 +170,7 @@ class CoAPCLI(Cmd):
     if len(self.mote_observe_lists) != 0:
       for index in self.mote_observe_lists:
         if index.getFlag() is False:
-          if arg is None:
+          if not arg:
             index.printName()
           else:
             continue

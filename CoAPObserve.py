@@ -31,7 +31,7 @@ class CoAPObserve(threading.Thread):
                 log.debug(packet_content)
             log.debug("Payload length: {0}".format(len(response.payload)))
             log.debug("=================================")
-            print("")
+            print(">")
 
             # will upload data to mysql server.
           try :
