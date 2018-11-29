@@ -11,6 +11,8 @@ class CoAPObserve(threading.Thread):
     threading.Thread.__init__(self, group=group, target=target, name=node, verbose=verbose)
     self.coap_client = None
     self.flag = True
+    self.counter_Check = 0
+    self.counter_Observing = 0
     self.kwargs = kwargs
     self.node = node
     self.resource = resource
@@ -25,6 +27,7 @@ class CoAPObserve(threading.Thread):
         if response is not None:
           if self.flag:
             self.flag = False
+            
             print("")
             log.debug("Got new message")
             if log.isEnabledFor(logging.DEBUG):
@@ -38,7 +41,8 @@ class CoAPObserve(threading.Thread):
           try :
             mote_data = MoteData.make_from_bytes(response.source[0], response.payload)
             if mote_data is not None and self.object_callback is not None:
-                self.object_callback(mote_data)
+              self.counter_Observing+=1 # counter callback.
+              self.object_callback(mote_data) # callback to main function.
           except :
             log.info("Unexpected error: {0}".format(sys.exc_info()[0]))
             #self.stdout.write("Unexpected error:", sys.exc_info()[0])
@@ -69,4 +73,14 @@ class CoAPObserve(threading.Thread):
 
   def getFlag(self):
     return self.flag
+
+  def getCountOb(self):
+    return self.counter_Observing
+
+  def getCountCk(self):
+    return self.counter_Check
+
+  def saveCountCk(self, countOb):
+    self.counter_Check = countOb
+    
     
