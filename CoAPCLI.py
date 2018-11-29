@@ -206,7 +206,7 @@ class CoAPCLI(Cmd):
   def do_auto(self, arg):
     if arg == "start":
       if self.autoObserve is None:
-        self.autoObserve = AutoOb(mote_list=self.mote_lists, mote_ob_list=self.mote_observe_lists, autoOb_callback=self.autoOb_callback, object_callback=object_callback)
+        self.autoObserve = AutoOb(mote_list=self.mote_lists, mote_observe_lists=self.mote_observe_lists, autoOb_callback=self.autoOb_callback, object_callback=object_callback)
         self.autoObserve.start()
       else:
         self.stdout.write("Running... You can't run again.\n")
