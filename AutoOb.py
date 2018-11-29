@@ -47,8 +47,6 @@ class AutoOb(threading.Thread):
           continue
         else:
           node.stop()
-          node.printName()
-          node.start()
 
       # except :
       #   log.info("Do not found moteAddress text.")
