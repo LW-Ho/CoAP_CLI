@@ -18,6 +18,7 @@ class AutoOb(threading.Thread):
     self.object_callback = object_callback
     self.signal = True
     self.countDown = countDown
+    self.brTimer = None
     return
 
   def run(self):
@@ -25,8 +26,8 @@ class AutoOb(threading.Thread):
     print("")
     if self.countDown is None:
       self.countDown = 60
-    t = threading.Timer(int(self.countDown), self.freshBR)
-    t.start()
+    self.brTimer = threading.Timer(int(self.countDown)*10, self.freshBR)
+    self.brTimer.start()
     while self.signal:
       s1 = set(self.mote_lists)
       temp = []
@@ -58,12 +59,12 @@ class AutoOb(threading.Thread):
 
       # except :
       #   log.info("Do not found moteAddress text.")
-    t.cancel()
     return
 
   def stop(self):
     log.info("Stoping auto observing nodes.")
     self.signal = False
+    self.brTimer.cancel()
     return
 
   def freshBR(self):
