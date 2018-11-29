@@ -204,14 +204,14 @@ class CoAPCLI(Cmd):
     Testing_responsetime.testingSim()
 
   def do_auto(self, arg):
-    if arg = "start":
+    if arg == "start":
       if self.autoObserve is None:
         self.autoObserve = AutoOb(mote_list=self.mote_lists, mote_ob_list=self.mote_observe_lists, autoOb_callback=self.autoOb_callback, object_callback=object_callback)
         self.autoObserve.start()
       else:
         self.stdout.write("Running... You can't run again.\n")
         self.stdout.write("You must stop before you can start again.\n")
-    elif arg = "stop" and self.autoObserve is not None:
+    elif arg == "stop" and self.autoObserve is not None:
       self.autoObserve.stop()
     else:
       self.stdout.write("Need type auto start or auto stop.\n")
