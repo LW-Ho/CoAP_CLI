@@ -42,7 +42,7 @@ class AutoOb(threading.Thread):
       self.mote_lists = self.autoOb_callback(self.mote_observe_lists)
 
       for node in self.mote_observe_lists:
-        print "Counter Ob : "+node.getCountOb+", Counter Ck : "+node.getCountCk
+        print "Counter Ob : "+str(node.getCountOb)+", Counter Ck : "+str(node.getCountCk)
         if (node.getCountOb() - node.getCountCk()) > 5: # 5 is offset number.
           node.saveCountCk(node.getCountOb()) # record fresh count number.
         else:
