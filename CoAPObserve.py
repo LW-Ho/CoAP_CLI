@@ -1,4 +1,5 @@
 import threading
+import sys
 from coapthon.client.helperclient import HelperClient
 
 from MoteData import MoteData
@@ -10,6 +11,8 @@ class CoAPObserve(threading.Thread):
     threading.Thread.__init__(self, group=group, target=target, name=node, verbose=verbose)
     self.coap_client = None
     self.flag = True
+    self.counter_Check = 0
+    self.counter_Observing = 0
     self.kwargs = kwargs
     self.node = node
     self.resource = resource
@@ -24,20 +27,30 @@ class CoAPObserve(threading.Thread):
         if response is not None:
           if self.flag:
             self.flag = False
+            
+            print("")
             log.debug("Got new message")
             if log.isEnabledFor(logging.DEBUG):
                 packet_content = ":".join("{:02x}".format(ord(c)) for c in response.payload)
                 log.debug(packet_content)
             log.debug("Payload length: {0}".format(len(response.payload)))
             log.debug("=================================")
-          
-          # will upload data to mysql server.
-          mote_data = MoteData.make_from_bytes(response.source[0], response.payload)
-          if mote_data is not None and self.object_callback is not None:
-              self.object_callback(mote_data)
+            print(">")
+
+            # will upload data to mysql server.
+          try :
+            mote_data = MoteData.make_from_bytes(response.source[0], response.payload)
+            if mote_data is not None and self.object_callback is not None:
+              self.counter_Observing+=1 # counter callback.
+              self.object_callback(mote_data) # callback to main function.
+          except :
+            log.info("Unexpected error: {0}".format(sys.exc_info()[0]))
+            #self.stdout.write("Unexpected error:", sys.exc_info()[0])
+            print("")
 
   def run(self):
     log.info("CoAP Observe \"{0}\" started.".format(self.name))
+    print("")
     self.coap_client = HelperClient(server=(self.node, self.port))
     self.coap_client.observe(path=self.resource, callback=self.message_callback)
     return
@@ -47,9 +60,14 @@ class CoAPObserve(threading.Thread):
     if self.coap_client is not None:
       self.flag = True
       self.coap_client.stop()
-    else :
-      log.info("Deleted Done !")
       return
+<<<<<<< HEAD
+=======
+    # else :
+    #   log.info("Deleted Done !")
+    #   threading.exit()
+    #   return
+>>>>>>> testing-responsetime
 
   def printName(self):
     log.info("Node Name : {0}".format(self.node))
@@ -57,4 +75,17 @@ class CoAPObserve(threading.Thread):
 
   def getName(self):
     return self.node
+
+  def getFlag(self):
+    return self.flag
+
+  def getCountOb(self):
+    return self.counter_Observing
+
+  def getCountCk(self):
+    return self.counter_Check
+
+  def saveCountCk(self, countOb):
+    self.counter_Check = countOb
+    
     

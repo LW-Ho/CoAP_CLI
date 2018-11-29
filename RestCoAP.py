@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 #import subprocess, sys
+=======
+>>>>>>> testing-responsetime
 import time
 from coapthon.client.helperclient import HelperClient
 
@@ -8,6 +11,7 @@ port = 5683
 def postQueryToNode(node,resource,query):
   query = "?"+query
   resource = "g/"+resource+query
+<<<<<<< HEAD
   #log.info("CoAP Observe \"{0}\" started.".format(self.name))
   try:
     coap_client = HelperClient(server=(node, port))
@@ -19,6 +23,19 @@ def postQueryToNode(node,resource,query):
     return elapsed
   except:
     print "Did not successfully send out."
+=======
+  try:
+    coap_client = HelperClient(server=(node, port))
+    start = time.time()
+    coap_client.post(path=resource, payload='' ,timeout=60)
+    coap_client.stop()
+    elapsed = time.time() - start
+    print "%s  successful delivery, %.2f seconds." %(node, elapsed)
+    return elapsed
+  except:
+    coap_client.stop()
+    print node+" did not successfully send out."
+>>>>>>> testing-responsetime
     pass  
 
 def postToAllNode(List,resource,query):
@@ -26,6 +43,7 @@ def postToAllNode(List,resource,query):
   resource = "g/"+resource+query
 
   for node in List:
+<<<<<<< HEAD
     #get_cmd = 'echo -n \'POST\' | coap post \"coap://['+node+']:5683/g/'+resource+'?'+query+'\"'
     try:
       coap_client = HelperClient(server=(node, port))
@@ -37,6 +55,20 @@ def postToAllNode(List,resource,query):
 
     except:
       print "Did not successfully send out."
+=======
+    try:
+      coap_client = HelperClient(server=(node, port))
+      start = time.time()
+      #coap_client.post(resource, '')
+      coap_client.post(path=resource, payload='' ,timeout=60)
+      coap_client.stop()
+      elapsed = time.time() - start
+      print "%s  successful delivery, %.2f seconds." %(node, elapsed)
+
+    except:
+      coap_client.stop()
+      print node+" did not successfully send out."
+>>>>>>> testing-responsetime
       pass
 
   return

@@ -1,9 +1,15 @@
 import logging.config
 import os
+import sys
 from cmd import Cmd
 from GetMotes import getAllMotes
 import RestCoAP
 from CoAPObserve import CoAPObserve
+<<<<<<< HEAD
+=======
+import Testing_responsetime
+from AutoOb import AutoOb
+>>>>>>> testing-responsetime
 
 logging.config.fileConfig(os.path.join('logging.conf'))
 log = logging.getLogger("root")
@@ -30,6 +36,7 @@ def object_callback(mote_data):
     try:
         #log.info("Got new object_callback")
         #log.debug(mote_data)
+
         if flag_DB :
           #log.info("Got new object_callback in flag_DB")
           session = Session()
@@ -62,21 +69,23 @@ class CoAPCLI(Cmd):
     log.info("Starting CoAPCLI...")
 
     Cmd.__init__(self)
-    self.doc_header = 'Commands: \ngetallmotes \nlist \npost \npostall \nobserve \nobserveall \nobservelist \ndelete \ntest \nquit'
+    self.doc_header = 'Commands: \ngetallmotes \nlist \npost \npostall \nobserve \nobserveall \nobservelist \ndelete \nauto \ntest \nquit'
     self.prompt = '>'
     self.intro = '\nCoAP Command Line Tool, Welcome to use it!'
 
     self.mote_lists = []
     self.mote_observe_lists = []
+    self.autoObserve = None # save autoOb class
+    self.border_router_Addr = ""
 
   def do_getallmotes(self, arg):
     if not arg:
       self.stdout.write("Please provide Border router's IP address.\n")
       return
-        
+    self.border_router_Addr = arg
     try:
       self.stdout.write("Current Motes List : \n")
-      self.mote_lists = getAllMotes(arg) # get motes from border router website.
+      self.mote_lists = getAllMotes(self.border_router_Addr) # get motes from border router website.
       self.stdout.write("====== End of List =======\n")
     except:
       self.stdout.write("Error from getallmotes.\n")
@@ -85,7 +94,7 @@ class CoAPCLI(Cmd):
     try:
       self.stdout.write("Current Motes List : \n")
       for index in range(0,len(self.mote_lists)):
-        self.stdout.write("%d : %s\n" %(index+1, self.mote_lists[index]))
+        self.stdout.write("%2d : %s\n" %(index+1, self.mote_lists[index]))
       self.stdout.write("====== End of List =======\n")
     except:
       self.stdout.write("Error from list.\n")
@@ -102,7 +111,10 @@ class CoAPCLI(Cmd):
       resource = args[1]
       query = args[2]
       pst = RestCoAP.postQueryToNode(node, resource, query)
+<<<<<<< HEAD
       print "get %.2f seconds... " %(pst)
+=======
+>>>>>>> testing-responsetime
     except:
       self.stdout.write("Error from post.\n")
      
@@ -131,6 +143,7 @@ class CoAPCLI(Cmd):
       resource = "g/"+str(args[1])
       coapObserve = CoAPObserve(node=node, resource=resource, object_callback=object_callback)
       coapObserve.printName()
+      coapObserve.setDaemon(True)
       coapObserve.start()
       self.mote_observe_lists.append(coapObserve)
     except:
@@ -140,25 +153,42 @@ class CoAPCLI(Cmd):
     if len(self.mote_lists) == 0:
       self.stdout.write("Please run getallmotes command.\n")
       return
+    self.do_observelist("arg") # refresh observe_list.
+    s1 = set(self.mote_lists)
+    temp = []
+
+    for obnode in self.mote_observe_lists: # to change element type, then save to oher list. (CoAP to string)
+      temp.append(obnode.getName())
+    s2 = set(temp)
+
+    result = list(s1.difference(s2)) # compare list,we can know that is not observing.
     
     try :
-      for line in self.mote_lists:
-        coapObserve = CoAPObserve(node=line, resource="g/bcollect", object_callback=object_callback)
+      for node in result:
+        coapObserve = CoAPObserve(node=node, resource="g/bcollect", object_callback=object_callback)
         coapObserve.printName()
+        coapObserve.setDaemon(True)
         coapObserve.start()
         self.mote_observe_lists.append(coapObserve)
+
       self.stdout.write("Observe ALL Done.\n")
                 
     except :
       self.stdout.write("Do not found moteAddress text.\n")
       return
 
-  
   def do_observelist(self, arg):
-    self.stdout.write("Current Observing Mote of Numbers: %d \n" %(len(self.mote_observe_lists)))
     if len(self.mote_observe_lists) != 0:
       for index in self.mote_observe_lists:
-        index.printName()
+        if index.getFlag() is False:
+          if not arg:
+            index.printName()
+          else:
+            continue
+        else:
+          self.mote_observe_lists.remove(index)
+
+    self.stdout.write("Current Observing Mote of Numbers: %d \n" %(len(self.mote_observe_lists)))
 
   def do_delete(self, arg):
     if not arg:
@@ -172,6 +202,53 @@ class CoAPCLI(Cmd):
           self.mote_observe_lists.remove(index)
           self.stdout.write("Delete got %s\n" %(str(arg)))
         
+<<<<<<< HEAD
+=======
+  def do_test(self, arg):
+    self.stdout.write("Testing post command response time.\n")
+
+    # input list, post command to each node.
+    Testing_responsetime.testingRspT(self.mote_lists)
+  
+  def do_testsim(self, arg):
+    self.stdout.write("Testing 30 nodes... \n")
+    Testing_responsetime.testingSim()
+
+  def do_auto(self, arg):
+    args = arg.split(' ')
+
+    if args[0] == "start":
+      if self.autoObserve is None and len(self.mote_lists) != 0 :
+        if len(args) == 2:
+          self.autoObserve = AutoOb(mote_lists=self.mote_lists, mote_observe_lists=self.mote_observe_lists, countDown=args[1], autoOb_callback=self.autoOb_callback, object_callback=object_callback)
+        else:
+          self.autoObserve = AutoOb(mote_lists=self.mote_lists, mote_observe_lists=self.mote_observe_lists, autoOb_callback=self.autoOb_callback, object_callback=object_callback)
+        self.autoObserve.setDaemon(True)
+        self.autoObserve.start()
+      elif len(self.mote_lists) == 0:
+        self.stdout.write("Please run getallmotes command.\n")
+        return
+      else:
+        self.stdout.write("Running... You can't run again.\n")
+        self.stdout.write("You must stop before you can start again.\n")
+    elif args[0] == "stop" and self.autoObserve is not None:
+      self.autoObserve.stop()
+      self.autoObserve.join()
+    else:
+      self.stdout.write("Need type auto start or auto stop.\n")
+      return
+
+  def autoOb_callback(self, mote_observe_Lists, refreshTopology):
+    # using callback function to maintain mote_lists and mote_observe_lists.
+    self.mote_observe_lists = mote_observe_Lists
+
+    if refreshTopology is True :
+      self.mote_lists = getAllMotes(self.border_router_Addr)
+      self.stdout.write("Updating Topology...\n")
+    else:
+      return self.mote_lists
+    
+>>>>>>> testing-responsetime
   def do_quit(self, arg):
     log.info("Stopping CoAPCLI...")
 
@@ -180,8 +257,9 @@ class CoAPCLI(Cmd):
         log.info("Closing {0}!".format(index.getName()))
         self.mote_observe_lists.remove(index)
         index.stop()
+        index.join() # testing, join to main thread, will be release it.
+    sys.exit(1)
     
-    return True
       
         
 if __name__=="__main__":
