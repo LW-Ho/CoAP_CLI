@@ -1,5 +1,6 @@
 import logging.config
 import os
+import sys
 from cmd import Cmd
 from GetMotes import getAllMotes
 import RestCoAP
@@ -142,7 +143,7 @@ class CoAPCLI(Cmd):
     if len(self.mote_lists) == 0:
       self.stdout.write("Please run getallmotes command.\n")
       return
-    do_observelist(arg)
+    self.do_observelist("arg")
     s1 = set(self.mote_lists)
     temp = []
 
@@ -210,8 +211,8 @@ class CoAPCLI(Cmd):
         log.info("Closing {0}!".format(index.getName()))
         self.mote_observe_lists.remove(index)
         index.stop()
+    sys.exit(1)
     
-    return True
       
         
 if __name__=="__main__":
