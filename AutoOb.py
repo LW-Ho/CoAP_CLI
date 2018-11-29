@@ -18,7 +18,7 @@ class AutoOb(threading.Thread):
     self.object_callback = object_callback
     self.signal = True
     self.countDown = countDown
-    self.brTimer = None
+    self.countBR = 0
     return
 
   def run(self):
@@ -26,8 +26,7 @@ class AutoOb(threading.Thread):
     print("")
     if self.countDown is None:
       self.countDown = 60
-    self.brTimer = threading.Timer(int(self.countDown)*10, self.freshBR)
-    self.brTimer.start()
+
     while self.signal:
       s1 = set(self.mote_lists)
       temp = []
@@ -44,7 +43,13 @@ class AutoOb(threading.Thread):
         coapObserve.start()
         self.mote_observe_lists.append(coapObserve)
 
-      time.sleep(int(self.countDown)) # sleep 1mins.
+      time.sleep(int(self.countDown)) # sleep.
+      if self.countBR > 9:
+        self.refreshBR()
+        self.countBR = 0
+      else :
+        self.countBR+=1
+      
       log.info("Observe ALL Done.")
 
       self.mote_lists = self.autoOb_callback(self.mote_observe_lists, False)
@@ -64,8 +69,7 @@ class AutoOb(threading.Thread):
   def stop(self):
     log.info("Stoping auto observing nodes.")
     self.signal = False
-    self.brTimer.cancel()
     return
 
-  def freshBR(self):
+  def refreshBR(self):
     self.autoOb_callback(self.mote_observe_lists, True)
