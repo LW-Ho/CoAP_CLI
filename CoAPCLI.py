@@ -74,7 +74,7 @@ class CoAPCLI(Cmd):
     self.mote_lists = []
     self.mote_observe_lists = []
     self.autoObserve = None # save autoOb class
-    self.border_router_Addr
+    self.border_router_Addr = ""
 
   def do_getallmotes(self, arg):
     if not arg:
@@ -208,7 +208,7 @@ class CoAPCLI(Cmd):
 
   def do_auto(self, arg):
     if arg == "start":
-      if self.autoObserve is None:
+      if self.autoObserve is None and len(self.mote_lists) != 0 :
         self.autoObserve = AutoOb(mote_lists=self.mote_lists, mote_observe_lists=self.mote_observe_lists, autoOb_callback=self.autoOb_callback, object_callback=object_callback)
         self.autoObserve.setDaemon(True)
         self.autoObserve.start()
