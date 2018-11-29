@@ -136,6 +136,7 @@ class CoAPCLI(Cmd):
       resource = "g/"+str(args[1])
       coapObserve = CoAPObserve(node=node, resource=resource, object_callback=object_callback)
       coapObserve.printName()
+      coapObserve.setDaemon(True)
       coapObserve.start()
       self.mote_observe_lists.append(coapObserve)
     except:
@@ -159,6 +160,7 @@ class CoAPCLI(Cmd):
       for node in result:
         coapObserve = CoAPObserve(node=node, resource="g/bcollect", object_callback=object_callback)
         coapObserve.printName()
+        coapObserve.setDaemon(True)
         coapObserve.start()
         self.mote_observe_lists.append(coapObserve)
 
@@ -207,12 +209,14 @@ class CoAPCLI(Cmd):
     if arg == "start":
       if self.autoObserve is None:
         self.autoObserve = AutoOb(mote_lists=self.mote_lists, mote_observe_lists=self.mote_observe_lists, autoOb_callback=self.autoOb_callback, object_callback=object_callback)
+        self.autoObserve.setDaemon(True)
         self.autoObserve.start()
       else:
         self.stdout.write("Running... You can't run again.\n")
         self.stdout.write("You must stop before you can start again.\n")
     elif arg == "stop" and self.autoObserve is not None:
       self.autoObserve.stop()
+      self.autoObserve.join()
     else:
       self.stdout.write("Need type auto start or auto stop.\n")
       return
@@ -222,9 +226,6 @@ class CoAPCLI(Cmd):
     self.mote_observe_lists = mote_observe_Lists
     return self.mote_lists
     
-
-    
-
   def do_quit(self, arg):
     log.info("Stopping CoAPCLI...")
 
@@ -233,6 +234,7 @@ class CoAPCLI(Cmd):
         log.info("Closing {0}!".format(index.getName()))
         self.mote_observe_lists.remove(index)
         index.stop()
+        index.join() # testing, join to main thread, will be release it.
     sys.exit(1)
     
       

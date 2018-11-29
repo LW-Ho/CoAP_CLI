@@ -15,12 +15,13 @@ class AutoOb(threading.Thread):
     self.mote_observe_lists = mote_observe_lists
     self.autoOb_callback = autoOb_callback
     self.object_callback = object_callback
+    self.signal = True
     return
 
   def run(self):
     log.info("Starting auto observing nodes.")
     print("")
-    while True:
+    while self.signal:
       s1 = set(self.mote_lists)
       temp = []
 
@@ -42,7 +43,7 @@ class AutoOb(threading.Thread):
       self.mote_lists = self.autoOb_callback(self.mote_observe_lists)
 
       for node in self.mote_observe_lists:
-        print "Counter Ob : "+str(node.getCountOb())+", Counter Ck : "+str(node.getCountCk())
+        print str(node.getName())+"Counter Ob : "+str(node.getCountOb())+", Counter Ck : "+str(node.getCountCk())
         if (node.getCountOb() - node.getCountCk()) > 2: # 5 is offset number.
           node.saveCountCk(node.getCountOb()) # record fresh count number.
         else:
@@ -56,5 +57,5 @@ class AutoOb(threading.Thread):
 
   def stop(self):
     log.info("Stoping auto observing nodes.")
-    (threading.Thread).daemon = False
+    self.signal = False
     return
