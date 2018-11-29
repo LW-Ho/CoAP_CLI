@@ -60,7 +60,7 @@ class CoAPObserve(threading.Thread):
     if self.coap_client is not None:
       self.flag = True
       self.coap_client.stop()
-      (threading.Thread).exit()
+      (threading.Thread).daemon = False
       return
     # else :
     #   log.info("Deleted Done !")

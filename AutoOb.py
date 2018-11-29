@@ -43,7 +43,7 @@ class AutoOb(threading.Thread):
 
       for node in self.mote_observe_lists:
         print "Counter Ob : "+str(node.getCountOb())+", Counter Ck : "+str(node.getCountCk())
-        if (node.getCountOb() - node.getCountCk()) > 5: # 5 is offset number.
+        if (node.getCountOb() - node.getCountCk()) > 2: # 5 is offset number.
           node.saveCountCk(node.getCountOb()) # record fresh count number.
         else:
           node.stop()
@@ -56,5 +56,5 @@ class AutoOb(threading.Thread):
 
   def stop(self):
     log.info("Stoping auto observing nodes.")
-    (threading.Thread).exit()
+    (threading.Thread).daemon = False
     return
