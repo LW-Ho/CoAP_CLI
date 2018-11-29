@@ -1,4 +1,5 @@
 import threading
+import os
 from coapthon.client.helperclient import HelperClient
 from CoAPObserve import CoAPObserve
 
@@ -37,12 +38,12 @@ class AutoOb(threading.Thread):
 
         self.stdout.write("Observe ALL Done.\n")
 
-        sleep(60) # sleep 15mins.
+        sleep(60) # sleep 1mins.
 
         self.mote_lists = self.autoOb_callback(self.mote_observe_lists)
 
         for node in self.mote_observe_lists:
-          if (node.getCountOb() - node.getCountCk()) > 5: # 35 is offset number.
+          if (node.getCountOb() - node.getCountCk()) > 5: # 5 is offset number.
             node.saveCountCk(node.getCountOb()) # record fresh count number.
             continue
           else:
@@ -52,7 +53,7 @@ class AutoOb(threading.Thread):
 
       except :
         self.stdout.write("Do not found moteAddress text.\n")
-        return
+        
     return
 
   def stop(self):
