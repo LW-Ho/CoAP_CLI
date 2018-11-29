@@ -3,8 +3,8 @@ from coapthon.client.helperclient import HelperClient
 from CoAPObserve import CoAPObserve
 
 class AutoOb(threading.Thread):
-  def __init__(self, mote_lists, mote_observe_lists, group=None, target=None, verbose=None, autoOb_callback=None, object_callback=None):
-    threading.Thread.__init__(self, group=group, target=target, naem=node, verbose=verbose)
+  def __init__(self, mote_lists, mote_observe_lists, node=None, group=None, target=None, verbose=None, autoOb_callback=None, object_callback=None):
+    threading.Thread.__init__(self, group=group, target=target, name=node, verbose=verbose)
     self.auto_ob = None
     self.record_counter = 0
     self.mote_lists = mote_lists
