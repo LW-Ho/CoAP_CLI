@@ -61,13 +61,6 @@ class CoAPObserve(threading.Thread):
       self.flag = True
       self.coap_client.stop()
       return
-<<<<<<< HEAD
-=======
-    # else :
-    #   log.info("Deleted Done !")
-    #   threading.exit()
-    #   return
->>>>>>> testing-responsetime
 
   def printName(self):
     log.info("Node Name : {0}".format(self.node))

@@ -5,11 +5,7 @@ from cmd import Cmd
 from GetMotes import getAllMotes
 import RestCoAP
 from CoAPObserve import CoAPObserve
-<<<<<<< HEAD
-=======
-import Testing_responsetime
 from AutoOb import AutoOb
->>>>>>> testing-responsetime
 
 logging.config.fileConfig(os.path.join('logging.conf'))
 log = logging.getLogger("root")
@@ -111,10 +107,6 @@ class CoAPCLI(Cmd):
       resource = args[1]
       query = args[2]
       pst = RestCoAP.postQueryToNode(node, resource, query)
-<<<<<<< HEAD
-      print "get %.2f seconds... " %(pst)
-=======
->>>>>>> testing-responsetime
     except:
       self.stdout.write("Error from post.\n")
      
@@ -201,18 +193,6 @@ class CoAPCLI(Cmd):
           index.stop()
           self.mote_observe_lists.remove(index)
           self.stdout.write("Delete got %s\n" %(str(arg)))
-        
-<<<<<<< HEAD
-=======
-  def do_test(self, arg):
-    self.stdout.write("Testing post command response time.\n")
-
-    # input list, post command to each node.
-    Testing_responsetime.testingRspT(self.mote_lists)
-  
-  def do_testsim(self, arg):
-    self.stdout.write("Testing 30 nodes... \n")
-    Testing_responsetime.testingSim()
 
   def do_auto(self, arg):
     args = arg.split(' ')
@@ -248,7 +228,6 @@ class CoAPCLI(Cmd):
     else:
       return self.mote_lists
     
->>>>>>> testing-responsetime
   def do_quit(self, arg):
     log.info("Stopping CoAPCLI...")
 
