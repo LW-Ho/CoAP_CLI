@@ -211,7 +211,10 @@ class CoAPCLI(Cmd):
 
     if args[0] == "start":
       if self.autoObserve is None and len(self.mote_lists) != 0 :
-        self.autoObserve = AutoOb(mote_lists=self.mote_lists, mote_observe_lists=self.mote_observe_lists, countDown=args[1], autoOb_callback=self.autoOb_callback, object_callback=object_callback)
+        if len(args) == 2:
+          self.autoObserve = AutoOb(mote_lists=self.mote_lists, mote_observe_lists=self.mote_observe_lists, countDown=args[1], autoOb_callback=self.autoOb_callback, object_callback=object_callback)
+        else:
+          self.autoObserve = AutoOb(mote_lists=self.mote_lists, mote_observe_lists=self.mote_observe_lists, autoOb_callback=self.autoOb_callback, object_callback=object_callback)
         self.autoObserve.setDaemon(True)
         self.autoObserve.start()
       elif len(self.mote_lists) == 0:
