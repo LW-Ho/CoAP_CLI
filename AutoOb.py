@@ -2,6 +2,9 @@ import threading
 from coapthon.client.helperclient import HelperClient
 from CoAPObserve import CoAPObserve
 
+import logging
+log = logging.getLogger("CoAPObserve")
+
 class AutoOb(threading.Thread):
   def __init__(self, mote_lists, mote_observe_lists, node=None, group=None, target=None, verbose=None, autoOb_callback=None, object_callback=None):
     threading.Thread.__init__(self, group=group, target=target, name=node, verbose=verbose)
