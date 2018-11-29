@@ -38,7 +38,7 @@ class AutoOb(threading.Thread):
 
         log.info("Observe ALL Done.")
 
-        sleep(60) # sleep 1mins.
+        time.sleep(60) # sleep 1mins.
 
         self.mote_lists = self.autoOb_callback(self.mote_observe_lists)
 
