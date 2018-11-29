@@ -1,4 +1,5 @@
 import threading
+import time
 from coapthon.client.helperclient import HelperClient
 from CoAPObserve import CoAPObserve
 
@@ -19,7 +20,7 @@ class AutoOb(threading.Thread):
   def run(self):
     log.info("Starting auto observing nodes.")
     print("")
-    while(1):
+    while True:
       s1 = set(self.mote_lists)
       temp = []
 
