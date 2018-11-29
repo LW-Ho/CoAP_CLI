@@ -105,8 +105,6 @@ class CoAPCLI(Cmd):
       resource = args[1]
       query = args[2]
       pst = RestCoAP.postQueryToNode(node, resource, query)
-      #print "get %.2f seconds... " %(pst)
-      #print "Successful delivery."
     except:
       self.stdout.write("Error from post.\n")
      
@@ -144,28 +142,40 @@ class CoAPCLI(Cmd):
     if len(self.mote_lists) == 0:
       self.stdout.write("Please run getallmotes command.\n")
       return
+    do_observelist(arg)
+    s1 = set(self.mote_lists)
+    temp = []
+
+    for obnode in self.mote_observe_lists:
+      temp.append(obnode.getNode())
+    s2 = set(temp)
+
+    result = list(s1.difference(s2))
     
     try :
-      for node in self.mote_lists:
+      for node in result:
         coapObserve = CoAPObserve(node=node, resource="g/bcollect", object_callback=object_callback)
         coapObserve.printName()
         coapObserve.start()
         self.mote_observe_lists.append(coapObserve)
+
       self.stdout.write("Observe ALL Done.\n")
                 
     except :
       self.stdout.write("Do not found moteAddress text.\n")
       return
 
-  
   def do_observelist(self, arg):
     if len(self.mote_observe_lists) != 0:
       for index in self.mote_observe_lists:
         if index.getFlag() is False:
-          index.printName()
+          if arg is None:
+            index.printName()
+          else:
+            continue
         else:
           self.mote_observe_lists.remove(index)
-          
+
     self.stdout.write("Current Observing Mote of Numbers: %d \n" %(len(self.mote_observe_lists)))
 
   def do_delete(self, arg):
