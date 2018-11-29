@@ -148,7 +148,7 @@ class CoAPCLI(Cmd):
     temp = []
 
     for obnode in self.mote_observe_lists:
-      temp.append(obnode.getNode())
+      temp.append(obnode.getName())
     s2 = set(temp)
 
     result = list(s1.difference(s2))
