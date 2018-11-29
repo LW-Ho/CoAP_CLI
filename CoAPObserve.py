@@ -60,9 +60,12 @@ class CoAPObserve(threading.Thread):
     if self.coap_client is not None:
       self.flag = True
       self.coap_client.stop()
-    else :
-      log.info("Deleted Done !")
+      threading.exit()
       return
+    # else :
+    #   log.info("Deleted Done !")
+    #   threading.exit()
+    #   return
 
   def printName(self):
     log.info("Node Name : {0}".format(self.node))
