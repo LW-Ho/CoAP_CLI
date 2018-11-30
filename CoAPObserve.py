@@ -25,16 +25,16 @@ class CoAPObserve(threading.Thread):
         :type response: coapthon.messages.response.Response
         """
         if response is not None:
-            print("")
-            log.debug("Got new message")
-            if log.isEnabledFor(logging.DEBUG):
-                packet_content = ":".join("{:02x}".format(ord(c)) for c in response.payload)
-                log.debug(packet_content)
-            log.debug("Payload length: {0}".format(len(response.payload)))
-            log.debug("=================================")
-            print(">")
+          print("")
+          log.debug("Got new message")
+          if log.isEnabledFor(logging.DEBUG):
+              packet_content = ":".join("{:02x}".format(ord(c)) for c in response.payload)
+              log.debug(packet_content)
+          log.debug("Payload length: {0}".format(len(response.payload)))
+          log.debug("=================================")
+          print(">")
 
-            # will upload data to mysql server.
+          # will upload data to mysql server.
           try :
             mote_data = MoteData.make_from_bytes(response.source[0], response.payload)
             if mote_data is not None and self.object_callback is not None:
