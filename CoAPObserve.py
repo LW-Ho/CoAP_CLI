@@ -25,9 +25,6 @@ class CoAPObserve(threading.Thread):
         :type response: coapthon.messages.response.Response
         """
         if response is not None:
-          if self.flag:
-            self.flag = False
-            
             print("")
             log.debug("Got new message")
             if log.isEnabledFor(logging.DEBUG):
@@ -41,9 +38,12 @@ class CoAPObserve(threading.Thread):
           try :
             mote_data = MoteData.make_from_bytes(response.source[0], response.payload)
             if mote_data is not None and self.object_callback is not None:
+              if self.flag:
+                self.flag = False
               self.counter_Observing+=1 # counter callback.
               self.object_callback(mote_data) # callback to main function.
           except :
+            self.flag = True
             log.info("Unexpected error: {0}".format(sys.exc_info()[0]))
             #self.stdout.write("Unexpected error:", sys.exc_info()[0])
             print("")
