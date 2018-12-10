@@ -9,7 +9,11 @@ def getAllMotes(host):
   #fo = open("../motesAddress","w")
 
   hostStr = "http://["+host+"]/"
-  res = requests.get(hostStr) # get website data
+  try:
+    res = requests.get(hostStr) # get website data
+  except:
+    print "Failed to get border-router link...  \nPlease wait a minutes, then try again."
+    return motes_List
 
   soup = BeautifulSoup(res.text, 'html.parser')
   mote_tags = soup.find_all('pre') # find <pre> html tag
