@@ -38,10 +38,13 @@ class AutoOb(threading.Thread):
       result = list(s1.difference(s2)) # compare list,we can know that is not observing.
       # try :
       for node in result:
-        coapObserve = CoAPObserve(node=node, resource="g/bcollect", object_callback=self.object_callback)
-        coapObserve.printName()
-        coapObserve.start()
-        self.mote_observe_lists.append(coapObserve)
+        try:
+          coapObserve = CoAPObserve(node=node, resource="g/bcollect", object_callback=self.object_callback)
+          coapObserve.printName()
+          coapObserve.start()
+          self.mote_observe_lists.append(coapObserve)
+        except:
+          log.info("Error of observe, have more threading... ")
 
       time.sleep(int(self.countDown)) # sleep.
       if self.countBR > 9:
