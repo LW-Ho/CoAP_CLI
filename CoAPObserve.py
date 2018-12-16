@@ -58,8 +58,11 @@ class CoAPObserve(threading.Thread):
   def stop(self):
     log.info("Stoping CoAP Observe \"{0}\" .".format(self.name))
     if self.coap_client is not None:
-      self.flag = True
-      self.coap_client.stop()
+      try:
+        self.flag = True
+        self.coap_client.stop()
+      except:
+        print("Cannot join thread before it is started...")
       return
 
   def printName(self):
