@@ -28,7 +28,7 @@ class CoAPObserve(threading.Thread):
           if self.flag:
             self.flag = False
             print("")
-            log.debug("Got new message")
+            log.debug("Got new message -> {0}".format(self.node))
             if log.isEnabledFor(logging.DEBUG):
                 packet_content = ":".join("{:02x}".format(ord(c)) for c in response.payload)
                 log.debug(packet_content)
