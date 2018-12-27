@@ -201,6 +201,7 @@ class CoAPCLI(Cmd):
         log.info("Delete got {0}!".format(index.getName()))
         if index.getCancelOb() is False:
           self.mote_observe_lists.remove(index)
+          break
 
   def do_auto(self, arg):
     args = arg.split(' ')

@@ -47,6 +47,7 @@ class CoAPObserve(threading.Thread):
               self.object_callback(mote_data) # callback to main function.
           except :
             self.flag = True
+            self.coap_client.cancel_observing(response, self.cancel_observe)
             log.info("Unexpected error: {0}".format(sys.exc_info()[0]))
             #self.stdout.write("Unexpected error:", sys.exc_info()[0])
             print("")
