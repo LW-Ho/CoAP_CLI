@@ -130,16 +130,16 @@ class CoAPCLI(Cmd):
       return
 
     args = arg.split(' ')
-    # try:
-    node = args[0]
-    resource = str(args[1])
-    coapObserve = CoAPObserve(node=node, resource=resource, object_callback=object_callback)
-    coapObserve.printName()
-    coapObserve.setDaemon(True)
-    coapObserve.start()
-    self.mote_observe_lists.append(coapObserve)
-    # except:
-    #   self.stdout.write("Error from observe.\n")
+    try:
+      node = args[0]
+      resource = str(args[1])
+      coapObserve = CoAPObserve(node=node, resource="g/"+resource, object_callback=object_callback)
+      coapObserve.printName()
+      coapObserve.setDaemon(True)
+      coapObserve.start()
+      self.mote_observe_lists.append(coapObserve)
+    except:
+      self.stdout.write("Error from observe.\n")
   
   def do_observeall(self, arg):
     if len(self.mote_lists) == 0:
@@ -157,7 +157,7 @@ class CoAPCLI(Cmd):
     
     try :
       for node in result:
-        coapObserve = CoAPObserve(node=node, resource="bcollect", object_callback=object_callback)
+        coapObserve = CoAPObserve(node=node, resource="g/bcollect", object_callback=object_callback)
         coapObserve.printName()
         coapObserve.setDaemon(True)
         coapObserve.start()

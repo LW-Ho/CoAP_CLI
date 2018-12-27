@@ -39,7 +39,7 @@ class AutoOb(threading.Thread):
       # try :
       for node in result:
         try:
-          coapObserve = CoAPObserve(node=node, resource="bcollect", object_callback=self.object_callback)
+          coapObserve = CoAPObserve(node=node, resource="g/bcollect", object_callback=self.object_callback)
           coapObserve.printName()
           coapObserve.start()
           self.mote_observe_lists.append(coapObserve)
