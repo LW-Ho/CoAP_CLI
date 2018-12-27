@@ -1,6 +1,7 @@
 import threading
 import sys
 from coapthon.client.helperclient import HelperClient
+from coapthon.utils import parse_uri
 
 from MoteData import MoteData
 import logging
@@ -15,7 +16,7 @@ class CoAPObserve(threading.Thread):
     self.counter_Observing = 0
     self.kwargs = kwargs
     self.node = node
-    self.resource = resource
+    self.resource = parse_uri(resource)
     self.port = port
     self.object_callback = object_callback
     self.response = None
