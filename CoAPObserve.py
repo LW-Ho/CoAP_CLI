@@ -16,7 +16,7 @@ class CoAPObserve(threading.Thread):
     self.counter_Observing = 0
     self.kwargs = kwargs
     self.node = node
-    self.resource = "coap://["+node+"]:"+port+"/"+resource
+    self.resource = str("coap://["+node+"]:"+port+"/"+resource)
     self.port = port
     self.object_callback = object_callback
     self.response = None
