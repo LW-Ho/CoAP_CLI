@@ -17,7 +17,7 @@ class CoAPObserve(threading.Thread):
     self.counter_Observing = 0
     self.kwargs = kwargs
     self.node = node
-    self.resource = str("coap://["+str(node)+"]:"+str(port)+"/"+str(resource))
+    self.resource = resource
     self.port = port
     self.object_callback = object_callback
     self.response = None
@@ -63,7 +63,6 @@ class CoAPObserve(threading.Thread):
             
 
   def run(self):
-    self.resource = parse_uri(self.resource)
     log.info("CoAP Observe \"{0}\" started.".format(self.name))
     print("")
     self.coap_client = HelperClient(server=(self.node, self.port))
