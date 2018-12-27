@@ -41,6 +41,7 @@ class AutoOb(threading.Thread):
         try:
           coapObserve = CoAPObserve(node=node, resource="g/bcollect", object_callback=self.object_callback)
           coapObserve.printName()
+          coapObserve.setDaemon(True)
           coapObserve.start()
           self.mote_observe_lists.append(coapObserve)
         except:

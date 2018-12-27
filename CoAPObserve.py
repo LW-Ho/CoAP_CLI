@@ -48,7 +48,7 @@ class CoAPObserve(threading.Thread):
           except :
             self.flag = True
             self.coap_client.cancel_observing(response, self.flag)
-            self.coap_client.stop()
+            self.coap_client.close()
             log.info("Unexpected error: {0}".format(sys.exc_info()[0]))
             #self.stdout.write("Unexpected error:", sys.exc_info()[0])
             print("")
@@ -61,11 +61,8 @@ class CoAPObserve(threading.Thread):
               :type send_rst: bool
               """
               self.coap_client.cancel_observing(response, self.cancel_observe)
+              self.coap_client.close()
               self.flag = True
-        else :
-          self.cancel_observe = False
-          self.stop()
-              
               
   def run(self):
     log.info("CoAP Observe \"{0}\" started.".format(self.name))
