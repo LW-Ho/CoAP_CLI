@@ -235,7 +235,6 @@ class CoAPCLI(Cmd):
         index.stop()
         log.info("Closing {0}!".format(index.getName()))
         self.mote_observe_lists.remove(index)
-        index.join() # testing, join to main thread, will be release it.
     sys.exit(1)
     
       
