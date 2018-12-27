@@ -239,7 +239,6 @@ class CoAPCLI(Cmd):
 
     if len(self.mote_observe_lists) != 0:
       self.stdout.write("You need delete to all nodes.\n")
-      break
     else:
       sys.exit(1)
     
