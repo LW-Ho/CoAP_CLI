@@ -59,10 +59,8 @@ class CoAPObserve(threading.Thread):
               :type send_rst: bool
               """
               self.coap_client.cancel_observing(response, self.cancel_observe)
+              self.cancel_observe = False
               
-
-            
-
   def run(self):
     log.info("CoAP Observe \"{0}\" started.".format(self.name))
     print("")
@@ -98,5 +96,8 @@ class CoAPObserve(threading.Thread):
 
   def saveCountCk(self, countOb):
     self.counter_Check = countOb
+
+  def getCancelOb(self):
+    return self.cancel_observe
     
     

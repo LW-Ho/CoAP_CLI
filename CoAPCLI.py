@@ -195,11 +195,12 @@ class CoAPCLI(Cmd):
           log.info("Delete got {0}!".format(index.getName()))
 
   def do_deleteall(self, arg):
-    if len(self.mote_observe_lists) != 0:
+    while len(self.mote_observe_lists) != 0:
       for index in self.mote_observe_lists:
         index.stop()
         log.info("Delete got {0}!".format(index.getName()))
-        self.mote_observe_lists.remove(index)
+        if index.getCancelOb() is False:
+          self.mote_observe_lists.remove(index)
 
   def do_auto(self, arg):
     args = arg.split(' ')
