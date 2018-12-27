@@ -58,7 +58,8 @@ class CoAPObserve(threading.Thread):
               :param explicit: if explicitly cancel using token
               :type send_rst: bool
               """
-              self.coap_client.cancel_observing(response=response, self.cancel_observe)
+              self.coap_client.cancel_observing(response, self.cancel_observe)
+              
 
             
 
