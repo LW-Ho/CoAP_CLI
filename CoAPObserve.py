@@ -61,7 +61,7 @@ class CoAPObserve(threading.Thread):
     if self.coap_client is not None:
       try:
         self.flag = True
-        self.coap_client.cancel_observing(self.response, self.flag)
+        self.coap_client.cancel_observing(response=self.response, explicit=self.flag)
       except:
         print("Cannot join thread before it is started...")
       return
