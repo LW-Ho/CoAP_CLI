@@ -18,6 +18,7 @@ class CoAPObserve(threading.Thread):
     self.resource = resource
     self.port = port
     self.object_callback = object_callback
+    self.response = None
     return
 
   def message_callback(self, response):
@@ -52,7 +53,7 @@ class CoAPObserve(threading.Thread):
     log.info("CoAP Observe \"{0}\" started.".format(self.name))
     print("")
     self.coap_client = HelperClient(server=(self.node, self.port))
-    self.coap_client.observe(path=self.resource, callback=self.message_callback)
+    self.response = self.coap_client.observe(path=self.resource, callback=self.message_callback)
     return
 
   def stop(self):
@@ -60,7 +61,7 @@ class CoAPObserve(threading.Thread):
     if self.coap_client is not None:
       try:
         self.flag = True
-        self.coap_client.stop()
+        self.coap_client.cancel_observing(self.response, self.flag)
       except:
         print("Cannot join thread before it is started...")
       return
