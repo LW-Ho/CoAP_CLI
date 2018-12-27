@@ -80,7 +80,7 @@ class CoAPObserve(threading.Thread):
       try:
         self.flag = True
         self.cancel_observe = True
-        self.coap_client.stop()
+        self.coap_client.close()
       except:
         print("Cannot join thread before it is started...")
       return
