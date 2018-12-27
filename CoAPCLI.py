@@ -198,9 +198,10 @@ class CoAPCLI(Cmd):
     while len(self.mote_observe_lists) != 0:
       for index in self.mote_observe_lists:
         index.stopOb()
-        if index.checkOb() is False:
+        if index.getFlag() is True:
           log.info("Delete got {0}!".format(index.getName()))
           self.mote_observe_lists.remove(index)
+          index.join()
 
 
   def do_auto(self, arg):

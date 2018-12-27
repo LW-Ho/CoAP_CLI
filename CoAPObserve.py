@@ -47,7 +47,8 @@ class CoAPObserve(threading.Thread):
               self.object_callback(mote_data) # callback to main function.
           except :
             self.flag = True
-            self.coap_client.cancel_observing(response, True)
+            self.coap_client.cancel_observing(response, self.flag)
+            self.coap_client.stop()
             log.info("Unexpected error: {0}".format(sys.exc_info()[0]))
             #self.stdout.write("Unexpected error:", sys.exc_info()[0])
             print("")
@@ -60,6 +61,7 @@ class CoAPObserve(threading.Thread):
               :type send_rst: bool
               """
               self.coap_client.cancel_observing(response, self.cancel_observe)
+              self.cancel_observe = False
         else :
           self.cancel_observe = False
           self.stop()
@@ -76,8 +78,9 @@ class CoAPObserve(threading.Thread):
     log.info("Stoping CoAP Observe \"{0}\" .".format(self.name))
     if self.coap_client is not None:
       try:
-        #self.flag = True
+        self.flag = True
         self.cancel_observe = True
+        self.coap_client.stop()
       except:
         print("Cannot join thread before it is started...")
       return
