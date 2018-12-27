@@ -192,7 +192,14 @@ class CoAPCLI(Cmd):
         if index.getName() == arg:
           index.stop()
           self.mote_observe_lists.remove(index)
-          self.stdout.write("Delete got %s\n" %(str(arg)))
+          log.info("Delete got {0}!".format(index.getName()))
+
+  def do_deleteall(self, arg):
+    if len(self.mote_observe_lists) != 0:
+      for index in self.mote_observe_lists:
+        index.stop()
+        log.info("Delete got {0}!".format(index.getName()))
+        self.mote_observe_lists.remove(index)
 
   def do_auto(self, arg):
     args = arg.split(' ')
@@ -230,12 +237,11 @@ class CoAPCLI(Cmd):
   def do_quit(self, arg):
     log.info("Stopping CoAPCLI...")
 
-    while len(self.mote_observe_lists) != 0:
-      for index in self.mote_observe_lists:
-        index.stop()
-        log.info("Closing {0}!".format(index.getName()))
-        self.mote_observe_lists.remove(index)
-    sys.exit(1)
+    if len(self.mote_observe_lists) != 0:
+      self.stdout.write("You need delete to all nodes.\n")
+      break
+    else:
+      sys.exit(1)
     
       
         
