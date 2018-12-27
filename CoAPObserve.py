@@ -61,7 +61,7 @@ class CoAPObserve(threading.Thread):
               :type send_rst: bool
               """
               self.coap_client.cancel_observing(response, self.cancel_observe)
-              self.cancel_observe = False
+              self.flag = True
         else :
           self.cancel_observe = False
           self.stop()
