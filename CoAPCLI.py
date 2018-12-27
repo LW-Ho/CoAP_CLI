@@ -232,9 +232,9 @@ class CoAPCLI(Cmd):
 
     while len(self.mote_observe_lists) != 0:
       for index in self.mote_observe_lists:
+        index.stop()
         log.info("Closing {0}!".format(index.getName()))
         self.mote_observe_lists.remove(index)
-        index.stop()
         index.join() # testing, join to main thread, will be release it.
     sys.exit(1)
     
