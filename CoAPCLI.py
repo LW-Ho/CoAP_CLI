@@ -65,7 +65,7 @@ class CoAPCLI(Cmd):
     log.info("Starting CoAPCLI...")
 
     Cmd.__init__(self)
-    self.doc_header = 'Commands: \ngetallmotes \nlist \npost \npostall \nobserve \nobserveall \nobservelist \ndelete \nauto \nquit'
+    self.doc_header = 'Commands: \ngetallmotes \nlist \npost \npostall \nobserve \nobserveall \nobservelist \ndelete \ndeleteall \nauto \nquit'
     self.prompt = '>'
     self.intro = '\nCoAP Command Line Tool, Welcome to use it!'
 
@@ -195,13 +195,12 @@ class CoAPCLI(Cmd):
           log.info("Delete got {0}!".format(index.getName()))
 
   def do_deleteall(self, arg):
-    while len(self.mote_observe_lists) != 0:
+    if len(self.mote_observe_lists) != 0:
       for index in self.mote_observe_lists:
         index.stop()
         log.info("Delete got {0}!".format(index.getName()))
-        if index.getCancelOb() is False:
-          self.mote_observe_lists.remove(index)
-          break
+        self.mote_observe_lists.remove(index)
+
 
   def do_auto(self, arg):
     args = arg.split(' ')

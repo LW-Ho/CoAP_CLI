@@ -47,7 +47,7 @@ class CoAPObserve(threading.Thread):
               self.object_callback(mote_data) # callback to main function.
           except :
             self.flag = True
-            self.coap_client.cancel_observing(response, self.cancel_observe)
+            self.coap_client.cancel_observing(response, True)
             log.info("Unexpected error: {0}".format(sys.exc_info()[0]))
             #self.stdout.write("Unexpected error:", sys.exc_info()[0])
             print("")
@@ -97,8 +97,5 @@ class CoAPObserve(threading.Thread):
 
   def saveCountCk(self, countOb):
     self.counter_Check = countOb
-
-  def getCancelOb(self):
-    return self.cancel_observe
     
     
