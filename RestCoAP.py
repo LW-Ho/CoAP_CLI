@@ -6,7 +6,7 @@ port = 5683
 
 def postQueryToNode(node,resource,query):
   query = "?"+query
-  resource = "g/"+resource+query
+  resource = resource+query
   try:
     coap_client = HelperClient(server=(node, port))
     start = time.time()

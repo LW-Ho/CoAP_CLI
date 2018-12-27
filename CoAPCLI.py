@@ -132,7 +132,7 @@ class CoAPCLI(Cmd):
     args = arg.split(' ')
     # try:
     node = args[0]
-    resource = "g/"+str(args[1])
+    resource = str(args[1])
     coapObserve = CoAPObserve(node=node, resource=resource, object_callback=object_callback)
     coapObserve.printName()
     coapObserve.setDaemon(True)
@@ -157,7 +157,7 @@ class CoAPCLI(Cmd):
     
     try :
       for node in result:
-        coapObserve = CoAPObserve(node=node, resource="g/bcollect", object_callback=object_callback)
+        coapObserve = CoAPObserve(node=node, resource="bcollect", object_callback=object_callback)
         coapObserve.printName()
         coapObserve.setDaemon(True)
         coapObserve.start()
