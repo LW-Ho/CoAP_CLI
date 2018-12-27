@@ -12,6 +12,7 @@ class CoAPObserve(threading.Thread):
     threading.Thread.__init__(self, group=group, target=target, name=node, verbose=verbose)
     self.coap_client = None
     self.flag = True
+    self.cancel_observe = False
     self.counter_Check = 0
     self.counter_Observing = 0
     self.kwargs = kwargs
@@ -49,21 +50,32 @@ class CoAPObserve(threading.Thread):
             log.info("Unexpected error: {0}".format(sys.exc_info()[0]))
             #self.stdout.write("Unexpected error:", sys.exc_info()[0])
             print("")
+          else :
+            if self.cancel_observe:
+              """
+              Delete observing on the remote server.
+              :param response: the last received response
+              :param explicit: if explicitly cancel using token
+              :type send_rst: bool
+              """
+              self.coap_client.cancel_observe(response=response ,explicit=self.cancel_observe)
+
+            
 
   def run(self):
     self.resource = parse_uri(self.resource)
     log.info("CoAP Observe \"{0}\" started.".format(self.name))
     print("")
     self.coap_client = HelperClient(server=(self.node, self.port))
-    self.response = self.coap_client.observe(path=self.resource, callback=self.message_callback)
+    self.coap_client.observe(path=self.resource, callback=self.message_callback)
     return
 
   def stop(self):
     log.info("Stoping CoAP Observe \"{0}\" .".format(self.name))
     if self.coap_client is not None:
       try:
-        self.flag = True
-        self.coap_client.cancel_observing(response=self.response, explicit=self.flag)
+        #self.flag = True
+        self.cancel_observe = True
       except:
         print("Cannot join thread before it is started...")
       return
