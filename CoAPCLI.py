@@ -226,6 +226,7 @@ class CoAPCLI(Cmd):
         self.stdout.write("You must stop before you can start again.\n")
     elif args[0] == "stop" and self.autoObserve is not None:
       self.autoObserve.stop()
+      self.autoObserve.join()
     else:
       self.stdout.write("Need type auto start or auto stop.\n")
       return
