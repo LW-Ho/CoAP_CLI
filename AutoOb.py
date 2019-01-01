@@ -51,7 +51,7 @@ class AutoOb(threading.Thread):
       count = 0
       while count < self.countDown :
         time.sleep(1)
-        count + 1
+        count += 1
         print "timer : %d ..." % (count)
       # time.sleep(int(self.countDown)) # sleep.
 
