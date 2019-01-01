@@ -47,28 +47,30 @@ class AutoOb(threading.Thread):
         print (e)
         log.info("Error of observe, have more threading... ")
 
-    timer = threading.Timer(int(self.countDown), self.run())
-    timer.start()
     # time.sleep(int(self.countDown)) # sleep.
 
-    if self.countBR > 9:
+    if self.countBR != 0 :
+      log.info("Observe ALL Done.")
+
+      self.mote_lists = self.autoOb_callback(self.mote_observe_lists, False)
+
+      for node in self.mote_observe_lists:
+        # print str(node.getName())+" -> Counter Ob : "+str(node.getCountOb())+", Counter Ck : "+str(node.getCountCk())
+        print "%s  -> Counter Ob : %s , Counter Ck : %s " % (node.getName(), node.getCountOb(), node.getCountCk())
+        if (node.getCountOb() - node.getCountCk()) > 1: # threshold number.
+          node.saveCountCk(node.getCountOb()) # record fresh count number.
+        else:
+          node.stop()
+          self.mote_observe_lists.remove(node)
+
+    if self.countBR > 10:
       self.refreshBR()
-      self.countBR = 0
+      self.countBR = 1
     else :
       self.countBR+=1
     
-    log.info("Observe ALL Done.")
-
-    self.mote_lists = self.autoOb_callback(self.mote_observe_lists, False)
-
-    for node in self.mote_observe_lists:
-      # print str(node.getName())+" -> Counter Ob : "+str(node.getCountOb())+", Counter Ck : "+str(node.getCountCk())
-      print "%s  -> Counter Ob : %s , Counter Ck : %s " % (node.getName(), node.getCountOb(), node.getCountCk())
-      if (node.getCountOb() - node.getCountCk()) > 1: # threshold number.
-        node.saveCountCk(node.getCountOb()) # record fresh count number.
-      else:
-        node.stop()
-        self.mote_observe_lists.remove(node)
+    timer = threading.Timer(int(self.countDown), self.run())
+    timer.start()
 
   def stop(self):
     log.info("Stoping auto observing nodes.")
