@@ -17,7 +17,7 @@ class AutoOb(threading.Thread):
     self.autoOb_callback = autoOb_callback
     self.object_callback = object_callback
     self.signal = True
-    self.countDown = float(countDown)
+    self.countDown = int(countDown)
     self.countBR = 0
     return
 
@@ -25,31 +25,40 @@ class AutoOb(threading.Thread):
     log.info("Starting auto observing nodes.")
     print("")
     if self.countDown is None or self.countDown < 60:
-      self.countDown = 60.0
+      self.countDown = 60
 
-    s1 = set(self.mote_lists)
-    temp = []
+    while self.signal :
+      s1 = set(self.mote_lists)
+      temp = []
 
-    for obnode in self.mote_observe_lists: # to change element type, then save to oher list. (CoAP to string)
-      temp.append(obnode.getName())
-    s2 = set(temp)
+      for obnode in self.mote_observe_lists: # to change element type, then save to oher list. (CoAP to string)
+        temp.append(obnode.getName())
+      s2 = set(temp)
 
-    result = list(s1.difference(s2)) # compare list,we can know that is not observing.
-    # try :
-    for node in result:
-      try:
-        coapObserve = CoAPObserve(node=node, resource="g/bcollect", object_callback=self.object_callback)
-        coapObserve.printName()
-        coapObserve.setDaemon(True)
-        coapObserve.start()
-        self.mote_observe_lists.append(coapObserve)
-      except Exception as e:
-        print (e)
-        log.info("Error of observe, have more threading... ")
+      result = list(s1.difference(s2)) # compare list,we can know that is not observing.
+      # try :
+      for node in result:
+        try:
+          coapObserve = CoAPObserve(node=node, resource="g/bcollect", object_callback=self.object_callback)
+          coapObserve.printName()
+          coapObserve.setDaemon(True)
+          coapObserve.start()
+          self.mote_observe_lists.append(coapObserve)
+        except Exception as e:
+          print (e)
+          log.info("Error of observe, have more threading... ")
 
-    # time.sleep(int(self.countDown)) # sleep.
+      count = 0
+      while count < self.countDown :
+        time.sleep(1)
+      # time.sleep(int(self.countDown)) # sleep.
 
-    if self.countBR != 0 :
+      if self.countBR > 9:
+        self.refreshBR()
+        self.countBR = 0
+      else :
+        self.countBR+=1
+
       log.info("Observe ALL Done.")
 
       self.mote_lists = self.autoOb_callback(self.mote_observe_lists, False)
@@ -63,17 +72,9 @@ class AutoOb(threading.Thread):
           node.stop()
           self.mote_observe_lists.remove(node)
 
-    if self.countBR > 10:
-      self.refreshBR()
-      self.countBR = 1
-    else :
-      self.countBR+=1
-    
-    timer = threading.Timer(self.countDown, self.run())
-    timer.start()
-
   def stop(self):
     log.info("Stoping auto observing nodes.")
+    self.signal = False
     return
 
   def refreshBR(self):
