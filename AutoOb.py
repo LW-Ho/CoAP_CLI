@@ -17,7 +17,7 @@ class AutoOb(threading.Thread):
     self.autoOb_callback = autoOb_callback
     self.object_callback = object_callback
     self.signal = True
-    self.countDown = countDown
+    self.countDown = float(countDown)
     self.countBR = 0
     return
 
@@ -25,7 +25,7 @@ class AutoOb(threading.Thread):
     log.info("Starting auto observing nodes.")
     print("")
     if self.countDown is None or self.countDown < 60:
-      self.countDown = 60
+      self.countDown = 60.0
 
     s1 = set(self.mote_lists)
     temp = []
@@ -69,7 +69,7 @@ class AutoOb(threading.Thread):
     else :
       self.countBR+=1
     
-    timer = threading.Timer(int(self.countDown), self.run())
+    timer = threading.Timer(self.countDown, self.run())
     timer.start()
 
   def stop(self):
