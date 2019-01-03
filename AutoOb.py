@@ -52,7 +52,7 @@ class AutoOb(threading.Thread):
       while count < self.countDown :
         time.sleep(1)
         count += 1
-        print "timer : %d ..." % (count)
+        #print "timer : %d ..." % (count)
       # time.sleep(int(self.countDown)) # sleep.
 
       if self.countBR > 9:
