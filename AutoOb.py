@@ -73,6 +73,7 @@ class AutoOb(threading.Thread):
         else:
           node.stop()
           self.mote_observe_lists.remove(node)
+          node = None
 
   def stop(self):
     log.info("Stoping auto observing nodes.")

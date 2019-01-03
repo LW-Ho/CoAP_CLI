@@ -190,9 +190,10 @@ class CoAPCLI(Cmd):
     if len(self.mote_observe_lists) != 0:
       for index in self.mote_observe_lists:
         if index.getName() == arg:
-          index.stop()
+          #index.stop()
           self.mote_observe_lists.remove(index)
           log.info("Delete got {0}!".format(index.getName()))
+          index = None
 
   def do_deleteall(self, arg):
     while len(self.mote_observe_lists) != 0:
@@ -201,8 +202,10 @@ class CoAPCLI(Cmd):
         if index.getFlag() is True:
           log.info("Delete got {0}!".format(index.getName()))
           self.mote_observe_lists.remove(index)
-          index.stop() # stop coap_client
-          index.join() # release thread.
+          index.stop()
+          index = None
+          #index.stop() # stop coap_client
+          #index.join() # release thread.
         else :
           index.stopOb()
 
@@ -226,7 +229,8 @@ class CoAPCLI(Cmd):
         self.stdout.write("You must stop before you can start again.\n")
     elif args[0] == "stop" and self.autoObserve is not None:
       self.autoObserve.stop()
-      self.autoObserve.join()
+      self.autoObserve = None
+      #self.autoObserve.join()
     else:
       self.stdout.write("Need type auto start or auto stop.\n")
       return
