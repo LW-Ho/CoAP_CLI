@@ -49,14 +49,18 @@ class AutoOb(threading.Thread):
           log.info("Error of observe, have more threading... ")
 
       count = 0
-      while count < self.countDown :
-        time.sleep(1)
-        count += 1
-        print "timer : %d ..." % (count) # for testing.
-      # time.sleep(int(self.countDown)) # sleep.
+      try:
+        while count < self.countDown :
+          time.sleep(1)
+          count += 1
+          print "timer : %d ..." % (count) # for testing.
+        # time.sleep(int(self.countDown)) # sleep.
+      except Exception as e:
+        print (e)
+        log.info("Error of count down timer... ")
 
       if self.countBR > 9:
-        self.refreshBR()
+        self.refreshBR() # get new routing table from border router.
         self.countBR = 0
       else :
         self.countBR+=1

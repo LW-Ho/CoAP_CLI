@@ -60,7 +60,7 @@ class CoAPObserve(threading.Thread):
               :param explicit: if explicitly cancel using token
               :type send_rst: bool
               """
-              self.coap_client.cancel_observing(response, self.cancel_observe)
+              self.coap_client.cancel_observing(response, self.cancel_observe) # send RST packet by CoAP.
               self.coap_client.close()
               self.flag = True
               
