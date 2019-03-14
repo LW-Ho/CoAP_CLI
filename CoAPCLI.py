@@ -4,7 +4,6 @@ import sys
 from cmd import Cmd
 from GetMotes import getAllMotes
 import RestCoAP
-from CoAPObserve import CoAPObserve
 from AutoOb import AutoOb
 
 logging.config.fileConfig(os.path.join('logging.conf'))
@@ -27,6 +26,8 @@ engine = create_engine('mysql+mysqlconnector://{username}:{password}@{host}/{dat
                                                                                                ), echo=False)
 session_factory = sessionmaker(bind=engine)
 Session = scoped_session(session_factory)
+
+from CoAPObserve import CoAPObserve
 
 def object_callback(mote_data):
     try:

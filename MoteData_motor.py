@@ -1,5 +1,5 @@
 import logging
-log = logging.getLogger("moteData")
+log = logging.getLogger("motorData")
 
 import upload_data_requests_motor
 
