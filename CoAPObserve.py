@@ -44,11 +44,11 @@ class CoAPObserve(threading.Thread):
           # will upload data to mysql server.
           try :
             if self.resource == "g/sht21" or self.resource == "g/arduinoBoard":
-              MoteData.make_from_bytes(response.source[0], response.payload)
               log.debug("environment got it.")
+              MoteData.make_from_bytes(response.source[0], response.payload)
             elif self.resource == "g/sicslowpan" :
-              MoteData_motor.make_from_bytes(response.source[0], response.payload)
               log.debug("Motor Data got it.")
+              MoteData_motor.make_from_bytes(response.source[0], response.payload)
             else :
               # will be added punch_machine data to upload om2m server.
               log.debug("have no uploaded, need to check other setting.")
