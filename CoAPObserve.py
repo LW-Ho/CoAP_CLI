@@ -47,7 +47,7 @@ class CoAPObserve(threading.Thread):
             elif self.resource == "sicslowpan" :
               mote_data = MoteData_motor.make_from_bytes(response.source[0], response.payload)
             else :
-              # will be added 沖床 data to upload om2m server.
+              # will be added punch_machine data to upload om2m server.
               continue
             if mote_data is not None and self.object_callback is not None:
               self.counter_Observing+=1 # counter callback.
