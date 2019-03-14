@@ -51,7 +51,7 @@ class CoAPObserve(threading.Thread):
               self.object_callback(mote_data) # callback to main function.
             else :
               # will be added punch_machine data to upload om2m server.
-              return
+              log.debug("have no uploaded, need to check other setting.")
             # if mote_data is not None and self.object_callback is not None:
             #   self.counter_Observing+=1 # counter callback.
             #   self.object_callback(mote_data) # callback to main function.

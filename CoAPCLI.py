@@ -30,8 +30,8 @@ Session = scoped_session(session_factory)
 
 def object_callback(mote_data):
     try:
-        # log.info("Got new object_callback")
-        # log.debug(mote_data)
+        log.info("Got new object_callback")
+        log.debug(mote_data)
 
         if flag_DB :
           #log.info("Got new object_callback in flag_DB")
