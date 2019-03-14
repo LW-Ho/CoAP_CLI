@@ -45,14 +45,16 @@ class CoAPObserve(threading.Thread):
           try :
             if self.resource == "sht21" or self.resource == "arduinoBoard":
               mote_data = MoteData.make_from_bytes(response.source[0], response.payload)
+              self.object_callback(mote_data) # callback to main function.
             elif self.resource == "sicslowpan" :
               mote_data = MoteData_motor.make_from_bytes(response.source[0], response.payload)
+              self.object_callback(mote_data) # callback to main function.
             else :
               # will be added punch_machine data to upload om2m server.
               return
-            if mote_data is not None and self.object_callback is not None:
-              self.counter_Observing+=1 # counter callback.
-              self.object_callback(mote_data) # callback to main function.
+            # if mote_data is not None and self.object_callback is not None:
+            #   self.counter_Observing+=1 # counter callback.
+            #   self.object_callback(mote_data) # callback to main function.
           except :
             self.flag = True
             self.coap_client.cancel_observing(response, self.flag)
