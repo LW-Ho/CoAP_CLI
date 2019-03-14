@@ -43,10 +43,10 @@ class CoAPObserve(threading.Thread):
 
           # will upload data to mysql server.
           try :
-            if self.resource == "sht21" or self.resource == "arduinoBoard":
+            if self.resource == "g/sht21" or self.resource == "g/arduinoBoard":
               mote_data = MoteData.make_from_bytes(response.source[0], response.payload)
               self.object_callback(mote_data) # callback to main function.
-            elif self.resource == "sicslowpan" :
+            elif self.resource == "g/sicslowpan" :
               mote_data = MoteData_motor.make_from_bytes(response.source[0], response.payload)
               self.object_callback(mote_data) # callback to main function.
             else :
