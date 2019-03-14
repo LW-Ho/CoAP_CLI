@@ -3,8 +3,9 @@ import sys
 from coapthon.client.helperclient import HelperClient
 from coapthon.utils import parse_uri
 
-from MoteData import MoteData
 from MoteData_motor import MoteData_motor
+from MoteData import MoteData
+
 import logging
 log = logging.getLogger("CoAPObserve")
 
