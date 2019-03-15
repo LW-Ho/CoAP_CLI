@@ -1,3 +1,5 @@
+import sys
+
 import logging
 log = logging.getLogger("moteData")
 
@@ -80,7 +82,10 @@ class MoteData(Base):
             #"xx",   # end_alignment_padding[2]
         ]
         packet_format_str = ''.join(packet_format)
-        packet_item = struct.unpack(packet_format_str, data)
+        try:
+            packet_item = struct.unpack(packet_format_str, data)
+        except:
+            log.info("Unexpected error of struct : {0}".format(sys.exc_info()[0]))
         mote_data = MoteData(
             mote=mote,
             packet_tcflow=packet_item[0],
@@ -99,6 +104,9 @@ class MoteData(Base):
             gasValue=packet_item[13],
             gasAlarm=packet_item[1],
         )
-        upload_data_requests.send(mote,packet_item[0],packet_item[14],packet_item[15],packet_item[13],packet_item[1])
+        try:
+            upload_data_requests.send(mote,packet_item[0],packet_item[14],packet_item[15],packet_item[13],packet_item[1])
+        except:
+            log.info("Unexpected error of requests: {0}".format(sys.exc_info()[0]))
         #return mote_data
     
