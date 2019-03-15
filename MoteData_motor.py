@@ -12,7 +12,7 @@ from sqlalchemy import Column, Integer, String, DateTime
 
 # parser payload information.
 
-class MoteData():
+class MoteData_motor():
     __tablename__ = 'motor_data'
 
     def __str__(self):
@@ -96,5 +96,5 @@ class MoteData():
         packet_item = struct.unpack(packet_format_str, data)
 
         upload_data_requests_motor.send(packet_item[0], packet_item[1], packet_item[2], packet_item[3], packet_item[4], packet_item[5], packet_item[6], packet_item[7], packet_item[8], packet_item[9], packet_item[10], packet_item[11], packet_item[12], packet_item[13], packet_item[14], packet_item[15], packet_item[16], packet_item[17], packet_item[18], packet_item[19], packet_item[20], packet_item[21], packet_item[22], packet_item[23], packet_item[24], packet_item[25], packet_item[26], packet_item[27], packet_item[28], packet_item[29], packet_item[30], packet_item[31])
-    
+
 # add fd00::212:4b00:615:a5d4 g/sicslowpan
