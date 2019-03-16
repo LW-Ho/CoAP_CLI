@@ -4,7 +4,7 @@ from coapthon.client.helperclient import HelperClient
 from coapthon.utils import parse_uri
 
 #import MoteData_motor
-from MoteData_Evi import MoteData
+from MoteData import MoteData
 
 import logging
 log = logging.getLogger("CoAPObserve")
@@ -45,7 +45,7 @@ class CoAPObserve(threading.Thread):
           try :
             if self.resource == "g/sht21" or self.resource == "g/arduinoBoard":
               log.debug("environment got it.")
-              MoteData_Evi.make_from_bytes(response.source[0], response.payload)
+              MoteData.make_from_bytes(response.source[0], response.payload)
             # elif self.resource == "g/sicslowpan" :
             #   log.debug("Motor Data got it.")
             #   MoteData_motor.make_from_bytes(response.source[0], response.payload)
