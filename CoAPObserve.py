@@ -3,8 +3,9 @@ import sys
 from coapthon.client.helperclient import HelperClient
 from coapthon.utils import parse_uri
 
-#import MoteData_motor
 from MoteData import MoteData
+from MoteData_motor import MoteData_motor
+
 
 import logging
 log = logging.getLogger("CoAPObserve")
@@ -46,9 +47,9 @@ class CoAPObserve(threading.Thread):
             if self.resource == "g/sht21" or self.resource == "g/arduinoBoard":
               log.debug("environment got it.")
               MoteData.make_from_bytes(response.source[0], response.payload)
-            # elif self.resource == "g/sicslowpan" :
-            #   log.debug("Motor Data got it.")
-            #   MoteData_motor.make_from_bytes(response.source[0], response.payload)
+            elif self.resource == "g/sicslowpan" :
+              log.debug("Motor Data got it.")
+              MoteData_motor.make_from_bytes(response.source[0], response.payload)
             else :
               # will be added punch_machine data to upload om2m server.
               log.debug("have no uploaded, need to check other setting.")
