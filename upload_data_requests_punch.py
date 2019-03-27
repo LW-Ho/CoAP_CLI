@@ -10,7 +10,7 @@ def send(data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, 
 
     headers = { 'X-M2M-Origin': "admin:admin", 'Content-Type': "application/json;ty=4", 'Connection': "close" }
     try:
-        if data32 == 0:
+        if data30 == 0:
             print "The data incomplete, wating next get. "
         else:
             requests.packages.urllib3.disable_warnings()
