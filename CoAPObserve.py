@@ -5,6 +5,7 @@ from coapthon.utils import parse_uri
 
 from MoteData import MoteData
 from MoteData_motor import MoteData_motor
+from MoteData_punch import MoteData_punch
 
 
 import logging
@@ -50,6 +51,9 @@ class CoAPObserve(threading.Thread):
             elif self.resource == "g/sicslowpan" :
               log.debug("Motor Data got it.")
               MoteData_motor.make_from_bytes(response.source[0], response.payload)
+            elif self.resource == "g/punch" :
+              log.debug("Punch Data got it.")
+              MoteData_punch.make_from_bytes(response.source[0], response.payload)
             else :
               # will be added punch_machine data to upload om2m server.
               log.debug("have no uploaded, need to check other setting.")
