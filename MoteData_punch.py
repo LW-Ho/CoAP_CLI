@@ -12,7 +12,7 @@ from sqlalchemy import Column, Integer, String, DateTime
 
 # parser payload information.
 
-class MoteData_motor():
+class MoteData_punch():
     __tablename__ = 'punch_data'
 
     def __str__(self):
