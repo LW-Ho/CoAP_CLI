@@ -47,7 +47,8 @@ class CoAPObserve(threading.Thread):
           try :
             if self.resource == "g/sht21" or self.resource == "g/arduinoBoard":
               log.debug("environment got it.")
-              MoteData.make_from_bytes(response.source[0], response.payload)
+              mote_data = MoteData.make_from_bytes(response.source[0], response.payload)
+              self.object_callback(mote_data) # callback to main function.
             elif self.resource == "g/sicslowpan" :
               log.debug("Motor Data got it.")
               MoteData_motor.make_from_bytes(response.source[0], response.payload)

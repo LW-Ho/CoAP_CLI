@@ -111,5 +111,5 @@ class MoteData(Base):
         except:
             print "Unexpected error of requests"
             #log.info("Unexpected error of requests: {0}".format(sys.exc_info()[0]))
-        #return mote_data
+        return mote_data
     
