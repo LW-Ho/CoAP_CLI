@@ -9,4 +9,5 @@ def get_table(void):
     # return false
     return 0
   else :
+    print "Got it ~~"
     return topology_table
