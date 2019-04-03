@@ -4,6 +4,10 @@ import string
 
 def getAllMotes(host):
   motes_List = []
+  # parent_table = []
+  topology_table = []
+  child = ''
+  parent = ''
 
   # save mote's address to file, will take it observe to all motes.
   #fo = open("../motesAddress","w")
@@ -21,15 +25,25 @@ def getAllMotes(host):
     tag
   motesStr = tag.string
   motesStr = motesStr.encode('utf-8') # encode unicode
+  motesStr = motesStr.replace(')','')
   motesStr = motesStr.split()
 
-  for index in range(0,len(motesStr),4):
+  for index in range(0, len(motesStr), 4):
     #fo.write("add "+motesStr[index]+" bcollect\n")
     #fo.write(motesStr[index]+"\n")
+    temp = []
+    for parent_index in range(2, len(motesStr), 4):
+      parent = motesStr[parent_index]
+      temp.append(parent)
+
+    child = motesStr[index]
+    temp.append(child)
+    topology_table.append[temp]
     motes_List.append(motesStr[index])
     print motesStr[index]
   
   #fo.close()
+  print topology_table
   return motes_List # return mote lists
 
 #getAllMotes Done.
