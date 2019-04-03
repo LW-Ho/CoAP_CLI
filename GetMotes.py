@@ -16,7 +16,7 @@ def getAllMotes(host):
     return motes_List
 
   soup = BeautifulSoup(res.text, 'html.parser')
-  mote_tags = soup.find_all('pre') # find <pre> html tag
+  mote_tags = soup.find_all('li', class_="link") # find <li> html tag bind class name.
   for tag in mote_tags:
     tag
   motesStr = tag.string

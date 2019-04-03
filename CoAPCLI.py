@@ -62,7 +62,7 @@ def optional_mysqlDB():
 
 class CoAPCLI(Cmd):
   def __init__(self):
-    log.info("Starting CoAPCLI...")
+    log.info("Starting CoAP command line to control centralized scheduling...")
 
     Cmd.__init__(self)
     self.doc_header = 'Commands: \ngetallmotes \nlist \npost \npostall \nobserve \nobserveall \nobservelist \ndelete \ndeleteall \nauto \nquit'
