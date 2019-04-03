@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
 import string
-from Topology_table import Topology_table
+import TopologyTable
 
 def getAllMotes(host):
   motes_List = []
