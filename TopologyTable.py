@@ -7,7 +7,7 @@ def get_table(void):
 
   if len(topology_table) is 0 :
     # return false
-    return 0
+    return []
   else :
     print "Got it ~~"
     return topology_table
