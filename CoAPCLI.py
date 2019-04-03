@@ -85,8 +85,11 @@ class CoAPCLI(Cmd):
       self.stdout.write("Current Motes List : \n")
       self.mote_lists = getAllMotes(self.border_router_Addr) # get motes from border router website.
       self.stdout.write("====== End of List =======\n")
-      self.topology_table = Topology_table.get_table()
-      self.stdout.write("Got the table from topology\n")
+      self.topology_table = TopologyTable.get_table()
+      if self.topology_table is 0 :
+        log.info("Can't get the topology.")
+      else :
+        log.info("Got the topology.")
     except:
       self.stdout.write("Error from getallmotes.\n")
 
