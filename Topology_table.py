@@ -1,6 +1,6 @@
 topology_table = []
 
-def set_table(topology_List)
+def set_table(topology_List):
   topology_table = topology_List
 
 def get_table(void):
