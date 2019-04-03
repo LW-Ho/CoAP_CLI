@@ -6,7 +6,7 @@ from GetMotes import getAllMotes
 import RestCoAP
 from CoAPObserve import CoAPObserve
 from AutoOb import AutoOb
-from topology import Topology_table
+from Topology_table import Topology_table
 
 logging.config.fileConfig(os.path.join('logging.conf'))
 log = logging.getLogger("root")
@@ -85,7 +85,7 @@ class CoAPCLI(Cmd):
       self.stdout.write("Current Motes List : \n")
       self.mote_lists = getAllMotes(self.border_router_Addr) # get motes from border router website.
       self.stdout.write("====== End of List =======\n")
-      self.topology_table = topology.get_table()
+      self.topology_table = Topology_table.get_table()
       self.stdout.write("Got the table from topology\n")
     except:
       self.stdout.write("Error from getallmotes.\n")
