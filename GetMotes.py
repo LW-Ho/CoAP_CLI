@@ -42,7 +42,7 @@ def getAllMotes(host):
       temp.append(child)
       topology_table.append(temp)
       motes_List.append(motesStr[index])
-      print motesStr[index]
+      #print motesStr[index]
   
   TopologyTable.set_table(host, topology_table)
 
