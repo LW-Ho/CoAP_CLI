@@ -2,7 +2,7 @@ topology_table = []
 global_counter = 0
 testing_flag = 0
 
-def set_table(topology_List, host):
+def set_table(host, topology_List):
   dictTemp = {}
 
   for item in topology_list:
