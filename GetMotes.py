@@ -9,7 +9,6 @@ def getAllMotes(host):
   topology_table = []
   child = ''
   parent = ''
-  host = 'fd00::201:1:1:1'
     # save mote's address to file, will take it observe to all motes.
     #fo = open("../motesAddress","w")
 
@@ -44,8 +43,9 @@ def getAllMotes(host):
       topology_table.append(temp)
       motes_List.append(motesStr[index])
       print motesStr[index]
+  
+  TopologyTable.set_table(host, topology_table)
 
-  TopologyTable.set_table(topology_table)
     #fo.close()
   return motes_List # return mote lists
 #getAllMotes Done.
