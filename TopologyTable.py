@@ -5,7 +5,7 @@ testing_flag = 0
 def set_table(host, topology_List):
   dictTemp = {}
 
-  for item in topology_list:
+  for item in topology_List:
     print item
     if item[0] in dictTemp:
       dictTemp[item[0]].append(item[1])
