@@ -6,7 +6,7 @@ port = 5683
 
 def postQueryToNode(node,resource,query):
   query = "?"+query
-  resource = "g/"+resource+query
+  resource = "res/"+resource+query
   try:
     coap_client = HelperClient(server=(node, port))
     start = time.time()
@@ -22,7 +22,7 @@ def postQueryToNode(node,resource,query):
 
 def postToAllNode(List,resource,query):
   query = "?"+query
-  resource = "g/"+resource+query
+  resource = "res/"+resource+query
 
   for node in List:
     try:

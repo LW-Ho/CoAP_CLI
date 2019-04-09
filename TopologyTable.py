@@ -6,7 +6,7 @@ def set_table(host, topology_List):
   dictTemp = {}
 
   for item in topology_List:
-    print item
+    #print item
     if item[0] in dictTemp:
       dictTemp[item[0]].append(item[1])
     else:
@@ -27,12 +27,10 @@ def topology_print(dictTemp, host):
         # host's child is other node's parent.
         if childKey in dictTemp.keys(): 
           global_counter += 1
-
           print "--"+" 1 "+childKey
           get_queue = parentAndChild(childKey, dictTemp, 1)
-
-          
           dictTemp.pop(childKey)
+
           if testing_flag :
             print childKey+" global queue "+str(get_queue+local_queue)
         # only child
