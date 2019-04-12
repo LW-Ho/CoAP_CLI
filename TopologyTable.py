@@ -1,4 +1,4 @@
-from core.nodeinfo import NodeInfo
+#from core.nodeinfo import NodeInfo
 import RestCoAP
 
 node_list = []
