@@ -38,7 +38,7 @@ def topology_print(dictTemp, host):
           
           
           sumCounter = get_queue+local_queue
-          query = "slot="+str(time_slot)+"&numbers="+sumCounter
+          query = "slot="+str(time_slot)+"&numbers="+str(sumCounter)
           RestCoAP.postQueryToNode(childKey, resource, query)
           RestCoAP.postQueryToNode(mainKey, resource, query)
           time_slot = time_slot + sumCounter
@@ -85,7 +85,7 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
       local_queue += 1
       
       sumCounter = get_queue+1
-      query = "slot="+str(time_slot)+"&numbers="+sumCounter
+      query = "slot="+str(time_slot)+"&numbers="+str(sumCounter)
       RestCoAP.postQueryToNode(childKey, resource, query)
       RestCoAP.postQueryToNode(parentKey, resource, query)
       time_slot = time_slot + sumCounter
