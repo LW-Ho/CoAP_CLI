@@ -108,7 +108,7 @@ class CoAPCLI(Cmd):
       node = args[0]
       resource = args[1]
       query = args[2]
-      pst = RestCoAP.postQueryToNode(node, resource, query)
+      RestCoAP.postQueryToNode(node, resource, query)
     except:
       self.stdout.write("Error from post.\n")
      
