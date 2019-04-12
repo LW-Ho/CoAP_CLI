@@ -1,7 +1,7 @@
 import sys
 from coapthon.client.helperclient import HelperClient
 
-from MoteData import MoteData
+from core.MoteData import MoteData
 import logging
 log = logging.getLogger("CoAP REST Engine")
 
