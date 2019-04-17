@@ -59,9 +59,9 @@ def topology_print(dictTemp, host):
                 childNode = SlotOperation(nodeID=childKey, slot_numbers=sumCounter, now_slotoffset=time_slot, now_channeloffset=channel_offset)
                 node_list.append(childNode)
               # got already exists the nodeID
-              else if nodeid.getName() is childKey:
+              elif nodeid.getName() is childKey:
                 childNode = nodeid
-              else if nodeid.getName() is mainKey:
+              elif nodeid.getName() is mainKey:
                 parentNode = nodeid
 
           parentNode.parentpostQuery(childNode.getName(), time_slot, channel_offset, resource, query)
@@ -137,9 +137,9 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
               childNode = SlotOperation(nodeID=childKey, parentID=parentKey ,slot_numbers=sumCounter, now_slotoffset=time_slot, now_channeloffset=channel_offset)
               node_list.append(childNode)
             # got already exists the nodeID
-            else if nodeid.getName() is childKey:
+            elif nodeid.getName() is childKey:
               childNode = nodeid
-            else if nodeid.getName() is parentKey:
+            elif nodeid.getName() is parentKey:
               parentNode = nodeid
       
       parentNode.parentpostQuery(childNode.getName(), time_slot, channel_offset, resource, query)
