@@ -5,6 +5,7 @@ from coapthon.client.helperclient import HelperClient
 port = 5683
 
 def postQueryToNode(node,resource,query):
+  global coap_client
   query = "?"+query
   resource = "res/"+resource+query
   try:
@@ -20,6 +21,7 @@ def postQueryToNode(node,resource,query):
     pass  
 
 def postToAllNode(List,resource,query):
+  global coap_client
   query = "?"+query
   resource = "res/"+resource+query
 
