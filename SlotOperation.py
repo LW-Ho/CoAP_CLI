@@ -17,8 +17,8 @@ class SlotOperation(object):
       self.pre_slotoffset = timeslot_offset # to save 
       self.pre_channeloffset = channel_offset
 
-      RestCoAP.postQueryToNode(str(childID), resource, query)
-      RestCoAP.postQueryToNode(str(self.nodeID), resource, query)
+      RestCoAP.postQueryToNode(childID, resource, query)
+      RestCoAP.postQueryToNode(self.nodeID, resource, query)
 
     # if the node is other node's parent, need add to child_list.
     def checkChild(self, childID):

@@ -1,11 +1,9 @@
 import time
 from coapthon.client.helperclient import HelperClient
-coap_client = None
 # coap get "coap://[fd00::212:4b00:615:a736]:5683/g/sht21?pp=2&thd=20"
 port = 5683
 
 def postQueryToNode(node,resource,query):
-  global coap_client
   query = "?"+query
   resource = "res/"+resource+query
   try:
@@ -21,7 +19,6 @@ def postQueryToNode(node,resource,query):
     pass  
 
 def postToAllNode(List,resource,query):
-  global coap_client
   query = "?"+query
   resource = "res/"+resource+query
 

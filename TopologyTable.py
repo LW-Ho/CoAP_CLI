@@ -87,7 +87,7 @@ def topology_print(dictTemp, host):
           hostNode.checkChild(childKey)
           
           # host node can post node and itself.
-          hostNode.parentpostQuery(childNode, time_slot, channel_offset, resource ,query)
+          hostNode.parentpostQuery(childKey, time_slot, channel_offset, resource ,query)
           # RestCoAP.postQueryToNode(childKey, resource, query)
           # RestCoAP.postQueryToNode(mainKey, resource, query)
           #time_slot = time_slot + 1
