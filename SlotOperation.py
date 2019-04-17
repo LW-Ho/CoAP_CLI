@@ -1,8 +1,9 @@
 import RestCoAP
 
 class SlotOperation(object):
-    def __init__(self, nodeID, slot_numbers=None, child_numbers=None, now_slotoffset=None, now_channeloffset=None):
+    def __init__(self, nodeID, parentID=None ,slot_numbers=None, child_numbers=None, now_slotoffset=None, now_channeloffset=None):
       self.nodeID = nodeID
+      self.parentID = parentID
       self.slot_numbers = slot_numbers
       self.child_numbers = child_numbers
       self.now_slotoffset = now_slotoffset
@@ -11,7 +12,7 @@ class SlotOperation(object):
       self.pre_channeloffset = None
 
       self.child_list = []
-
+      
     # for parent node to post other child node.
     def parentpostQuery(self, childID, timeslot_offset, channel_offset, resource, query):
       self.pre_slotoffset = timeslot_offset # to save 
