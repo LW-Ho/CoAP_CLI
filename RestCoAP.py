@@ -1,6 +1,6 @@
 import time
 from coapthon.client.helperclient import HelperClient
-
+coap_client = None
 # coap get "coap://[fd00::212:4b00:615:a736]:5683/g/sht21?pp=2&thd=20"
 port = 5683
 
