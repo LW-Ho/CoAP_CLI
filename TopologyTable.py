@@ -134,8 +134,9 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
             # got already exists the nodeID
             elif nodeid.getName() is childKey:
               childNode = nodeid
-            elif nodeid.getName() is parentKey:
-              parentNode = nodeid
+          for parentid in node_list :
+            if parentid.getName() is parentKey:
+              parentNode = parentid
       
       parentNode.parentpostQuery(childNode.getName(), time_slot, channel_offset, resource, query)
       time_slot = time_slot + sumCounter
