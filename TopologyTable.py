@@ -60,10 +60,8 @@ def topology_print(dictTemp, host):
               # got already exists the nodeID
               elif nodeid.getName() is childKey:
                 childNode = nodeid
-              elif nodeid.getName() is mainKey:
-                parentNode = nodeid
 
-          parentNode.parentpostQuery(childNode.getName(), time_slot, channel_offset, resource, query)
+          hostNode.parentpostQuery(childNode.getName(), time_slot, channel_offset, resource, query)
           time_slot = time_slot + sumCounter
 
           dictTemp.pop(childKey)
