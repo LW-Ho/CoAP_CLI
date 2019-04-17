@@ -29,6 +29,7 @@ def topology_print(dictTemp, host):
     if mainKey in host:
       print mainKey # host
 
+      hostNode = None
       # if host node not in list, add new one.
       if hostNode not in node_list:
         hostNode = SlotOperation(nodeID=mainKey)
@@ -50,8 +51,6 @@ def topology_print(dictTemp, host):
             time_slot = 10
           query = "slot="+str(time_slot)+"&numbers="+str(sumCounter)
 
-          childNode = None
-          parentNode = None
           if len(node_list) != 0 :
             for nodeid in node_list :
               # if node have not created, just new one.
@@ -128,8 +127,6 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
         time_slot = 10
       query = "slot="+str(time_slot)+"&numbers="+str(sumCounter)
 
-      childNode = None
-      parentNode = None
       if len(node_list) != 0 :
           for nodeid in node_list :
             # if node have not created, just new one.
