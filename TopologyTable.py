@@ -129,14 +129,18 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
           for nodeid in node_list :
             # if node have not created, just new one.
             if nodeid.getName() is not childKey :
-              childNode = SlotOperation(nodeID=childKey, parentID=parentKey ,slot_numbers=sumCounter, now_slotoffset=time_slot, now_channeloffset=channel_offset)
+              childNode = SlotOperation(nodeID=childKey, parentID=parentKey, slot_numbers=sumCounter, now_slotoffset=time_slot, now_channeloffset=channel_offset)
               node_list.append(childNode)
             # got already exists the nodeID
             elif nodeid.getName() is childKey:
               childNode = nodeid
           for parentid in node_list :
-            if parentid.getName() is parentKey:
+            if parentid.getName() is not parentKey:
+              parentNode = SlotOperation(nodeID=parentKey, slot_numbers=sumCounter, now_slotoffset=time_slot, now_channeloffset=channel_offset)
+              node_list.append(parentNode)
+            else :
               parentNode = parentid
+            
       
       parentNode.parentpostQuery(childNode.getName(), time_slot, channel_offset, resource, query)
       time_slot = time_slot + sumCounter
