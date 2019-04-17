@@ -4,7 +4,6 @@ class SlotOperation(object):
     def __init__(self, nodeID, slot_numbers=None, child_numbers=None, now_slotoffset=None, now_channeloffset=None):
       self.nodeID = nodeID
       self.slot_numbers = slot_numbers
-      self.is_parent = is_parent
       self.child_numbers = child_numbers
       self.now_slotoffset = now_slotoffset
       self.now_channeloffset = now_channeloffset
