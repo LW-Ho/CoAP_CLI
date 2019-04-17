@@ -189,6 +189,6 @@ def cal_timeslot(now_time_slot, numbers):
   now_time_slot = now_time_slot + numbers
 
   if now_time_slot > max_numbers :
-    return 0
-  else :
     return 1
+  else :
+    return 0
