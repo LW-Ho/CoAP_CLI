@@ -32,14 +32,11 @@ def topology_print(dictTemp, host):
       print mainKey # host
 
       hostNode = None
-      # if host node not in list, add new one.
-      if hostNode not in node_list:
-        hostNode = SlotOperation(nodeID=mainKey)
-        node_list.append(hostNode)
-      else :
+      if len(node_list) != 0:
         for hostID in node_list:
-          if hostID.getName() is mainKey:
-            hostNode = hostID
+          if hostID not in node_list:
+            hostNode = SlotOperation(nodeID=mainKey)
+            node_list.append(hostNode)
 
       global_counter += 1
       for childKey in dictTemp.get(mainKey):
