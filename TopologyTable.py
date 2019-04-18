@@ -181,7 +181,7 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
             childNode = SlotOperation(nodeID=childKey, parentID=parentNode, slot_numbers=sumCounter, now_slotoffset=time_slot, now_channeloffset=channel_offset)
             node_list.append(childNode)
             parentFlag = None
-                break
+            break
           # got already exists the nodeID
           elif nodeid.getName() is childKey:
             # Confirm that his parent is still the same?
