@@ -9,7 +9,9 @@ time_slot = 10          # default timeslot_offset.
 channel_offset = 0      # default channelslot_offset.
 resource = "slotframe"  # resource name.
 
-def set_table(host, topology_List):
+def set_table(host, topology_List, old_node_list):
+  global node_list
+  node_list = old_node_list
   dictTemp = {}
 
   for item in topology_List:
@@ -133,6 +135,8 @@ def topology_print(dictTemp, host):
 
   if testing_flag :
     print "All topology global queue "+str(global_counter)
+
+  return node_list
 
 
 def parentAndChild(parentKey, dictTemp, temp_counter):

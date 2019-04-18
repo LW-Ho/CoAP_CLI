@@ -74,7 +74,7 @@ class CoAPCLI(Cmd):
     self.mote_observe_lists = []
     self.autoObserve = None # save autoOb class
     self.border_router_Addr = ""
-    self.topology_table = []
+    self.topology_list = []
 
   def do_getallmotes(self, arg):
     if not arg:
@@ -83,7 +83,7 @@ class CoAPCLI(Cmd):
     self.border_router_Addr = arg
     #try:
     self.stdout.write("Current Motes List : \n")
-    self.mote_lists = getAllMotes(self.border_router_Addr) # get motes from border router website.
+    self.mote_lists, self.topology_list  = getAllMotes(self.border_router_Addr, self.topology_list) # get motes from border router website.
     self.stdout.write("====== End of List =======\n")
     # except:
     #   self.stdout.write("Error from getallmotes.\n")
