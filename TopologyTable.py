@@ -51,17 +51,37 @@ def topology_print(dictTemp, host):
             time_slot = 10
           query = "slot="+str(time_slot)+"&numbers="+str(sumCounter)
 
+          parentFlag = None
           if len(node_list) != 0 :
             for nodeid in node_list :
               # if node have not created, just new one.
               if nodeid.getName() is not childKey :
-                childNode = SlotOperation(nodeID=childKey, slot_numbers=sumCounter, now_slotoffset=time_slot, now_channeloffset=channel_offset)
+                childNode = SlotOperation(nodeID=childKey, parentID=hostNode, slot_numbers=sumCounter, now_slotoffset=time_slot, now_channeloffset=channel_offset)
                 node_list.append(childNode)
               # got already exists the nodeID
               elif nodeid.getName() is childKey:
+                # Confirm that his parent is still the same?
                 childNode = nodeid
+                if childNode.checkParent(hostNode) :
+                  # yes, not send slot_operation again.
+                  parentFlag = 0
+                else :
+                  # no, delete previous slot, then send a new scheduling to node.
+                  parentFlag = 1
 
-          hostNode.parentpostQuery(childNode.getName(), time_slot, channel_offset, resource, query)
+          
+
+          if parentFlag is None :
+            # host node can post node and itself.
+            hostNode.parentpostQuery(childNode, time_slot, channel_offset, resource, query, parentFlag)
+          elif parentFlag:
+            # add a child for host node_list.
+            hostNode.checkChild(childNode)
+            # need to delete other parent dedicated slot.
+            hostNode.parentpostQuery(childNode, time_slot, channel_offset, resource, query, parentFlag)
+          else :
+            # nothing, no need to change the slot.
+
           time_slot = time_slot + sumCounter
 
           dictTemp.pop(childKey)
@@ -76,18 +96,35 @@ def topology_print(dictTemp, host):
             time_slot = 10
           query = "slot="+str(time_slot)
 
+          parentFlag = None
           if len(node_list) != 0 :
             for nodeid in node_list :
               # if node still on first layer and no child.
               if nodeid.getName() is not childKey :
-                childNode = SlotOperation(nodeID=childKey, slot_numbers=1, now_slotoffset=time_slot, now_channeloffset=channel_offset)
+                childNode = SlotOperation(nodeID=childKey, parentID=hostNode, slot_numbers=1, now_slotoffset=time_slot, now_channeloffset=channel_offset)
                 node_list.append(childNode)
-
-          # add a child for host node.
-          hostNode.checkChild(childKey)
+              elif nodeid.getName() is childKey:
+                # Confirm that his parent is still the same?
+                childNode = nodeid
+                if childNode.checkParent(hostNode) :
+                  # yes, not send slot_operation again.
+                  parentFlag = 0
+                else :
+                  # no, delete previous slot, then send a new scheduling to node.
+                  parentFlag = 1
+                  
           
-          # host node can post node and itself.
-          hostNode.parentpostQuery(childKey, time_slot, channel_offset, resource ,query)
+          if parentFlag is None :
+            # host node can post node and itself.
+            hostNode.parentpostQuery(childNode, time_slot, channel_offset, resource, query, parentFlag)
+          elif parentFlag:
+            # add a child for host node_list.
+            hostNode.checkChild(childNode)
+            # need to delete other parent dedicated slot.
+            hostNode.parentpostQuery(childNode, time_slot, channel_offset, resource, query, parentFlag)
+          else :
+            # nothing, no need to change the slot.
+
           time_slot = time_slot + 1
 
 
@@ -124,7 +161,8 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
       if cal_timeslot(time_slot, 1) :
         time_slot = 10
       query = "slot="+str(time_slot)+"&numbers="+str(sumCounter)
-
+      
+      parentFlag = None
       if len(node_list) != 0 :
           for nodeid in node_list :
             # if node have not created, just new one.
@@ -142,7 +180,7 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
               parentNode = parentid
             
       
-      parentNode.parentpostQuery(childNode.getName(), time_slot, channel_offset, resource, query)
+      parentNode.parentpostQuery(childNode, time_slot, channel_offset, resource, query, parentFlag)
       time_slot = time_slot + sumCounter
       
       if testing_flag :
@@ -163,6 +201,7 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
       if cal_timeslot(time_slot, 1) :
         time_slot = 10
 
+      parentFlag = None
       if len(node_list) != 0 :
           for nodeid in node_list :
             # if node still on first layer and no child.
@@ -176,7 +215,7 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
           parentNode = SlotOperation(nodeID=parentKey, slot_numbers=1, now_slotoffset=time_slot, now_channeloffset=channel_offset)
           node_list.append(parentNode)
 
-      parentNode.parentpostQuery(childKey, time_slot, channel_offset, resource, query)
+      parentNode.parentpostQuery(childNode, time_slot, channel_offset, resource, query, parentFlag)
       time_slot = time_slot + 1
 
   return local_queue
