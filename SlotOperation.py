@@ -50,7 +50,7 @@ class SlotOperation(object):
     def checkParent(self, parentID):
       if parentID.getName() is self.parentID.getName() :
         return 1
-      else
+      else:
         # callback parentID need to update child_list.
         self.parentID.delChildKey(self.nodeID)
         # update parentID
