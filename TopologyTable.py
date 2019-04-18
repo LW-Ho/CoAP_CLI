@@ -186,7 +186,7 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
           elif nodeid.getName() is childKey:
             # Confirm that his parent is still the same?
             childNode = nodeid
-            if childNode.checkParent(hostNode) :
+            if childNode.checkParent(parentNode) :
               # yes, not send slot_operation again.
               parentFlag = 0
             else :
@@ -195,13 +195,13 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
         
       if parentFlag :
         # add a child for host node_list.
-        hostNode.checkChild(childNode)
+        parentNode.checkChild(childNode)
         # need to delete other parent dedicated slot.
-        hostNode.parentPostQuery(childNode, time_slot, channel_offset, resource, query, parentFlag)
+        parentNode.parentPostQuery(childNode, time_slot, channel_offset, resource, query, parentFlag)
       elif parentFlag is 0:
         pass
       else :
-        hostNode.parentPostQuery(childNode, time_slot, channel_offset, resource, query, None)
+        parentNode.parentPostQuery(childNode, time_slot, channel_offset, resource, query, None)
 
       time_slot = time_slot + sumCounter
       
@@ -244,7 +244,7 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
           elif nodeid.getName() is childKey:
             # Confirm that his parent is still the same?
             childNode = nodeid
-            if childNode.checkParent(hostNode) :
+            if childNode.checkParent(parentNode) :
               # yes, not send slot_operation again.
               parentFlag = 0
             else :
@@ -253,13 +253,13 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
 
       if parentFlag :
         # add a child for host node_list.
-        hostNode.checkChild(childNode)
+        parentNode.checkChild(childNode)
         # need to delete other parent dedicated slot.
-        hostNode.parentPostQuery(childNode, time_slot, channel_offset, resource, query, parentFlag)
+        parentNode.parentPostQuery(childNode, time_slot, channel_offset, resource, query, parentFlag)
       elif parentFlag is 0:
         pass
       else :
-        hostNode.parentPostQuery(childNode, time_slot, channel_offset, resource, query, None)
+        parentNode.parentPostQuery(childNode, time_slot, channel_offset, resource, query, None)
 
       time_slot = time_slot + 1
 
