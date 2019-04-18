@@ -13,8 +13,9 @@ class SlotOperation(object):
       self.child_list = []
       
     # for parent node to post other child node.
-    def parentpostQuery(self, childID, timeslot_offset, channel_offset, resource, query, delFlag):
+    def parentPostQuery(self, childID, timeslot_offset, channel_offset, resource, query, delFlag):
 
+      print "IN parentPostQuery"
       if delFlag is None:
         self.pre_slotoffset = timeslot_offset # to save 
         self.pre_channeloffset = channel_offset
@@ -25,12 +26,13 @@ class SlotOperation(object):
       elif delFlag is 1 :
         delquery = "delslot="+str(self.pre_slotoffset)
         query = query + delquery
+        
+        self.pre_slotoffset = timeslot_offset # to update value
+        self.pre_channeloffset = channel_offset
 
         RestCoAP.postQueryToNode(childID.getName(), resource, query)
         RestCoAP.postQueryToNode(self.nodeID, resource, query) # send by self.
 
-        self.pre_slotoffset = timeslot_offset # to update value
-        self.pre_channeloffset = channel_offset
     
     def delChildKey(self, childKey):
       # child node will call it parent to update child_list.

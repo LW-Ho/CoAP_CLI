@@ -73,12 +73,12 @@ def topology_print(dictTemp, host):
 
           if parentFlag is None :
             # host node can post node and itself.
-            hostNode.parentpostQuery(childNode, time_slot, channel_offset, resource, query, parentFlag)
+            hostNode.parentPostQuery(childNode, time_slot, channel_offset, resource, query, parentFlag)
           elif parentFlag:
             # add a child for host node_list.
             hostNode.checkChild(childNode)
             # need to delete other parent dedicated slot.
-            hostNode.parentpostQuery(childNode, time_slot, channel_offset, resource, query, parentFlag)
+            hostNode.parentPostQuery(childNode, time_slot, channel_offset, resource, query, parentFlag)
 
           time_slot = time_slot + sumCounter
 
@@ -99,6 +99,7 @@ def topology_print(dictTemp, host):
             for nodeid in node_list :
               # if node still on first layer and no child.
               if nodeid.getName() is not childKey :
+                print "Created a new childNode "+str(childKey)+"."
                 childNode = SlotOperation(nodeID=childKey, parentID=hostNode, slot_numbers=1, now_slotoffset=time_slot, now_channeloffset=channel_offset)
                 node_list.append(childNode)
               elif nodeid.getName() is childKey:
@@ -113,13 +114,14 @@ def topology_print(dictTemp, host):
                   
           
           if parentFlag is None :
+            print "Post query to both."
             # host node can post node and itself.
-            hostNode.parentpostQuery(childNode, time_slot, channel_offset, resource, query, parentFlag)
+            hostNode.parentPostQuery(childNode, time_slot, channel_offset, resource, query, parentFlag)
           elif parentFlag:
             # add a child for host node_list.
             hostNode.checkChild(childNode)
             # need to delete other parent dedicated slot.
-            hostNode.parentpostQuery(childNode, time_slot, channel_offset, resource, query, parentFlag)
+            hostNode.parentPostQuery(childNode, time_slot, channel_offset, resource, query, parentFlag)
 
           time_slot = time_slot + 1
 
@@ -132,6 +134,7 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
   global global_counter, time_slot, node_list, channel_offset
   local_queue = 0
   get_queue = 0
+  parentNode = None
   save_counter = temp_counter
   for childKey in dictTemp.get(parentKey):
     
@@ -160,23 +163,25 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
       
       parentFlag = None
       if len(node_list) != 0 :
-          for nodeid in node_list :
-            # if node have not created, just new one.
-            if nodeid.getName() is not childKey :
-              childNode = SlotOperation(nodeID=childKey, parentID=parentKey, slot_numbers=sumCounter, now_slotoffset=time_slot, now_channeloffset=channel_offset)
-              node_list.append(childNode)
-            # got already exists the nodeID
-            elif nodeid.getName() is childKey:
-              childNode = nodeid
-          for parentid in node_list :
-            if parentid.getName() is not parentKey:
-              parentNode = SlotOperation(nodeID=parentKey, slot_numbers=sumCounter, now_slotoffset=time_slot, now_channeloffset=channel_offset)
-              node_list.append(parentNode)
-            else :
-              parentNode = parentid
+        for parentid in node_list :
+          if parentid.getName() is not parentKey:
+            parentNode = SlotOperation(nodeID=parentKey, slot_numbers=sumCounter, now_slotoffset=time_slot, now_channeloffset=channel_offset)
+            node_list.append(parentNode)
+          else :
+            parentNode = parentid
+
+        for nodeid in node_list :
+          # if node have not created, just new one.
+          if nodeid.getName() is not childKey :
+            childNode = SlotOperation(nodeID=childKey, parentID=parentNode, slot_numbers=sumCounter, now_slotoffset=time_slot, now_channeloffset=channel_offset)
+            node_list.append(childNode)
+          # got already exists the nodeID
+          elif nodeid.getName() is childKey:
+            childNode = nodeid
+        
             
       
-      parentNode.parentpostQuery(childNode, time_slot, channel_offset, resource, query, parentFlag)
+      parentNode.parentPostQuery(childNode, time_slot, channel_offset, resource, query, parentFlag)
       time_slot = time_slot + sumCounter
       
       if testing_flag :
@@ -199,19 +204,25 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
 
       parentFlag = None
       if len(node_list) != 0 :
-          for nodeid in node_list :
-            # if node still on first layer and no child.
-            if nodeid.getName() is not childKey :
-              childNode = SlotOperation(nodeID=childKey, parentID=parentKey ,slot_numbers=1, now_slotoffset=time_slot, now_channeloffset=channel_offset)
-              node_list.append(childNode)
+        for parentid in node_list :
+          # the parent node are not created, we create a new one.
+          if parentid.getName() is not parentKey:
+            parentNode = SlotOperation(nodeID=parentKey, slot_numbers=1, now_slotoffset=time_slot, now_channeloffset=channel_offset)
+            node_list.append(parentNode)
+          else :
+            parentNode = parentid
 
-      for parentid in node_list :
-        # the parent node are not created, we create a new one.
-        if parentid.getName() is not parentKey:
-          parentNode = SlotOperation(nodeID=parentKey, slot_numbers=1, now_slotoffset=time_slot, now_channeloffset=channel_offset)
-          node_list.append(parentNode)
+        for nodeid in node_list :
+          # if node still on first layer and no child.
+          if nodeid.getName() is not childKey :
+            childNode = SlotOperation(nodeID=childKey, parentID=parentNode ,slot_numbers=1, now_slotoffset=time_slot, now_channeloffset=channel_offset)
+            node_list.append(childNode)
+          # got already exists the nodeID
+          elif nodeid.getName() is childKey:
+            childNode = nodeid
 
-      parentNode.parentpostQuery(childNode, time_slot, channel_offset, resource, query, parentFlag)
+
+      parentNode.parentPostQuery(childNode, time_slot, channel_offset, resource, query, parentFlag)
       time_slot = time_slot + 1
 
   return local_queue
