@@ -113,15 +113,15 @@ def topology_print(dictTemp, host):
                   parentFlag = 1
                   
           
-          if parentFlag is None :
-            print "Post query to both."
-            # host node can post node and itself.
-            hostNode.parentPostQuery(childNode, time_slot, channel_offset, resource, query, parentFlag)
-          elif parentFlag:
+          if parentFlag :
             # add a child for host node_list.
             hostNode.checkChild(childNode)
             # need to delete other parent dedicated slot.
             hostNode.parentPostQuery(childNode, time_slot, channel_offset, resource, query, parentFlag)
+          else :
+            print "Post query to both."
+            # host node can post node and itself.
+            hostNode.parentPostQuery(childNode, time_slot, channel_offset, resource, query, None)
 
           time_slot = time_slot + 1
 
