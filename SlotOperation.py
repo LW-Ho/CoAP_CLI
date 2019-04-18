@@ -26,12 +26,14 @@ class SlotOperation(object):
       elif delFlag is 1 :
         delquery = "delslot="+str(self.pre_slotoffset)
         query = query + delquery
-        
+
         self.pre_slotoffset = timeslot_offset # to update value
         self.pre_channeloffset = channel_offset
 
         RestCoAP.postQueryToNode(childID.getName(), resource, query)
         RestCoAP.postQueryToNode(self.nodeID, resource, query) # send by self.
+      else :
+        return
 
     
     def delChildKey(self, childKey):
