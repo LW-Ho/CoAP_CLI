@@ -79,8 +79,6 @@ def topology_print(dictTemp, host):
             hostNode.checkChild(childNode)
             # need to delete other parent dedicated slot.
             hostNode.parentpostQuery(childNode, time_slot, channel_offset, resource, query, parentFlag)
-          else :
-            # nothing, no need to change the slot.
 
           time_slot = time_slot + sumCounter
 
@@ -122,8 +120,6 @@ def topology_print(dictTemp, host):
             hostNode.checkChild(childNode)
             # need to delete other parent dedicated slot.
             hostNode.parentpostQuery(childNode, time_slot, channel_offset, resource, query, parentFlag)
-          else :
-            # nothing, no need to change the slot.
 
           time_slot = time_slot + 1
 
