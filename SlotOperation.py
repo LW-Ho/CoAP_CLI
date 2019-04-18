@@ -16,14 +16,16 @@ class SlotOperation(object):
     def parentPostQuery(self, childID, timeslot_offset, channel_offset, resource, query, delFlag):
 
       print "IN parentPostQuery"
-      if delFlag is None:
+      if delFlag is 0:
         self.pre_slotoffset = timeslot_offset # to save 
         self.pre_channeloffset = channel_offset
 
         RestCoAP.postQueryToNode(childID.getName(), resource, query)
         RestCoAP.postQueryToNode(self.nodeID, resource, query) # send by self.
-
       elif delFlag is 1 :
+        pass
+
+      elif delFlag is 2 :
         delquery = "delslot="+str(self.pre_slotoffset)
         query = query + delquery
 
@@ -32,8 +34,6 @@ class SlotOperation(object):
 
         RestCoAP.postQueryToNode(childID.getName(), resource, query)
         RestCoAP.postQueryToNode(self.nodeID, resource, query) # send by self.
-      else :
-        return
 
     
     def delChildKey(self, childKey):
