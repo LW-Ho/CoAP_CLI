@@ -202,9 +202,6 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
               if parentid.getName() is parentKey :
                 parentNode = parentid
                 flag = 0
-        
-        if testing_flag :
-          print "Created "+parentNode.getName()
 
         for nodeid in node_list :
           # if node have not created, just new one.
@@ -298,9 +295,6 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
               parentFlag = 2
             elif childNode.checkParent(parentNode) is 2:
               parentFlag = 0
-
-        if testing_flag :
-          print "Created "+childNode.getName()+" and parentFlag "+str(parentFlag)
 
       if parentFlag is 0 :
         parentNode.parentPostQuery(childNode, time_slot, channel_offset, resource, query, parentFlag)
