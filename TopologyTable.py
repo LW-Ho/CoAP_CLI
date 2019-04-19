@@ -36,10 +36,9 @@ def topology_print(dictTemp, host):
       childNode = None
       hostNode = None
       if len(node_list) is 0:
-        for hostID in node_list:
-          if hostID not in node_list:
-            hostNode = SlotOperation(nodeID=mainKey)
-            node_list.append(hostNode)
+        hostNode = SlotOperation(nodeID=mainKey)
+        node_list.append(hostNode)
+        
       print node_list
       global_counter += 1
       for childKey in dictTemp.get(mainKey):
@@ -209,14 +208,14 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
           print "Created "+childNode.getName()+" and parentFlag "+str(parentFlag)
 
       if parentFlag is 0 :
-        hostNode.parentPostQuery(childNode, time_slot, channel_offset, resource, query, parentFlag)
+        parentNode.parentPostQuery(childNode, time_slot, channel_offset, resource, query, parentFlag)
       elif parentFlag is 1 :
         pass
       elif parentFlag is 2 :
         # add a child for host node_list.
-        hostNode.checkChild(childNode)
+        parentNode.checkChild(childNode)
         # need to delete other parent dedicated slot.
-        hostNode.parentPostQuery(childNode, time_slot, channel_offset, resource, query, parentFlag)
+        parentNode.parentPostQuery(childNode, time_slot, channel_offset, resource, query, parentFlag)
 
       time_slot = time_slot + sumCounter
       
@@ -272,14 +271,14 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
           print "Created "+childNode.getName()+" and parentFlag "+str(parentFlag)
 
       if parentFlag is 0 :
-        hostNode.parentPostQuery(childNode, time_slot, channel_offset, resource, query, parentFlag)
+        parentNode.parentPostQuery(childNode, time_slot, channel_offset, resource, query, parentFlag)
       elif parentFlag is 1 :
         pass
       elif parentFlag is 2 :
         # add a child for host node_list.
-        hostNode.checkChild(childNode)
+        parentNode.checkChild(childNode)
         # need to delete other parent dedicated slot.
-        hostNode.parentPostQuery(childNode, time_slot, channel_offset, resource, query, parentFlag)
+        parentNode.parentPostQuery(childNode, time_slot, channel_offset, resource, query, parentFlag)
 
       time_slot = time_slot + 1
 
