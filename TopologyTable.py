@@ -31,6 +31,7 @@ def topology_print(dictTemp, host):
     if mainKey in host:
       print mainKey # host
 
+      childNode = None
       hostNode = None
       if len(node_list) != 0:
         for hostID in node_list:
@@ -58,13 +59,13 @@ def topology_print(dictTemp, host):
           if len(node_list) != 0 :
             for nodeid in node_list :
               # if node have not created, just new one.
-              if nodeid.getName() is not childKey :
+              if nodeid.getName() is not childKey and parentFlag is None:
                 childNode = SlotOperation(nodeID=childKey, parentID=hostNode, slot_numbers=sumCounter, now_slotoffset=time_slot, now_channeloffset=channel_offset)
                 node_list.append(childNode)
                 parentFlag = 0
-                break
+
               # got already exists the nodeID
-              elif nodeid.getName() is childKey and parentFlag is not 0:
+              elif nodeid.getName() is childKey and parentFlag is None:
                 # Confirm that his parent is still the same?
                 childNode = nodeid
                 if childNode.checkParent(hostNode) :
@@ -104,13 +105,13 @@ def topology_print(dictTemp, host):
           if len(node_list) != 0 :
             for nodeid in node_list :
               # if node still on first layer and no child.
-              if nodeid.getName() is not childKey :
+              if nodeid.getName() is not childKey and parentFlag is None :
                 print "Created a new childNode "+str(childKey)+"."
                 childNode = SlotOperation(nodeID=childKey, parentID=hostNode, slot_numbers=1, now_slotoffset=time_slot, now_channeloffset=channel_offset)
                 node_list.append(childNode)
                 parentFlag = 0
                 break
-              elif nodeid.getName() is childKey and parentFlag is not 0:
+              elif nodeid.getName() is childKey and parentFlag is None:
                 # Confirm that his parent is still the same?
                 childNode = nodeid
                 if childNode.checkParent(hostNode) :
@@ -182,13 +183,13 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
 
         for nodeid in node_list :
           # if node have not created, just new one.
-          if nodeid.getName() is not childKey :
+          if nodeid.getName() is not childKey and parentFlag is None :
             childNode = SlotOperation(nodeID=childKey, parentID=parentNode, slot_numbers=sumCounter, now_slotoffset=time_slot, now_channeloffset=channel_offset)
             node_list.append(childNode)
             parentFlag = 0
             break
           # got already exists the nodeID
-          elif nodeid.getName() is childKey and parentFlag is not 0:
+          elif nodeid.getName() is childKey and parentFlag is None:
             # Confirm that his parent is still the same?
             childNode = nodeid
             if childNode.checkParent(parentNode) :
@@ -240,13 +241,13 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
 
         for nodeid in node_list :
           # if node still on first layer and no child.
-          if nodeid.getName() is not childKey :
+          if nodeid.getName() is not childKey and parentFlag is None :
             childNode = SlotOperation(nodeID=childKey, parentID=parentNode ,slot_numbers=1, now_slotoffset=time_slot, now_channeloffset=channel_offset)
             node_list.append(childNode)
             parentFlag = 0
             break
           # got already exists the nodeID
-          elif nodeid.getName() is childKey and parentFlag is not 0:
+          elif nodeid.getName() is childKey and parentFlag is None:
             # Confirm that his parent is still the same?
             childNode = nodeid
             if childNode.checkParent(parentNode) :
