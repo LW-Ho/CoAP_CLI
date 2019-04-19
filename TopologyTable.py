@@ -112,32 +112,28 @@ def topology_print(dictTemp, host):
 
           parentFlag = None
           if len(node_list) != 0 :
-            for nodeid in node_list :
-              # if node still on first layer and no child.
-              if nodeid.getName() not in node_Name_list and parentFlag is None :
+            if childKey not in node_Name_list:
+              if testing_flag :
                 print "Created a new childNode "+str(childKey)+"."
-                childNode = SlotOperation(nodeID=childKey, parentID=hostNode, slot_numbers=1, now_slotoffset=time_slot, now_channeloffset=channel_offset)
-                node_list.append(childNode)
-                node_Name_list.append(childNode.getName())
-                if testing_flag :
-                  print "append "+childNode.getName()+" into node_list"
-                parentFlag = 0
-                break
-              elif nodeid.getName() in node_Name_list and parentFlag is None and nodeid.getName() is childKey:
-                # Confirm that his parent is still the same?
-                childNode = nodeid
-                if childNode.checkParent(hostNode) is 1:
-                  # yes, not send slot_operation again.
+              childNode = SlotOperation(nodeID=childKey, parentID=hostNode, slot_numbers=1, now_slotoffset=time_slot, now_channeloffset=channel_offset)
+              node_list.append(childNode)
+              node_Name_list.append(childNode.getName())
+              parentFlag = 0
+            else :
+              for tempkey in node_list :
+                if childKey is tempkey.getName() :
+                  childNode = tempkey
                   parentFlag = 1
-                elif childNode.checkParent(hostNode) is 0:
-                  # no, delete previous slot, then send a new scheduling to node.
-                  parentFlag = 2
-                elif childNode.checkParent(hostNode) is 2:
-                  parentFlag = 0  
+
+          # update Parent
+          if childNode.checkParent(hostNode) is 0:
+            parentFlag = 2
 
           if parentFlag is 0 :
+            # first post
             hostNode.parentPostQuery(childNode, time_slot, channel_offset, resource, query, parentFlag)
           elif parentFlag is 1 :
+            # nothing.
             pass
           elif parentFlag is 2 :
             # add a child for host node_list.
@@ -283,6 +279,7 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
               print "append "+childNode.getName()+" into node_list"
             parentFlag = 0
             break
+
           # got already exists the nodeID
           elif nodeid.getName() in node_Name_list and parentFlag is None and nodeid.getName() is childKey:
             # Confirm that his parent is still the same?
