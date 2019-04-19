@@ -86,9 +86,6 @@ def topology_print(dictTemp, host):
                 elif childNode.checkParent(hostNode) is 2:
                   parentFlag = 0
 
-            if testing_flag :
-              print "Created "+childNode.getName()+" and parentFlag "+str(parentFlag)
-
           if parentFlag is 0 :
             hostNode.parentPostQuery(childNode, time_slot, channel_offset, resource, query, parentFlag)
           elif parentFlag is 1 :
@@ -136,10 +133,7 @@ def topology_print(dictTemp, host):
                   # no, delete previous slot, then send a new scheduling to node.
                   parentFlag = 2
                 elif childNode.checkParent(hostNode) is 2:
-                  parentFlag = 0
-            
-            if testing_flag :
-              print "Created "+childNode.getName()+" and parentFlag "+str(parentFlag)      
+                  parentFlag = 0  
 
           if parentFlag is 0 :
             hostNode.parentPostQuery(childNode, time_slot, channel_offset, resource, query, parentFlag)
@@ -234,9 +228,6 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
             elif childNode.checkParent(parentNode) is 2:
               parentFlag = 0
 
-        if testing_flag :
-          print "Created "+childNode.getName()+" and parentFlag "+str(parentFlag)
-
       if parentFlag is 0 :
         parentNode.parentPostQuery(childNode, time_slot, channel_offset, resource, query, parentFlag)
       elif parentFlag is 1 :
@@ -284,9 +275,6 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
               if parentid.getName() is parentKey :
                 parentNode = parentid
                 flag = 0
-
-        if testing_flag :
-          print "Created "+parentNode.getName()
 
         for nodeid in node_list :
           # if node still on first layer and no child.
