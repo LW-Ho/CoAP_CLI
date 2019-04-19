@@ -30,7 +30,7 @@ def topology_print(dictTemp, host):
   local_queue = 1
   get_queue = 0
   for mainKey in dictTemp.keys():
-    if mainKey is host:
+    if mainKey in host:
       print mainKey # host
 
       childNode = None
