@@ -75,7 +75,8 @@ def topology_print(dictTemp, host):
                   # no, delete previous slot, then send a new scheduling to node.
                   parentFlag = 2
 
-          
+            if testing_flag :
+              print "Created "+childNode.getName()+" and parentFlag "+str(parentFlag)
 
           if parentFlag is 0 :
             hostNode.parentPostQuery(childNode, time_slot, channel_offset, resource, query, parentFlag)
@@ -120,7 +121,9 @@ def topology_print(dictTemp, host):
                 else :
                   # no, delete previous slot, then send a new scheduling to node.
                   parentFlag = 2
-                  
+            
+            if testing_flag :
+              print "Created "+childNode.getName()+" and parentFlag "+str(parentFlag)      
 
           if parentFlag is 0 :
             hostNode.parentPostQuery(childNode, time_slot, channel_offset, resource, query, parentFlag)
@@ -180,6 +183,9 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
             node_list.append(parentNode)
           else :
             parentNode = parentid
+        
+        if testing_flag :
+          print "Created "+parentNode.getName()
 
         for nodeid in node_list :
           # if node have not created, just new one.
@@ -187,7 +193,6 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
             childNode = SlotOperation(nodeID=childKey, parentID=parentNode, slot_numbers=sumCounter, now_slotoffset=time_slot, now_channeloffset=channel_offset)
             node_list.append(childNode)
             parentFlag = 0
-            break
           # got already exists the nodeID
           elif nodeid.getName() is childKey and parentFlag is None:
             # Confirm that his parent is still the same?
@@ -198,7 +203,9 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
             else :
               # no, delete previous slot, then send a new scheduling to node.
               parentFlag = 2
-        
+        if testing_flag :
+          print "Created "+childNode.getName()+" and parentFlag "+str(parentFlag)
+
       if parentFlag is 0 :
         hostNode.parentPostQuery(childNode, time_slot, channel_offset, resource, query, parentFlag)
       elif parentFlag is 1 :
@@ -239,6 +246,9 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
           else :
             parentNode = parentid
 
+        if testing_flag :
+          print "Created "+parentNode.getName()
+
         for nodeid in node_list :
           # if node still on first layer and no child.
           if nodeid.getName() is not childKey and parentFlag is None :
@@ -256,6 +266,8 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
             else :
               # no, delete previous slot, then send a new scheduling to node.
               parentFlag = 2
+        if testing_flag :
+          print "Created "+childNode.getName()+" and parentFlag "+str(parentFlag)
 
       if parentFlag is 0 :
         hostNode.parentPostQuery(childNode, time_slot, channel_offset, resource, query, parentFlag)
