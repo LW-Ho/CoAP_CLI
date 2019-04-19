@@ -52,14 +52,18 @@ class SlotOperation(object):
         return 1
 
     def checkParent(self, parentID):
-      if parentID.getName() is self.parentID.getName() :
-        return 1
-      else:
-        # callback parentID need to update child_list.
-        self.parentID.delChildKey(self.nodeID)
-        # update parentID
+      if self.parentID is None :
         self.parentID = parentID
-        return 0
+        return 2
+      else :
+        if parentID.getName() is self.parentID.getName() :
+          return 1
+        else:
+          # callback parentID need to update child_list.
+          self.parentID.delChildKey(self.nodeID)
+          # update parentID
+          self.parentID = parentID
+          return 0
     
     # if the node is other node's parent, need add to child_list.
     def checkChild(self, childID):

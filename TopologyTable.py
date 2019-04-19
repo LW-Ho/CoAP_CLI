@@ -29,12 +29,13 @@ def topology_print(dictTemp, host):
   global global_counter, time_slot, node_list, channel_offset, node_Name_list
   local_queue = 1
   get_queue = 0
+  hostNode = None
   for mainKey in dictTemp.keys():
     if mainKey in host:
       print mainKey # host
 
       childNode = None
-      hostNode = None
+      
       if len(node_list) is 0:
         hostNode = SlotOperation(nodeID=mainKey)
         node_list.append(hostNode)
@@ -64,7 +65,7 @@ def topology_print(dictTemp, host):
           if len(node_list) != 0 :
             for nodeid in node_list :
               # if node have not created, just new one.
-              if childKey not in node_Name_list and parentFlag is None:
+              if nodeid.getName() not in node_Name_list and parentFlag is None:
                 childNode = SlotOperation(nodeID=childKey, parentID=hostNode, slot_numbers=sumCounter, now_slotoffset=time_slot, now_channeloffset=channel_offset)
                 node_list.append(childNode)
                 node_Name_list.append(childNode.getName())
@@ -76,12 +77,14 @@ def topology_print(dictTemp, host):
               elif childKey in node_Name_list and parentFlag is None:
                 # Confirm that his parent is still the same?
                 childNode = nodeid
-                if childNode.checkParent(hostNode) :
+                if childNode.checkParent(hostNode) is 1:
                   # yes, not send slot_operation again.
                   parentFlag = 1
-                else :
+                elif childNode.checkParent(hostNode) is 0:
                   # no, delete previous slot, then send a new scheduling to node.
                   parentFlag = 2
+                elif childNode.checkParent(hostNode) is 2:
+                  parentFlag = 0
 
             if testing_flag :
               print "Created "+childNode.getName()+" and parentFlag "+str(parentFlag)
@@ -126,12 +129,14 @@ def topology_print(dictTemp, host):
               elif childKey in node_Name_list and parentFlag is None:
                 # Confirm that his parent is still the same?
                 childNode = nodeid
-                if childNode.checkParent(hostNode) :
+                if childNode.checkParent(hostNode) is 1:
                   # yes, not send slot_operation again.
                   parentFlag = 1
-                else :
+                elif childNode.checkParent(hostNode) is 0:
                   # no, delete previous slot, then send a new scheduling to node.
                   parentFlag = 2
+                elif childNode.checkParent(hostNode) is 2:
+                  parentFlag = 0
             
             if testing_flag :
               print "Created "+childNode.getName()+" and parentFlag "+str(parentFlag)      
@@ -215,12 +220,15 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
           elif childKey in node_Name_list and parentFlag is None:
             # Confirm that his parent is still the same?
             childNode = nodeid
-            if childNode.checkParent(parentNode) :
+            if childNode.checkParent(hostNode) is 1:
               # yes, not send slot_operation again.
               parentFlag = 1
-            else :
+            elif childNode.checkParent(hostNode) is 0:
               # no, delete previous slot, then send a new scheduling to node.
               parentFlag = 2
+            elif childNode.checkParent(hostNode) is 2:
+              parentFlag = 0
+
         if testing_flag :
           print "Created "+childNode.getName()+" and parentFlag "+str(parentFlag)
 
@@ -284,12 +292,15 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
           elif childKey in node_Name_list and parentFlag is None:
             # Confirm that his parent is still the same?
             childNode = nodeid
-            if childNode.checkParent(parentNode) :
+            if childNode.checkParent(hostNode) is 1:
               # yes, not send slot_operation again.
               parentFlag = 1
-            else :
+            elif childNode.checkParent(hostNode) is 0:
               # no, delete previous slot, then send a new scheduling to node.
               parentFlag = 2
+            elif childNode.checkParent(hostNode) is 2:
+              parentFlag = 0
+              
         if testing_flag :
           print "Created "+childNode.getName()+" and parentFlag "+str(parentFlag)
 
