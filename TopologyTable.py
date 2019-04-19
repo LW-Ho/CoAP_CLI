@@ -3,15 +3,15 @@ import RestCoAP
 from SlotOperation import SlotOperation
 
 node_list = []          # save the node to list. 
+node_Name_list = []     # save the node name to list, not class.
 global_counter = 0      # save global queue.
 testing_flag = 1        # testing flag.
 time_slot = 10          # default timeslot_offset.
 channel_offset = 0      # default channelslot_offset.
 resource = "slotframe"  # resource name.
 
-def set_table(host, topology_List, old_node_list):
+def set_table(host, topology_List):
   global node_list
-  node_list = old_node_list
 
   print node_list
   dictTemp = {}
@@ -26,7 +26,7 @@ def set_table(host, topology_List, old_node_list):
   topology_print(dictTemp, host)
 
 def topology_print(dictTemp, host):
-  global global_counter, time_slot, node_list, channel_offset
+  global global_counter, time_slot, node_list, channel_offset, node_Name_list
   local_queue = 1
   get_queue = 0
   for mainKey in dictTemp.keys():
@@ -38,6 +38,7 @@ def topology_print(dictTemp, host):
       if len(node_list) is 0:
         hostNode = SlotOperation(nodeID=mainKey)
         node_list.append(hostNode)
+        node_Name_list.append(hostNode.getName())
       else :
         for hostID in node_list:
           if hostID.getName() is mainKey :
@@ -63,15 +64,16 @@ def topology_print(dictTemp, host):
           if len(node_list) != 0 :
             for nodeid in node_list :
               # if node have not created, just new one.
-              if nodeid.getName() is not childKey and parentFlag is None:
+              if nodeid.getName() not in node_Name_list and parentFlag is None:
                 childNode = SlotOperation(nodeID=childKey, parentID=hostNode, slot_numbers=sumCounter, now_slotoffset=time_slot, now_channeloffset=channel_offset)
                 node_list.append(childNode)
+                node_Name_list.append(childNode.getName())
                 if testing_flag :
                   print "append "+childNode.getName()+" into node_list"
                 parentFlag = 0
 
               # got already exists the nodeID
-              elif nodeid.getName() is childKey and parentFlag is None:
+              elif nodeid.getName() in node_Name_list and parentFlag is None:
                 # Confirm that his parent is still the same?
                 childNode = nodeid
                 if childNode.checkParent(hostNode) :
@@ -112,15 +114,16 @@ def topology_print(dictTemp, host):
           if len(node_list) != 0 :
             for nodeid in node_list :
               # if node still on first layer and no child.
-              if nodeid.getName() is not childKey and parentFlag is None :
+              if nodeid.getName() not in node_Name_list and parentFlag is None :
                 print "Created a new childNode "+str(childKey)+"."
                 childNode = SlotOperation(nodeID=childKey, parentID=hostNode, slot_numbers=1, now_slotoffset=time_slot, now_channeloffset=channel_offset)
                 node_list.append(childNode)
+                node_Name_list.append(childNode.getName())
                 if testing_flag :
                   print "append "+childNode.getName()+" into node_list"
                 parentFlag = 0
                 break
-              elif nodeid.getName() is childKey and parentFlag is None:
+              elif nodeid.getName() in node_Name_list and parentFlag is None:
                 # Confirm that his parent is still the same?
                 childNode = nodeid
                 if childNode.checkParent(hostNode) :
@@ -183,12 +186,14 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
         time_slot = 10
       query = "slot="+str(time_slot)+"&numbers="+str(sumCounter)
       
+      check = None
       parentFlag = None
       if len(node_list) != 0 :
         for parentid in node_list :
-          if parentid.getName() is not parentKey:
+          if parentid.getName() not in node_Name_list:
             parentNode = SlotOperation(nodeID=parentKey, slot_numbers=sumCounter, now_slotoffset=time_slot, now_channeloffset=channel_offset)
             node_list.append(parentNode)
+            node_Name_list.append(parentNode.getName())
             if testing_flag :
               print "append "+parentNode.getName()+" into node_list"
           else :
@@ -199,14 +204,15 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
 
         for nodeid in node_list :
           # if node have not created, just new one.
-          if nodeid.getName() is not childKey and parentFlag is None :
+          if nodeid.getName() not in node_Name_list and parentFlag is None :
             childNode = SlotOperation(nodeID=childKey, parentID=parentNode, slot_numbers=sumCounter, now_slotoffset=time_slot, now_channeloffset=channel_offset)
             node_list.append(childNode)
+            node_Name_list.append(childNode.getName())
             if testing_flag :
               print "append "+childNode.getName()+" into node_list"
             parentFlag = 0
           # got already exists the nodeID
-          elif nodeid.getName() is childKey and parentFlag is None:
+          elif nodeid.getName() in node_Name_list and parentFlag is None:
             # Confirm that his parent is still the same?
             childNode = nodeid
             if childNode.checkParent(parentNode) :
@@ -252,9 +258,10 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
       if len(node_list) != 0 :
         for parentid in node_list :
           # the parent node are not created, we create a new one.
-          if parentid.getName() is not parentKey:
+          if parentid.getName() not in node_Name_list:
             parentNode = SlotOperation(nodeID=parentKey, slot_numbers=1, now_slotoffset=time_slot, now_channeloffset=channel_offset)
             node_list.append(parentNode)
+            node_Name_list.append(parentNode.getName())
             if testing_flag :
               print "append "+parentNode.getName()+" into node_list"
           else :
@@ -265,15 +272,16 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
 
         for nodeid in node_list :
           # if node still on first layer and no child.
-          if nodeid.getName() is not childKey and parentFlag is None :
+          if nodeid.getName() not in node_Name_list and parentFlag is None :
             childNode = SlotOperation(nodeID=childKey, parentID=parentNode ,slot_numbers=1, now_slotoffset=time_slot, now_channeloffset=channel_offset)
             node_list.append(childNode)
+            node_Name_list.append(childNode.getName())
             if testing_flag :
               print "append "+childNode.getName()+" into node_list"
             parentFlag = 0
             break
           # got already exists the nodeID
-          elif nodeid.getName() is childKey and parentFlag is None:
+          elif nodeid.getName() in node_Name_list and parentFlag is None:
             # Confirm that his parent is still the same?
             childNode = nodeid
             if childNode.checkParent(parentNode) :
