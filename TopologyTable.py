@@ -33,7 +33,7 @@ def topology_print(dictTemp, host):
 
       childNode = None
       hostNode = None
-      if len(node_list) != 0:
+      if len(node_list) is 0:
         for hostID in node_list:
           if hostID not in node_list:
             hostNode = SlotOperation(nodeID=mainKey)
