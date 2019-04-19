@@ -35,7 +35,7 @@ def topology_print(dictTemp, host):
       print mainKey # host
 
       childNode = None
-      
+
       if len(node_list) is 0:
         hostNode = SlotOperation(nodeID=mainKey)
         node_list.append(hostNode)
@@ -44,6 +44,7 @@ def topology_print(dictTemp, host):
         for hostID in node_list:
           if hostID.getName() is mainKey :
             hostNode = hostID
+      print node_Name_list
         
       global_counter += 1
       for childKey in dictTemp.get(mainKey):
@@ -112,6 +113,7 @@ def topology_print(dictTemp, host):
 
           parentFlag = None
           if parentFlag is None :
+            print parentFlag+"1  1"+node_Name_list
             if childKey not in node_Name_list:
               if testing_flag :
                 print "Created a new childNode "+str(childKey)+"."
@@ -124,7 +126,8 @@ def topology_print(dictTemp, host):
                 if childKey is tempkey.getName() :
                   childNode = tempkey
                   parentFlag = 1
-          print parentFlag
+
+          print parentFlag+"2  2"+node_Name_list
           # update Parent
           if childNode.checkParent(hostNode) is 0:
             parentFlag = 2
