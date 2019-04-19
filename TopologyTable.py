@@ -30,7 +30,7 @@ def topology_print(dictTemp, host):
   local_queue = 1
   get_queue = 0
   for mainKey in dictTemp.keys():
-    if mainKey in host:
+    if mainKey is host:
       print mainKey # host
 
       childNode = None
@@ -38,8 +38,11 @@ def topology_print(dictTemp, host):
       if len(node_list) is 0:
         hostNode = SlotOperation(nodeID=mainKey)
         node_list.append(hostNode)
+      else :
+        for hostID in node_list:
+          if hostID.getName() is mainKey :
+            hostNode = hostID
         
-      print node_list
       global_counter += 1
       for childKey in dictTemp.get(mainKey):
 
@@ -63,6 +66,8 @@ def topology_print(dictTemp, host):
               if nodeid.getName() is not childKey and parentFlag is None:
                 childNode = SlotOperation(nodeID=childKey, parentID=hostNode, slot_numbers=sumCounter, now_slotoffset=time_slot, now_channeloffset=channel_offset)
                 node_list.append(childNode)
+                if testing_flag :
+                  print "append "+childNode.getName()+" into node_list"
                 parentFlag = 0
 
               # got already exists the nodeID
@@ -111,6 +116,8 @@ def topology_print(dictTemp, host):
                 print "Created a new childNode "+str(childKey)+"."
                 childNode = SlotOperation(nodeID=childKey, parentID=hostNode, slot_numbers=1, now_slotoffset=time_slot, now_channeloffset=channel_offset)
                 node_list.append(childNode)
+                if testing_flag :
+                  print "append "+childNode.getName()+" into node_list"
                 parentFlag = 0
                 break
               elif nodeid.getName() is childKey and parentFlag is None:
@@ -141,7 +148,7 @@ def topology_print(dictTemp, host):
 
   if testing_flag :
     print "All topology global queue "+str(global_counter)
-    print node_list
+
   return node_list
 
 
@@ -182,6 +189,8 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
           if parentid.getName() is not parentKey:
             parentNode = SlotOperation(nodeID=parentKey, slot_numbers=sumCounter, now_slotoffset=time_slot, now_channeloffset=channel_offset)
             node_list.append(parentNode)
+            if testing_flag :
+              print "append "+parentNode.getName()+" into node_list"
           else :
             parentNode = parentid
         
@@ -193,6 +202,8 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
           if nodeid.getName() is not childKey and parentFlag is None :
             childNode = SlotOperation(nodeID=childKey, parentID=parentNode, slot_numbers=sumCounter, now_slotoffset=time_slot, now_channeloffset=channel_offset)
             node_list.append(childNode)
+            if testing_flag :
+              print "append "+childNode.getName()+" into node_list"
             parentFlag = 0
           # got already exists the nodeID
           elif nodeid.getName() is childKey and parentFlag is None:
@@ -244,6 +255,8 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
           if parentid.getName() is not parentKey:
             parentNode = SlotOperation(nodeID=parentKey, slot_numbers=1, now_slotoffset=time_slot, now_channeloffset=channel_offset)
             node_list.append(parentNode)
+            if testing_flag :
+              print "append "+parentNode.getName()+" into node_list"
           else :
             parentNode = parentid
 
@@ -255,6 +268,8 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
           if nodeid.getName() is not childKey and parentFlag is None :
             childNode = SlotOperation(nodeID=childKey, parentID=parentNode ,slot_numbers=1, now_slotoffset=time_slot, now_channeloffset=channel_offset)
             node_list.append(childNode)
+            if testing_flag :
+              print "append "+childNode.getName()+" into node_list"
             parentFlag = 0
             break
           # got already exists the nodeID
