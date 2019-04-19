@@ -195,15 +195,19 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
       parentFlag = None
       if len(node_list) != 0 :
         for parentid in node_list :
-          if parentid.getName() not in node_Name_list:
-            parentNode = SlotOperation(nodeID=parentKey, slot_numbers=sumCounter, now_slotoffset=time_slot, now_channeloffset=channel_offset)
-            node_list.append(parentNode)
-            node_Name_list.append(parentNode.getName())
-            if testing_flag :
-              print "append "+parentNode.getName()+" into node_list"
-          else :
-            if parentid.getName() is parentKey :
-              parentNode = parentid
+          flag = 1 
+          if flag :
+            if parentid.getName() not in node_Name_list:
+              parentNode = SlotOperation(nodeID=parentKey, slot_numbers=sumCounter, now_slotoffset=time_slot, now_channeloffset=channel_offset)
+              node_list.append(parentNode)
+              node_Name_list.append(parentNode.getName())
+              flag = 0
+              if testing_flag :
+                print "append "+parentNode.getName()+" into node_list"
+            else :
+              if parentid.getName() is parentKey :
+                parentNode = parentid
+                flag = 0
         
         if testing_flag :
           print "Created "+parentNode.getName()
@@ -267,15 +271,19 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
       if len(node_list) != 0 :
         for parentid in node_list :
           # the parent node are not created, we create a new one.
-          if parentid.getName() not in node_Name_list:
-            parentNode = SlotOperation(nodeID=parentKey, slot_numbers=1, now_slotoffset=time_slot, now_channeloffset=channel_offset)
-            node_list.append(parentNode)
-            node_Name_list.append(parentNode.getName())
-            if testing_flag :
-              print "append "+parentNode.getName()+" into node_list"
-          else :
-            if parentid.getName() is parentKey :
-              parentNode = parentid
+          flag = 1
+          if flag :
+            if parentid.getName() not in node_Name_list:
+              parentNode = SlotOperation(nodeID=parentKey, slot_numbers=1, now_slotoffset=time_slot, now_channeloffset=channel_offset)
+              node_list.append(parentNode)
+              node_Name_list.append(parentNode.getName())
+              flag = 0
+              if testing_flag :
+                print "append "+parentNode.getName()+" into node_list"
+            else :
+              if parentid.getName() is parentKey :
+                parentNode = parentid
+                flag = 0
 
         if testing_flag :
           print "Created "+parentNode.getName()
