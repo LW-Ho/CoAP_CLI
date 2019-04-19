@@ -64,7 +64,7 @@ def topology_print(dictTemp, host):
                 parentFlag = 0
                 break
               # got already exists the nodeID
-              elif nodeid.getName() is childKey:
+              elif nodeid.getName() is childKey and parentFlag is not 0:
                 # Confirm that his parent is still the same?
                 childNode = nodeid
                 if childNode.checkParent(hostNode) :
@@ -110,7 +110,7 @@ def topology_print(dictTemp, host):
                 node_list.append(childNode)
                 parentFlag = 0
                 break
-              elif nodeid.getName() is childKey:
+              elif nodeid.getName() is childKey and parentFlag is not 0:
                 # Confirm that his parent is still the same?
                 childNode = nodeid
                 if childNode.checkParent(hostNode) :
@@ -188,7 +188,7 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
             parentFlag = 0
             break
           # got already exists the nodeID
-          elif nodeid.getName() is childKey:
+          elif nodeid.getName() is childKey and parentFlag is not 0:
             # Confirm that his parent is still the same?
             childNode = nodeid
             if childNode.checkParent(parentNode) :
@@ -246,7 +246,7 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
             parentFlag = 0
             break
           # got already exists the nodeID
-          elif nodeid.getName() is childKey:
+          elif nodeid.getName() is childKey and parentFlag is not 0:
             # Confirm that his parent is still the same?
             childNode = nodeid
             if childNode.checkParent(parentNode) :
