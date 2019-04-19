@@ -111,7 +111,7 @@ def topology_print(dictTemp, host):
           query = "slot="+str(time_slot)
 
           parentFlag = None
-          if childNode is None :
+          if parentFlag is None :
             if childKey not in node_Name_list:
               if testing_flag :
                 print "Created a new childNode "+str(childKey)+"."
@@ -124,7 +124,7 @@ def topology_print(dictTemp, host):
                 if childKey is tempkey.getName() :
                   childNode = tempkey
                   parentFlag = 1
-
+          print parentFlag
           # update Parent
           if childNode.checkParent(hostNode) is 0:
             parentFlag = 2
