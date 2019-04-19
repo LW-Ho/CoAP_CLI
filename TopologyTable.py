@@ -4,7 +4,7 @@ from SlotOperation import SlotOperation
 
 node_list = []          # save the node to list. 
 global_counter = 0      # save global queue.
-testing_flag = 0        # testing flag.
+testing_flag = 1        # testing flag.
 time_slot = 10          # default timeslot_offset.
 channel_offset = 0      # default channelslot_offset.
 resource = "slotframe"  # resource name.
@@ -12,6 +12,8 @@ resource = "slotframe"  # resource name.
 def set_table(host, topology_List, old_node_list):
   global node_list
   node_list = old_node_list
+
+  print node_list
   dictTemp = {}
 
   for item in topology_List:
@@ -38,7 +40,7 @@ def topology_print(dictTemp, host):
           if hostID not in node_list:
             hostNode = SlotOperation(nodeID=mainKey)
             node_list.append(hostNode)
-
+      print node_list
       global_counter += 1
       for childKey in dictTemp.get(mainKey):
 
@@ -140,7 +142,7 @@ def topology_print(dictTemp, host):
 
   if testing_flag :
     print "All topology global queue "+str(global_counter)
-
+    print node_list
   return node_list
 
 
