@@ -9,6 +9,7 @@ testing_flag = 1        # testing flag.
 time_slot = 10          # default timeslot_offset.
 channel_offset = 0      # default channelslot_offset.
 resource = "slotframe"  # resource name.
+host_address = ""
 
 def set_table(host, topology_List):
   global node_list
@@ -26,7 +27,7 @@ def set_table(host, topology_List):
   topology_print(dictTemp, host)
 
 def topology_print(dictTemp, host):
-  global global_counter, time_slot, node_list, channel_offset, node_Name_list
+  global global_counter, time_slot, node_list, channel_offset, node_Name_list, host_address
   local_queue = 1
   get_queue = 0
   hostNode = None
@@ -34,8 +35,6 @@ def topology_print(dictTemp, host):
   for mainKey in dictTemp.keys():
     if mainKey in host:
       print mainKey # host
-
-      childNode = None
 
       if len(node_list) is 0:
         hostNode = SlotOperation(nodeID=mainKey)
@@ -46,6 +45,7 @@ def topology_print(dictTemp, host):
           if cmp(hostID.getName(), mainKey) is 0 :
             hostNode = hostID
 
+      host_address = str(mainKey)
       print node_Name_list
         
       global_counter += 1
@@ -64,27 +64,8 @@ def topology_print(dictTemp, host):
             time_slot = 10
           query = "slot="+str(time_slot)+"&numbers="+str(sumCounter)
 
-          parentFlag = None
-          if len(node_list) != 0 :
-            for nodeid in node_list :
-              # if node have not created, just new one.
-              if nodeid.getName() not in node_Name_list and parentFlag is None:
-                childNode = SlotOperation(nodeID=childKey, parentID=hostNode, slot_numbers=sumCounter, now_slotoffset=time_slot, now_channeloffset=channel_offset)
-                node_list.append(childNode)
-                node_Name_list.append(childNode.getName())
-                if testing_flag :
-                  print "append "+childNode.getName()+" into node_list"
-                parentFlag = 0
-
-          if parentFlag is 0 :
-            hostNode.parentPostQuery(childNode, time_slot, channel_offset, resource, query, parentFlag)
-          elif parentFlag is 1 :
-            pass
-          elif parentFlag is 2 :
-            # add a child for host node_list.
-            hostNode.checkChild(childNode)
-            # need to delete other parent dedicated slot.
-            hostNode.parentPostQuery(childNode, time_slot, channel_offset, resource, query, parentFlag)
+          parentNode, childNode = childparentControl(parentKey, childKey, sumCounter)
+          parentFlag_control(parentNode, childNode, time_slot, channel_offset, resource, query)
 
           time_slot = time_slot + sumCounter
 
@@ -100,31 +81,9 @@ def topology_print(dictTemp, host):
             time_slot = 10
           query = "slot="+str(time_slot)
 
-          parentFlag = None
-          if childKey not in node_Name_list:
-            if testing_flag :
-              print "Created a new childNode "+str(childKey)+"."
-            childNode = SlotOperation(nodeID=childKey, slot_numbers=1, now_slotoffset=time_slot, now_channeloffset=channel_offset)
-            node_list.append(childNode)
-            node_Name_list.append(childNode.getName())
-            parentFlag = 2
-          else :
-            for tempkey in node_list :
-              if cmp(childKey, tempkey.getName()) is 0 :
-                childNode = tempkey
-                parentFlag = childNode.checkParent(hostNode) # update parent.
-
-          if parentFlag is 2 :
-            # first post
-            hostNode.parentPostQuery(childNode, time_slot, channel_offset, resource, query, parentFlag)
-          elif parentFlag is 1 :
-            # nothing.
-            pass
-          elif parentFlag is 0 :
-            # add a child for host node_list.
-            hostNode.checkChild(childNode)
-            # need to delete other parent dedicated slot.
-            hostNode.parentPostQuery(childNode, time_slot, channel_offset, resource, query, parentFlag)
+          # only check child
+          parentNode, childNode = childparentControl(mainKey, childKey, 1)
+          parentFlag_control(parentNode, childNode, time_slot, channel_offset, resource, query)
 
           time_slot = time_slot + 1
 
@@ -139,7 +98,6 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
   global global_counter, time_slot, node_list, channel_offset
   local_queue = 0
   get_queue = 0
-  parentNode = None
   save_counter = temp_counter
   for childKey in dictTemp.get(parentKey):
     
@@ -168,7 +126,7 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
       
       parentNode, childNode = childparentControl(parentKey, childKey, sumCounter)
 
-      parentFlag_control(parentNode, childNode, time_slot, channel_offset, resourcem, query)
+      parentFlag_control(parentNode, childNode, time_slot, channel_offset, resource, query)
 
       time_slot = time_slot + sumCounter
       
@@ -192,14 +150,14 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
 
       parentNode, childNode = childparentControl(parentKey, childKey, 1)
 
-      parentFlag_control(parentNode, childNode, time_slot, channel_offset, resourcem, query)
+      parentFlag_control(parentNode, childNode, time_slot, channel_offset, resource, query)
 
       time_slot = time_slot + 1
 
   return local_queue
 
-def childparentControl(parentKey, childKey, slot_of_numbers)
-  global node_list, node_Name_list
+def childparentControl(parentKey, childKey, slot_of_numbers):
+  global node_list, node_Name_list, host_address
   parentNode = None
   childNode = None
 
@@ -225,7 +183,6 @@ def childparentControl(parentKey, childKey, slot_of_numbers)
     for nodeid in node_list :
       if cmp(childKey, nodeid.getName()) is 0 :
         childNode = nodeid
-
 
   return parentNode, childNode
 
