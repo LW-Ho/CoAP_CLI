@@ -11,6 +11,7 @@ class SlotOperation(object):
       self.now_channeloffset = now_channeloffset
       self.pre_slotoffset = None
       self.pre_channeloffset = None
+      self.need_to_added_deled_slot = 0
 
       self.child_list = []
       self.child_slot_dict = {}
@@ -22,7 +23,10 @@ class SlotOperation(object):
       if delFlag is 2:
         if testing_flag :
           print "First Post or Update Parent for new post."
-          print "prev : "+str(self.pre_slotoffset)+", current"+str(timeslot_offset)+", now"+str(self.now_slotoffset)
+          print "prev: "+str(self.pre_slotoffset)+", current: "+str(timeslot_offset)+", now: "+str(self.now_slotoffset)
+
+        # update child pre_slot.
+        childID.setSlot(timeslot_offset,timeslot_offset)
 
         self.pre_slotoffset = timeslot_offset # to save 
         self.pre_channeloffset = channel_offset
@@ -37,8 +41,14 @@ class SlotOperation(object):
         delquery = "&delslot="+str(self.pre_slotoffset)
         query = query + delquery
 
+        # to notification it's parent need added new slot.
+        self.need_to_added_deled_slot = 1
+
+        # update child pre_slot.
+        childID.setSlot(timeslot_offset,timeslot_offset)
+
         if testing_flag :
-          print "prev : "+str(self.pre_slotoffset)+", current"+str(timeslot_offset)+", now"+str(self.now_slotoffset)
+          print "prev: "+str(self.pre_slotoffset)+", current: "+str(timeslot_offset)+", now: "+str(self.now_slotoffset)
           print "Got changed event, will be delete slot and then added slot in one step."+" show force query : "+query
 
         self.pre_slotoffset = timeslot_offset # to update value
@@ -47,6 +57,10 @@ class SlotOperation(object):
         # first delslot, then working will added slot.
         RestCoAP.postQueryToNode(childID.getName(), resource, query)
         RestCoAP.postQueryToNode(self.nodeKey, resource, query) # send by self.
+      
+    def setSlot(self, timeslot_offset, channel_offset):
+      self.pre_slotoffset = timeslot_offset
+      self.pre_channeloffset = channel_offset
 
     
     def delChildKey(self, childKey):
@@ -67,7 +81,10 @@ class SlotOperation(object):
         return 2
       else :
         if cmp(parentID.getName(), self.parentID.getName()) is 0:
-          return 1
+          if self.need_to_added_deled_slot :
+            return 2
+          else :
+            return 1
         else:
           # callback parentID need to update child_list.
           self.parentID.delChildKey(self.nodeKey)
