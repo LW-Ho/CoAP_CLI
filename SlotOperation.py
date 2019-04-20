@@ -16,7 +16,7 @@ class SlotOperation(object):
     def parentPostQuery(self, childID, timeslot_offset, channel_offset, resource, query, delFlag):
 
       print "IN parentPostQuery"
-      if delFlag is 0:
+      if delFlag is 2:
         self.pre_slotoffset = timeslot_offset # to save 
         self.pre_channeloffset = channel_offset
 
@@ -25,13 +25,14 @@ class SlotOperation(object):
       elif delFlag is 1 :
         pass
 
-      elif delFlag is 2 :
+      elif delFlag is 0 :
         delquery = "delslot="+str(self.pre_slotoffset)
         query = query + delquery
 
         self.pre_slotoffset = timeslot_offset # to update value
         self.pre_channeloffset = channel_offset
 
+        # first delslot, then working will added slot.
         RestCoAP.postQueryToNode(childID.getName(), resource, query)
         RestCoAP.postQueryToNode(self.nodeID, resource, query) # send by self.
 
@@ -45,18 +46,20 @@ class SlotOperation(object):
             #print "deleted child was successful."
 
     def checkParentKey(self, parentKey):
-      if parentKey is not self.parentID.getName():
+      if cmp(parentKey, self.parentID.getName()) is 1:
         self.checkParent(self.parentID) # update self parentID
         return 0
       else :
         return 1
 
     def checkParent(self, parentID):
+
+      # first add child. return 2 to post query.
       if self.parentID is None :
         self.parentID = parentID
         return 2
       else :
-        if parentID.getName() is self.parentID.getName() :
+        if cmp(parentID.getName(), self.parentID.getName()) is 0:
           return 1
         else:
           # callback parentID need to update child_list.

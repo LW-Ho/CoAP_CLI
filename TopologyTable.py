@@ -30,6 +30,7 @@ def topology_print(dictTemp, host):
   local_queue = 1
   get_queue = 0
   hostNode = None
+  global_counter = 0 # initialize
   for mainKey in dictTemp.keys():
     if mainKey in host:
       print mainKey # host
@@ -42,8 +43,9 @@ def topology_print(dictTemp, host):
         node_Name_list.append(hostNode.getName())
       else :
         for hostID in node_list:
-          if hostID.getName() is mainKey :
+          if cmp(hostID.getName(), mainKey) is 0 :
             hostNode = hostID
+
       print node_Name_list
         
       global_counter += 1
@@ -74,19 +76,6 @@ def topology_print(dictTemp, host):
                   print "append "+childNode.getName()+" into node_list"
                 parentFlag = 0
 
-              # got already exists the nodeID
-              elif nodeid.getName() in node_Name_list and parentFlag is None and nodeid.getName() is childKey :
-                # Confirm that his parent is still the same?
-                childNode = nodeid
-                if childNode.checkParent(hostNode) is 1:
-                  # yes, not send slot_operation again.
-                  parentFlag = 1
-                elif childNode.checkParent(hostNode) is 0:
-                  # no, delete previous slot, then send a new scheduling to node.
-                  parentFlag = 2
-                elif childNode.checkParent(hostNode) is 2:
-                  parentFlag = 0
-
           if parentFlag is 0 :
             hostNode.parentPostQuery(childNode, time_slot, channel_offset, resource, query, parentFlag)
           elif parentFlag is 1 :
@@ -112,33 +101,26 @@ def topology_print(dictTemp, host):
           query = "slot="+str(time_slot)
 
           parentFlag = None
-          if parentFlag is None :
-            print str(parentFlag)+"1  1"+node_Name_list
-            if childKey not in node_Name_list:
-              if testing_flag :
-                print "Created a new childNode "+str(childKey)+"."
-              childNode = SlotOperation(nodeID=childKey, parentID=hostNode, slot_numbers=1, now_slotoffset=time_slot, now_channeloffset=channel_offset)
-              node_list.append(childNode)
-              node_Name_list.append(childNode.getName())
-              parentFlag = 0
-            else :
-              for tempkey in node_list :
-                if childKey is tempkey.getName() :
-                  childNode = tempkey
-                  parentFlag = 1
-
-          print str(parentFlag)+"2  2"+node_Name_list
-          # update Parent
-          if childNode.checkParent(hostNode) is 0:
+          if childKey not in node_Name_list:
+            if testing_flag :
+              print "Created a new childNode "+str(childKey)+"."
+            childNode = SlotOperation(nodeID=childKey, slot_numbers=1, now_slotoffset=time_slot, now_channeloffset=channel_offset)
+            node_list.append(childNode)
+            node_Name_list.append(childNode.getName())
             parentFlag = 2
+          else :
+            for tempkey in node_list :
+              if cmp(childKey, tempkey.getName()) is 0 :
+                childNode = tempkey
+                parentFlag = childNode.checkParent(hostNode) # update parent.
 
-          if parentFlag is 0 :
+          if parentFlag is 2 :
             # first post
             hostNode.parentPostQuery(childNode, time_slot, channel_offset, resource, query, parentFlag)
           elif parentFlag is 1 :
             # nothing.
             pass
-          elif parentFlag is 2 :
+          elif parentFlag is 0 :
             # add a child for host node_list.
             hostNode.checkChild(childNode)
             # need to delete other parent dedicated slot.
@@ -180,59 +162,13 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
       
       sumCounter = get_queue+1
       # check timeslot_offset have larger than TSCH_SLOTFRAME_LENGTH
-      if cal_timeslot(time_slot, 1) :
+      if cal_timeslot(time_slot, sumCounter) :
         time_slot = 10
       query = "slot="+str(time_slot)+"&numbers="+str(sumCounter)
       
-      check = None
-      parentFlag = None
-      if len(node_list) != 0 :
-        for parentid in node_list :
-          flag = 1 
-          if flag :
-            if parentid.getName() not in node_Name_list:
-              parentNode = SlotOperation(nodeID=parentKey, slot_numbers=sumCounter, now_slotoffset=time_slot, now_channeloffset=channel_offset)
-              node_list.append(parentNode)
-              node_Name_list.append(parentNode.getName())
-              flag = 0
-              if testing_flag :
-                print "append "+parentNode.getName()+" into node_list"
-            else :
-              if parentid.getName() is parentKey :
-                parentNode = parentid
-                flag = 0
+      parentNode, childNode = childparentControl(parentKey, childKey, sumCounter)
 
-        for nodeid in node_list :
-          # if node have not created, just new one.
-          if nodeid.getName() not in node_Name_list and parentFlag is None :
-            childNode = SlotOperation(nodeID=childKey, parentID=parentNode, slot_numbers=sumCounter, now_slotoffset=time_slot, now_channeloffset=channel_offset)
-            node_list.append(childNode)
-            node_Name_list.append(childNode.getName())
-            if testing_flag :
-              print "append "+childNode.getName()+" into node_list"
-            parentFlag = 0
-          # got already exists the nodeID
-          elif nodeid.getName() in node_Name_list and parentFlag is None and nodeid.getName() is childKey :
-            # Confirm that his parent is still the same?
-            childNode = nodeid
-            if childNode.checkParent(parentNode) is 1:
-              # yes, not send slot_operation again.
-              parentFlag = 1
-            elif childNode.checkParent(parentNode) is 0:
-              # no, delete previous slot, then send a new scheduling to node.
-              parentFlag = 2
-            elif childNode.checkParent(parentNode) is 2:
-              parentFlag = 0
-
-      if parentFlag is 0 :
-        parentNode.parentPostQuery(childNode, time_slot, channel_offset, resource, query, parentFlag)
-      elif parentFlag is 1 :
-        pass
-      elif parentFlag is 2 :
-        # add a child for host node_list.
-        parentNode.checkChild(childNode)
-        # need to delete other parent dedicated slot.
-        parentNode.parentPostQuery(childNode, time_slot, channel_offset, resource, query, parentFlag)
+      parentFlag_control(parentNode, childNode, time_slot, channel_offset, resourcem, query)
 
       time_slot = time_slot + sumCounter
       
@@ -254,62 +190,59 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
       if cal_timeslot(time_slot, 1) :
         time_slot = 10
 
-      parentFlag = None
-      if len(node_list) != 0 :
-        for parentid in node_list :
-          # the parent node are not created, we create a new one.
-          flag = 1
-          if flag :
-            if parentid.getName() not in node_Name_list:
-              parentNode = SlotOperation(nodeID=parentKey, slot_numbers=1, now_slotoffset=time_slot, now_channeloffset=channel_offset)
-              node_list.append(parentNode)
-              node_Name_list.append(parentNode.getName())
-              flag = 0
-              if testing_flag :
-                print "append "+parentNode.getName()+" into node_list"
-            else :
-              if parentid.getName() is parentKey :
-                parentNode = parentid
-                flag = 0
+      parentNode, childNode = childparentControl(parentKey, childKey, 1)
 
-        for nodeid in node_list :
-          # if node still on first layer and no child.
-          if nodeid.getName() not in node_Name_list and parentFlag is None :
-            childNode = SlotOperation(nodeID=childKey, parentID=parentNode ,slot_numbers=1, now_slotoffset=time_slot, now_channeloffset=channel_offset)
-            node_list.append(childNode)
-            node_Name_list.append(childNode.getName())
-            if testing_flag :
-              print "append "+childNode.getName()+" into node_list"
-            parentFlag = 0
-            break
-
-          # got already exists the nodeID
-          elif nodeid.getName() in node_Name_list and parentFlag is None and nodeid.getName() is childKey:
-            # Confirm that his parent is still the same?
-            childNode = nodeid
-            if childNode.checkParent(parentNode) is 1:
-              # yes, not send slot_operation again.
-              parentFlag = 1
-            elif childNode.checkParent(parentNode) is 0:
-              # no, delete previous slot, then send a new scheduling to node.
-              parentFlag = 2
-            elif childNode.checkParent(parentNode) is 2:
-              parentFlag = 0
-
-      if parentFlag is 0 :
-        parentNode.parentPostQuery(childNode, time_slot, channel_offset, resource, query, parentFlag)
-      elif parentFlag is 1 :
-        pass
-      elif parentFlag is 2 :
-        # add a child for host node_list.
-        parentNode.checkChild(childNode)
-        # need to delete other parent dedicated slot.
-        parentNode.parentPostQuery(childNode, time_slot, channel_offset, resource, query, parentFlag)
+      parentFlag_control(parentNode, childNode, time_slot, channel_offset, resourcem, query)
 
       time_slot = time_slot + 1
 
   return local_queue
 
+def childparentControl(parentKey, childKey, slot_of_numbers)
+  global node_list, node_Name_list
+  parentNode = None
+  childNode = None
+
+  if parentKey not in node_Name_list :
+    if testing_flag :
+      print "append "+parentKey+" into node_list"
+    parentNode = SlotOperation(nodeID=parentKey, slot_numbers=slot_of_numbers, now_slotoffset=time_slot, now_channeloffset=channel_offset)
+    node_list.append(parentNode)
+    node_Name_list.append(parentNode.getName())
+  else :
+    for parentid in node_list :
+      # got already exists the parentID
+      if cmp(parentKey,parentid.getName()) is 0 :
+        parentNode = parentid
+  
+  if childKey not in node_Name_list :
+    if testing_flag :
+      print "append "+childKey+" into node_list"
+    childNode = SlotOperation(nodeID=childKey, slot_numbers=slot_of_numbers, now_slotoffset=time_slot, now_channeloffset=channel_offset)
+    node_list.append(childNode)
+    node_Name_list.append(childNode.getName())
+  else :
+    for nodeid in node_list :
+      if cmp(childKey, nodeid.getName()) is 0 :
+        childNode = nodeid
+
+
+  return parentNode, childNode
+
+def parentFlag_control(ParentNode, ChildNode, current_timeslot, current_channel_offset, resource, query):
+  parent_Flag = None
+  parent_Flag = ChildNode.checkParent(ParentNode)
+
+  if parent_Flag is 0 :
+    # add a child for host node_list.
+    ParentNode.checkChild(ChildNode)
+    # need to delete other parent dedicated slot.
+    ParentNode.parentPostQuery(ChildNode, current_timeslot, current_channel_offset, resource, query, parent_Flag)
+  elif parent_Flag is 1 :
+    #nothing
+    pass
+  elif parent_Flag is 2 :
+    ParentNode.parentPostQuery(ChildNode, current_timeslot, current_channel_offset, resource, query, parent_Flag)
 
 
 
