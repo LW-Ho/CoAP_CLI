@@ -37,7 +37,7 @@ def topology_print(dictTemp, host):
       print mainKey # host
 
       if len(node_list) is 0:
-        hostNode = SlotOperation(nodeID=mainKey)
+        hostNode = SlotOperation(nodeKey=mainKey)
         node_list.append(hostNode)
         node_Name_list.append(hostNode.getName())
       else :
@@ -162,7 +162,7 @@ def childparentControl(parentKey, childKey, slot_of_numbers):
   if parentKey not in node_Name_list :
     if testing_flag :
       print "append "+parentKey+" into node_list"
-    parentNode = SlotOperation(nodeID=parentKey, slot_numbers=slot_of_numbers, now_slotoffset=time_slot, now_channeloffset=channel_offset)
+    parentNode = SlotOperation(nodeKey=parentKey, slot_numbers=slot_of_numbers, now_slotoffset=time_slot, now_channeloffset=channel_offset)
     node_list.append(parentNode)
     node_Name_list.append(parentNode.getName())
   else :
@@ -174,7 +174,7 @@ def childparentControl(parentKey, childKey, slot_of_numbers):
   if childKey not in node_Name_list :
     if testing_flag :
       print "append "+childKey+" into node_list"
-    childNode = SlotOperation(nodeID=childKey, slot_numbers=slot_of_numbers, now_slotoffset=time_slot, now_channeloffset=channel_offset)
+    childNode = SlotOperation(nodeKey=childKey, slot_numbers=slot_of_numbers, now_slotoffset=time_slot, now_channeloffset=channel_offset)
     node_list.append(childNode)
     node_Name_list.append(childNode.getName())
   else :
@@ -189,7 +189,7 @@ def parentFlag_control(ParentNode, ChildNode, current_timeslot, current_channel_
   parent_Flag = ChildNode.checkParent(ParentNode)
   # add a child for it's parent node_list.
   ParentNode.checkChild(ChildNode)
-  
+
   if parent_Flag is 0 :
     # need to delete other parent dedicated slot.
     ParentNode.parentPostQuery(ChildNode, current_timeslot, current_channel_offset, resource, query, parent_Flag)
