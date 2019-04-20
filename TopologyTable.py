@@ -64,7 +64,7 @@ def topology_print(dictTemp, host):
             time_slot = 10
           query = "slot="+str(time_slot)+"&numbers="+str(sumCounter)
 
-          parentNode, childNode = childparentControl(parentKey, childKey, sumCounter)
+          parentNode, childNode = childparentControl(mainKey, childKey, sumCounter)
           parentFlag_control(parentNode, childNode, time_slot, channel_offset, resource, query)
 
           time_slot = time_slot + sumCounter
@@ -125,7 +125,6 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
       query = "slot="+str(time_slot)+"&numbers="+str(sumCounter)
       
       parentNode, childNode = childparentControl(parentKey, childKey, sumCounter)
-
       parentFlag_control(parentNode, childNode, time_slot, channel_offset, resource, query)
 
       time_slot = time_slot + sumCounter
@@ -149,7 +148,6 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
         time_slot = 10
 
       parentNode, childNode = childparentControl(parentKey, childKey, 1)
-
       parentFlag_control(parentNode, childNode, time_slot, channel_offset, resource, query)
 
       time_slot = time_slot + 1
@@ -187,12 +185,12 @@ def childparentControl(parentKey, childKey, slot_of_numbers):
   return parentNode, childNode
 
 def parentFlag_control(ParentNode, ChildNode, current_timeslot, current_channel_offset, resource, query):
-  parent_Flag = None
+  # get parent flag event.
   parent_Flag = ChildNode.checkParent(ParentNode)
-
+  # add a child for it's parent node_list.
+  ParentNode.checkChild(ChildNode)
+  
   if parent_Flag is 0 :
-    # add a child for host node_list.
-    ParentNode.checkChild(ChildNode)
     # need to delete other parent dedicated slot.
     ParentNode.parentPostQuery(ChildNode, current_timeslot, current_channel_offset, resource, query, parent_Flag)
   elif parent_Flag is 1 :
