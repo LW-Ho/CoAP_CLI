@@ -52,11 +52,11 @@ class SlotOperation(object):
     def delChildKey(self, childKey):
       # child node will call it parent to update child_list.
       if len(self.child_list) != 0:
-        for childID in self.child_list:
-          if cmp(childID.getName(), childKey) is 0:
+        for childid in self.child_list:
+          if cmp(childid.getName(), childKey) is 0:
             if testing_flag :
-              print "Deleted child was successful."+str(childID.getName())
-            self.child_list.remove(childID)
+              print "Deleted child was successful."+str(childid.getName())
+            self.child_list.remove(childid)
             
 
     def checkParent(self, parentID):
@@ -77,15 +77,9 @@ class SlotOperation(object):
     
     # if the node is other node's parent, need add to child_list.
     def checkChild(self, childID):
-      if len(self.child_list) != 0:
-        if childID.getName() not in self.child_list:
-          print "add new child : "+childID.getName()+" by "+str(self.nodeKey)
-          self.child_list.append(childID)
-          print self.child_list
-      else:
-        print "First add new child : "+childID.getName()+" by "+str(self.nodeKey)
+      if childID not in self.child_list:
+        print "add new child : "+childID.getName()+" by "+str(self.nodeKey)
         self.child_list.append(childID)
-        print self.child_list
       
     # get nodeKey name.
     def getName(self):
