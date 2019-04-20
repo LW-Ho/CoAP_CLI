@@ -41,7 +41,7 @@ class SlotOperation(object):
         delquery = "&delslot="+str(self.pre_slotoffset)
         query = query + delquery
 
-        # to notification it's parent need added new slot.
+        # to notification it's parent need add/del new slot.
         self.need_to_added_deled_slot = 1
 
         # update child pre_slot.
@@ -82,7 +82,7 @@ class SlotOperation(object):
       else :
         if cmp(parentID.getName(), self.parentID.getName()) is 0:
           if self.need_to_added_deled_slot :
-            return 2
+            return 0
           else :
             return 1
         else:
