@@ -1,5 +1,7 @@
 import RestCoAP
 
+testing_flag = 1
+
 class SlotOperation(object):
     def __init__(self, nodeKey, parentID=None ,slot_numbers=None, now_slotoffset=None, now_channeloffset=None):
       self.nodeKey = nodeKey
@@ -18,7 +20,10 @@ class SlotOperation(object):
 
       
       if delFlag is 2:
-        print "First Post or Update Parent for new post."
+        if testing_flag :
+          print "First Post or Update Parent for new post."
+          print "prev : "+str(self.pre_slotoffset)+", current"+str(timeslot_offset)+", now"+str(self.now_slotoffset)
+
         self.pre_slotoffset = timeslot_offset # to save 
         self.pre_channeloffset = channel_offset
 
@@ -29,10 +34,12 @@ class SlotOperation(object):
         pass
 
       elif delFlag is 0 :
-        delquery = "delslot="+str(self.pre_slotoffset)
+        delquery = "&delslot="+str(self.pre_slotoffset)
         query = query + delquery
 
-        print "Got changed event, will be delete slot and then added slot in one step."+" show force query : "+query
+        if testing_flag :
+          print "prev : "+str(self.pre_slotoffset)+", current"+str(timeslot_offset)+", now"+str(self.now_slotoffset)
+          print "Got changed event, will be delete slot and then added slot in one step."+" show force query : "+query
 
         self.pre_slotoffset = timeslot_offset # to update value
         self.pre_channeloffset = channel_offset
@@ -47,9 +54,10 @@ class SlotOperation(object):
       if len(self.child_list) != 0:
         for childID in self.child_list:
           if cmp(childID.getName(), childKey) is 0:
-
+            if testing_flag :
+              print "Deleted child was successful."+str(childID.getName())
             self.child_list.remove(childID)
-            #print "deleted child was successful."
+            
 
     def checkParent(self, parentID):
 
@@ -71,10 +79,13 @@ class SlotOperation(object):
     def checkChild(self, childID):
       if len(self.child_list) != 0:
         if childID.getName() not in self.child_list:
-          self.child_list.append(childID)
           print "add new child : "+childID.getName()+" by "+str(self.nodeKey)
+          self.child_list.append(childID)
+          print self.child_list
       else:
+        print "First add new child : "+childID.getName()+" by "+str(self.nodeKey)
         self.child_list.append(childID)
+        print self.child_list
       
     # get nodeKey name.
     def getName(self):
