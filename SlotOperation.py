@@ -40,9 +40,9 @@ class SlotOperation(object):
 
       elif delFlag is 0 :
         if self.parentID is None:
-          delquery = "&delslot="+str(self.pre_slotoffset)
-        else :
           delquery = "&delslot="+str(self.now_slotoffset)+"&delnumbers="+str(self.pre_slot_numbers)
+        else :
+          delquery = "&delslot="+str(self.pre_slotoffset)+"&delnumbers="+str(self.pre_slot_numbers)
         query = query + delquery
 
         # to notification it's parent need add/del new slot.
