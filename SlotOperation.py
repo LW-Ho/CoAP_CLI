@@ -40,7 +40,7 @@ class SlotOperation(object):
 
       elif delFlag is 0 :
         if self.parentID is None:
-          delquery = "&delslot="+str(self.now_slotoffset)+"&delnumbers="+str(self.pre_slot_numbers)
+          delquery = "&delslot="+str(self.now_slotoffset)+"&delnumbers="+str(self.slot_numbers)
         else :
           delquery = "&delslot="+str(self.pre_slotoffset)+"&delnumbers="+str(self.pre_slot_numbers)
         query = query + delquery
