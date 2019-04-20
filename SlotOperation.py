@@ -30,7 +30,7 @@ class SlotOperation(object):
         childID.setSlot(timeslot_offset,timeslot_offset)
 
         # update parent's slot.
-        updateSlot(timeslot_offset, channel_offset)
+        self.updateSlot(timeslot_offset, channel_offset)
 
         RestCoAP.postQueryToNode(childID.getName(), resource, query)
         RestCoAP.postQueryToNode(self.nodeKey, resource, query) # send by self.
@@ -56,7 +56,7 @@ class SlotOperation(object):
           print "Got changed event, will be delete slot and then added slot in one step."+" show force query : "+query
 
         # update parent's slot.
-        updateSlot(timeslot_offset, channel_offset)
+        self.updateSlot(timeslot_offset, channel_offset)
 
         # first delslot, then working will added slot.
         RestCoAP.postQueryToNode(childID.getName(), resource, query)
@@ -73,7 +73,7 @@ class SlotOperation(object):
       self.now_slotoffset = timeslot_offset # to update offset
       self.now_channeloffset = channel_offset
 
-    def updateSlotNumbers(self, current_slot_numbers)
+    def updateSlotNumbers(self, current_slot_numbers):
       self.pre_slot_numbers = self.slot_numbers
       self.slot_numbers = current_slot_numbers
     
