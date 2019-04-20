@@ -64,8 +64,9 @@ def topology_print(dictTemp, host):
             time_slot = 10
           query = "slot="+str(time_slot)+"&numbers="+str(sumCounter)
 
+          nothing_flag = None
           parentNode, childNode = childparentControl(mainKey, childKey, sumCounter)
-          parentFlag_control(parentNode, childNode, time_slot, channel_offset, resource, query)
+          nothing_flag = parentFlag_control(parentNode, childNode, time_slot, channel_offset, resource, query)
 
           if nothing_flag is 0 :
             time_slot = time_slot + sumCounter
@@ -82,9 +83,10 @@ def topology_print(dictTemp, host):
             time_slot = 10
           query = "slot="+str(time_slot)
 
+          nothing_flag = None
           # only check child
           parentNode, childNode = childparentControl(mainKey, childKey, 1)
-          parentFlag_control(parentNode, childNode, time_slot, channel_offset, resource, query)
+          nothing_flag = parentFlag_control(parentNode, childNode, time_slot, channel_offset, resource, query)
 
           if nothing_flag is 0 :
             time_slot = time_slot + 1
@@ -125,8 +127,9 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
         time_slot = 10
       query = "slot="+str(time_slot)+"&numbers="+str(sumCounter)
       
+      nothing_flag = None
       parentNode, childNode = childparentControl(parentKey, childKey, sumCounter)
-      parentFlag_control(parentNode, childNode, time_slot, channel_offset, resource, query)
+      nothing_flag = parentFlag_control(parentNode, childNode, time_slot, channel_offset, resource, query)
 
       if nothing_flag is 0 :
         time_slot = time_slot + sumCounter
