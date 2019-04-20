@@ -170,6 +170,7 @@ def childparentControl(parentKey, childKey, slot_of_numbers):
       # got already exists the parentID
       if cmp(parentKey,parentid.getName()) is 0 :
         parentNode = parentid
+        parentNode.updateSlotNumbers(slot_of_numbers)
   
   if childKey not in node_Name_list :
     if testing_flag :

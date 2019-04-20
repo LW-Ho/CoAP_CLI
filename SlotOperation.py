@@ -11,6 +11,7 @@ class SlotOperation(object):
       self.now_channeloffset = now_channeloffset
       self.pre_slotoffset = None
       self.pre_channeloffset = None
+      self.pre_slot_numbers = None
       self.need_to_added_deled_slot = 0
 
       self.child_list = []
@@ -28,8 +29,8 @@ class SlotOperation(object):
         # update child pre_slot.
         childID.setSlot(timeslot_offset,timeslot_offset)
 
-        self.pre_slotoffset = timeslot_offset # to save 
-        self.pre_channeloffset = channel_offset
+        # update parent's slot.
+        updateSlot(timeslot_offset, channel_offset)
 
         RestCoAP.postQueryToNode(childID.getName(), resource, query)
         RestCoAP.postQueryToNode(self.nodeKey, resource, query) # send by self.
@@ -38,7 +39,10 @@ class SlotOperation(object):
         pass
 
       elif delFlag is 0 :
-        delquery = "&delslot="+str(self.pre_slotoffset)
+        if self.now_slotoffset is None:
+          delquery = "&delslot="+str(self.pre_slotoffset)
+        else :
+          delquery = "&delslot="+str(self.now_slotoffset)+"&delnumbers="+str(self.pre_slot_numbers)
         query = query + delquery
 
         # to notification it's parent need add/del new slot.
@@ -51,8 +55,8 @@ class SlotOperation(object):
           print "prev: "+str(self.pre_slotoffset)+", current: "+str(timeslot_offset)+", now: "+str(self.now_slotoffset)
           print "Got changed event, will be delete slot and then added slot in one step."+" show force query : "+query
 
-        self.pre_slotoffset = timeslot_offset # to update value
-        self.pre_channeloffset = channel_offset
+        # update parent's slot.
+        updateSlot(timeslot_offset, channel_offset)
 
         # first delslot, then working will added slot.
         RestCoAP.postQueryToNode(childID.getName(), resource, query)
@@ -62,6 +66,16 @@ class SlotOperation(object):
       self.pre_slotoffset = timeslot_offset
       self.pre_channeloffset = channel_offset
 
+    def updateSlot(self, timeslot_offset, channel_offset):
+      self.pre_slotoffset = self.now_slotoffset # to save 
+      self.pre_channeloffset = self.now_channeloffset
+
+      self.now_slotoffset = timeslot_offset # to update offset
+      self.now_channeloffset = channel_offset
+
+    def updateSlotNumbers(self, current_slot_numbers)
+      self.pre_slot_numbers = self.slot_numbers
+      self.slot_numbers = current_slot_numbers
     
     def delChildKey(self, childKey):
       # child node will call it parent to update child_list.
