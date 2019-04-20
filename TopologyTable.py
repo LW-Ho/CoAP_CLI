@@ -67,7 +67,8 @@ def topology_print(dictTemp, host):
           parentNode, childNode = childparentControl(mainKey, childKey, sumCounter)
           parentFlag_control(parentNode, childNode, time_slot, channel_offset, resource, query)
 
-          time_slot = time_slot + sumCounter
+          if nothing_flag is 0 :
+            time_slot = time_slot + sumCounter
 
           dictTemp.pop(childKey)
           if testing_flag :
@@ -85,8 +86,8 @@ def topology_print(dictTemp, host):
           parentNode, childNode = childparentControl(mainKey, childKey, 1)
           parentFlag_control(parentNode, childNode, time_slot, channel_offset, resource, query)
 
-          time_slot = time_slot + 1
-
+          if nothing_flag is 0 :
+            time_slot = time_slot + 1
 
   if testing_flag :
     print "All topology global queue "+str(global_counter)
@@ -127,7 +128,9 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
       parentNode, childNode = childparentControl(parentKey, childKey, sumCounter)
       parentFlag_control(parentNode, childNode, time_slot, channel_offset, resource, query)
 
-      time_slot = time_slot + sumCounter
+      if nothing_flag is 0 :
+        time_slot = time_slot + sumCounter
+      
       
       if testing_flag :
         print childKey+" global queue "+str(get_queue+1)
@@ -147,10 +150,12 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
       if cal_timeslot(time_slot, 1) :
         time_slot = 10
 
+      nothing_flag = None
       parentNode, childNode = childparentControl(parentKey, childKey, 1)
-      parentFlag_control(parentNode, childNode, time_slot, channel_offset, resource, query)
+      nothing_flag = parentFlag_control(parentNode, childNode, time_slot, channel_offset, resource, query)
 
-      time_slot = time_slot + 1
+      if nothing_flag is 0 :
+        time_slot = time_slot + 1
 
   return local_queue
 
@@ -194,11 +199,14 @@ def parentFlag_control(ParentNode, ChildNode, current_timeslot, current_channel_
   if parent_Flag is 0 :
     # need to delete other parent dedicated slot.
     ParentNode.parentPostQuery(ChildNode, current_timeslot, current_channel_offset, resource, query, parent_Flag)
+    return 0
   elif parent_Flag is 1 :
     #nothing
+    return 1
     pass
   elif parent_Flag is 2 :
     ParentNode.parentPostQuery(ChildNode, current_timeslot, current_channel_offset, resource, query, parent_Flag)
+    return 0
 
 
 
