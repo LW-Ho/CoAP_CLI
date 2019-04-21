@@ -13,8 +13,13 @@ class SlotOperation(object):
       self.pre_channeloffset = None
       self.pre_slot_numbers = None
       self.need_to_added_deled_slot = 0
+      self.child_node_of_numbers = None
+      self.need_again_add_slot = 0
+      self.need_more_slot = 0
+
 
       self.child_list = []
+      self.old_child_list = []
       self.child_slot_dict = {}
       
     # for parent node to post other child node.
@@ -26,6 +31,14 @@ class SlotOperation(object):
           print "First Post or Update Parent for new post."
           print "prev: "+str(self.pre_slotoffset)+", current: "+str(timeslot_offset)+", now: "+str(self.now_slotoffset)
 
+        if childID.checkChile_list :
+
+        # if child was changed, add same as slot to parent.
+        if self.need_again_add_slot > 0 :
+          query = "slot="+str(timeslot_offset)+"&numbers="+str(need_again_add_slot)
+          self.need_more_slot = self.need_again_add_slot
+          self.need_again_add_slot = 0
+
         # update child pre_slot.
         childID.setSlot(timeslot_offset,timeslot_offset)
 
@@ -34,6 +47,7 @@ class SlotOperation(object):
 
         RestCoAP.postQueryToNode(childID.getName(), resource, query)
         RestCoAP.postQueryToNode(self.nodeKey, resource, query) # send by self.
+
       elif delFlag is 1 :
         print "No changed event."
         pass
@@ -85,10 +99,10 @@ class SlotOperation(object):
             if testing_flag :
               print "Deleted child was successful."+str(childid.getName())
             self.child_list.remove(childid)
+            self.old_child_list = self.child_list # copy to old_list
             
 
     def checkParent(self, parentID):
-
       # first add child. return 2 to post query.
       if self.parentID is None :
         self.parentID = parentID
@@ -96,6 +110,7 @@ class SlotOperation(object):
       else :
         if cmp(parentID.getName(), self.parentID.getName()) is 0:
           if self.need_to_added_deled_slot :
+            self.need_to_added_deled_slot = 0 # init
             return 0
           else :
             return 1
@@ -111,6 +126,23 @@ class SlotOperation(object):
       if childID not in self.child_list:
         print "add new child : "+childID.getName()+" by "+str(self.nodeKey)
         self.child_list.append(childID)
+        self.child_node_of_numbers = childID.checkChile_list()
+      else :
+        if self.child_node_of_numbers is not childID.checkChile_list() :
+          self.need_again_add_slot = childID.checkChile_list() - self.child_node_of_numbers
+          return 1
+        elif childID.wasNeedMoreSlot() > 0 :
+          self.need_again_add_slot = childID.wasNeedMoreSlot()
+          return 1
+          
+    
+    def checkChile_list(self):
+      return len(self.child_list)
+
+    def wasNeedMoreSlot(self):
+      temp_slot = self.need_more_slot
+      self.need_more_slot = 0
+      return int(temp_slot)
       
     # get nodeKey name.
     def getName(self):
