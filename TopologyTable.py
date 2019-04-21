@@ -197,16 +197,13 @@ def parentFlag_control(ParentNode, ChildNode, current_timeslot, current_channel_
   # get parent flag event.
   parent_Flag = ChildNode.checkParent(ParentNode)
   # add a child for it's parent node_list.
-  needAddAgain = ParentNode.checkChild(ChildNode)
+  ParentNode.checkChild(ChildNode)
 
   if parent_Flag is 0 :
     # need to delete other parent dedicated slot.
     ParentNode.parentPostQuery(ChildNode, current_timeslot, current_channel_offset, resource, query, parent_Flag)
     return 0
   elif parent_Flag is 1 :
-    if needAddAgain is 1:
-      return 0
-    else :
       # if parent add new child, need to add slot.
       return 1
     pass
