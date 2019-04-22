@@ -9,84 +9,59 @@ class SlotOperation(object):
       self.slot_numbers = slot_numbers
       self.now_slotoffset = now_slotoffset
       self.now_channeloffset = now_channeloffset
-      self.pre_slotoffset = None
-      self.pre_channeloffset = None
-      self.pre_slot_numbers = None
       self.need_to_added_deled_slot = 0
+      self.resource = "slotframe"  # resource name.
 
-      self.child_list = []
-      self.child_slot_dict = {}
+      self.child_dict = {}
       
     # for parent node to post other child node.
-    def parentPostQuery(self, childID, timeslot_offset, channel_offset, resource, query, delFlag):
+    def parentPostQuery(self, childID, current_timeslot_offset, current_channel_offset, current_slot_numbers, delFlag):
+      childKey = childID.getName()
+      slot_offset = child_dict.get(childID)[0]
+      channel_offset = child_dict.get(childID)[1]
+      slot_numbers = child_dict.get(childID)[2]
 
-      
       if delFlag is 2:
         if testing_flag :
           print "First Post or Update Parent for new post."
-          print "prev: "+str(self.pre_slotoffset)+", current: "+str(timeslot_offset)+", now: "+str(self.now_slotoffset)
 
-        # update child pre_slot.
-        childID.setSlot(timeslot_offset,timeslot_offset)
+        query = "slot="+str(slot_offset)+"&numbers="+str(slot_numbers)
 
-        # update parent's slot.
-        self.updateSlot(timeslot_offset, channel_offset)
-
-        RestCoAP.postQueryToNode(childID.getName(), resource, query)
-        RestCoAP.postQueryToNode(self.nodeKey, resource, query) # send by self.
+        RestCoAP.postQueryToNode(childKey, self.resource, query)
+        RestCoAP.postQueryToNode(self.nodeKey, self.resource, query) # send by self.
 
       elif delFlag is 1 :
         print "No changed event."
         pass
 
       elif delFlag is 0 :
-        if self.parentID is None:
-          delquery = "&delslot="+str(self.pre_slotoffset)+"&delnumbers="+str(self.pre_slot_numbers)
-        else :
-          delquery = "&delslot="+str(self.pre_slotoffset)+"&delnumbers="+str(self.pre_slot_numbers)
+        query = "slot="+str(current_timeslot_offset)+"&numbers="+str(current_slot_numbers)
+        delquery = "&delslot="+str(slot_offset)+"&delnumbers="+str(slot_numbers)
+        
         query = query + delquery
+
+        child_dict[childID][0] = current_timeslot_offset
+        child_dict[childID][1] = current_channel_offset
+        child_dict[childID][2] = current_slot_numbers
 
         # to notification it's parent need add/del new slot.
         self.need_to_added_deled_slot = 1
 
-        # update child pre_slot.
-        childID.setSlot(timeslot_offset,timeslot_offset)
 
         if testing_flag :
-          print "prev: "+str(self.pre_slotoffset)+", current: "+str(timeslot_offset)+", now: "+str(self.now_slotoffset)
           print "Got changed event, will be delete slot and then added slot in one step."+" show force query : "+query
 
-        # update parent's slot.
-        self.updateSlot(timeslot_offset, channel_offset)
-
         # first delslot, then working will added slot.
-        RestCoAP.postQueryToNode(childID.getName(), resource, query)
-        RestCoAP.postQueryToNode(self.nodeKey, resource, query) # send by self.
-      
-    def setSlot(self, timeslot_offset, channel_offset):
-      self.pre_slotoffset = timeslot_offset
-      self.pre_channeloffset = channel_offset
-
-    def updateSlot(self, timeslot_offset, channel_offset):
-      self.pre_slotoffset = self.now_slotoffset # to save 
-      self.pre_channeloffset = self.now_channeloffset
-
-      self.now_slotoffset = timeslot_offset # to update offset
-      self.now_channeloffset = channel_offset
-
-    def updateSlotNumbers(self, current_slot_numbers):
-      self.pre_slot_numbers = self.slot_numbers
-      self.slot_numbers = current_slot_numbers
+        RestCoAP.postQueryToNode(childID.getName(), self.resource, query)
+        RestCoAP.postQueryToNode(self.nodeKey, self.resource, query) # send by self.
     
     def delChildKey(self, childKey):
-      # child node will call it parent to update child_list.
-      if len(self.child_list) != 0:
-        for childid in self.child_list:
-          if cmp(childid.getName(), childKey) is 0:
-            if testing_flag :
-              print "Deleted child was successful."+str(childid.getName())
-            self.child_list.remove(childid)
-
+      # child node will call it parent to update child_dict.
+      for childid in self.child_dict:
+        if cmp(childid.getName(), childKey) is 0:
+          if testing_flag :
+            print "Deleted child was successful."+str(childid.getName())
+          self.child_dict.pop(childid)
 
     def checkParent(self, parentID):
       # first add child. return 2 to post query.
@@ -101,17 +76,17 @@ class SlotOperation(object):
           else :
             return 1
         else:
-          # callback parentID need to update child_list.
+          # callback parentID need to update child_dict.
           self.parentID.delChildKey(self.nodeKey)
           # update parentID
           self.parentID = parentID
           return 0
     
-    # if the node is other node's parent, need add to child_list.
-    def checkChild(self, childID):
-      if childID not in self.child_list:
+    # if the node is other node's parent, need add to child_dict.
+    def checkChild(self, childID, current_slot_offset, current_channel_offset, slot_numbers):
+      if childID not in self.child_dict:
         print "add new child : "+childID.getName()+" by "+str(self.nodeKey)
-        self.child_list.append(childID)
+        self.child_dict[childID] = [current_slot_offset, current_channel_offset, slot_numbers]
       
     # get nodeKey name.
     def getName(self):

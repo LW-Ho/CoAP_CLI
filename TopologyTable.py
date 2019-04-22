@@ -6,9 +6,8 @@ node_list = []          # save the node to list.
 node_Name_list = []     # save the node name to list, not class.
 global_counter = 0      # save global queue.
 testing_flag = 1        # testing flag.
-time_slot = 10          # default timeslot_offset.
+slot_offset = 10          # default timeslot_offset.
 channel_offset = 0      # default channelslot_offset.
-resource = "slotframe"  # resource name.
 host_address = ""
 
 def set_table(host, topology_List):
@@ -27,7 +26,7 @@ def set_table(host, topology_List):
   topology_print(dictTemp, host)
 
 def topology_print(dictTemp, host):
-  global global_counter, time_slot, node_list, channel_offset, node_Name_list, host_address
+  global global_counter, slot_offset, node_list, channel_offset, node_Name_list, host_address
   local_queue = 1
   get_queue = 0
   hostNode = None
@@ -60,16 +59,15 @@ def topology_print(dictTemp, host):
           
           sumCounter = get_queue+local_queue
           # check timeslot_offset have larger than TSCH_SLOTFRAME_LENGTH
-          if cal_timeslot(time_slot, 1) :
-            time_slot = 10
-          query = "slot="+str(time_slot)+"&numbers="+str(sumCounter)
+          if cal_timeslot(slot_offset, 1) :
+            slot_offset = 10
 
           nothing_flag = None
           parentNode, childNode = childparentControl(mainKey, childKey, sumCounter)
-          nothing_flag = parentFlag_control(parentNode, childNode, time_slot, channel_offset, resource, query)
+          nothing_flag = parentFlag_control(parentNode, childNode, slot_offset, channel_offset, sumCounter)
 
           if nothing_flag is 0 :
-            time_slot = time_slot + sumCounter
+            slot_offset = slot_offset + sumCounter
 
           dictTemp.pop(childKey)
           if testing_flag :
@@ -79,17 +77,16 @@ def topology_print(dictTemp, host):
           global_counter += 1
           print "--"+" 1 "+childKey
           # check timeslot_offset have larger than TSCH_SLOTFRAME_LENGTH
-          if cal_timeslot(time_slot, 1) :
-            time_slot = 10
-          query = "slot="+str(time_slot)
+          if cal_timeslot(slot_offset, 1) :
+            slot_offset = 10
 
           nothing_flag = None
           # only check child
           parentNode, childNode = childparentControl(mainKey, childKey, 1)
-          nothing_flag = parentFlag_control(parentNode, childNode, time_slot, channel_offset, resource, query)
+          nothing_flag = parentFlag_control(parentNode, childNode, slot_offset, channel_offset, 1)
 
           if nothing_flag is 0 :
-            time_slot = time_slot + 1
+            slot_offset = slot_offset + 1
 
   if testing_flag :
     print "All topology global queue "+str(global_counter)
@@ -98,7 +95,7 @@ def topology_print(dictTemp, host):
 
 
 def parentAndChild(parentKey, dictTemp, temp_counter):
-  global global_counter, time_slot, node_list, channel_offset
+  global global_counter, slot_offset, node_list, channel_offset
   local_queue = 0
   get_queue = 0
   save_counter = temp_counter
@@ -123,17 +120,15 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
       
       sumCounter = get_queue+1
       # check timeslot_offset have larger than TSCH_SLOTFRAME_LENGTH
-      if cal_timeslot(time_slot, sumCounter) :
-        time_slot = 10
-      query = "slot="+str(time_slot)+"&numbers="+str(sumCounter)
+      if cal_timeslot(slot_offset, sumCounter) :
+        slot_offset = 10
       
       nothing_flag = None
       parentNode, childNode = childparentControl(parentKey, childKey, sumCounter)
-      nothing_flag = parentFlag_control(parentNode, childNode, time_slot, channel_offset, resource, query)
+      nothing_flag = parentFlag_control(parentNode, childNode, slot_offset, channel_offset, sumCounter)
 
       if nothing_flag is 0 :
-        time_slot = time_slot + sumCounter
-      
+        slot_offset = slot_offset + sumCounter
       
       if testing_flag :
         print childKey+" global queue "+str(get_queue+1)
@@ -147,18 +142,16 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
         temp_str = temp_str+"--"
       print temp_str+" "+str(temp_counter+1)+" "+childKey
 
-      query = "slot="+str(time_slot)
-
       # check timeslot_offset have larger than TSCH_SLOTFRAME_LENGTH
-      if cal_timeslot(time_slot, 1) :
-        time_slot = 10
+      if cal_timeslot(slot_offset, 1) :
+        slot_offset = 10
 
       nothing_flag = None
       parentNode, childNode = childparentControl(parentKey, childKey, 1)
-      nothing_flag = parentFlag_control(parentNode, childNode, time_slot, channel_offset, resource, query)
+      nothing_flag = parentFlag_control(parentNode, childNode, slot_offset, channel_offset, 1)
 
       if nothing_flag is 0 :
-        time_slot = time_slot + 1
+        slot_offset = slot_offset + 1
 
   return local_queue
 
@@ -170,7 +163,7 @@ def childparentControl(parentKey, childKey, slot_of_numbers):
   if parentKey not in node_Name_list :
     if testing_flag :
       print "append "+parentKey+" into node_list"
-    parentNode = SlotOperation(nodeKey=parentKey, slot_numbers=slot_of_numbers, now_slotoffset=time_slot, now_channeloffset=channel_offset)
+    parentNode = SlotOperation(nodeKey=parentKey, slot_numbers=slot_of_numbers, now_slotoffset=slot_offset, now_channeloffset=channel_offset)
     node_list.append(parentNode)
     node_Name_list.append(parentNode.getName())
   else :
@@ -183,7 +176,7 @@ def childparentControl(parentKey, childKey, slot_of_numbers):
   if childKey not in node_Name_list :
     if testing_flag :
       print "append "+childKey+" into node_list"
-    childNode = SlotOperation(nodeKey=childKey, slot_numbers=slot_of_numbers, now_slotoffset=time_slot, now_channeloffset=channel_offset)
+    childNode = SlotOperation(nodeKey=childKey, slot_numbers=slot_of_numbers, now_slotoffset=slot_offset, now_channeloffset=channel_offset)
     node_list.append(childNode)
     node_Name_list.append(childNode.getName())
   else :
@@ -193,22 +186,22 @@ def childparentControl(parentKey, childKey, slot_of_numbers):
 
   return parentNode, childNode
 
-def parentFlag_control(ParentNode, ChildNode, current_timeslot, current_channel_offset, resource, query):
+def parentFlag_control(ParentNode, ChildNode, current_slot_offset, current_channel_offset, slot_numbers, resource, query):
   # get parent flag event.
   parent_Flag = ChildNode.checkParent(ParentNode)
   # add a child for it's parent node_list.
-  ParentNode.checkChild(ChildNode)
+  ParentNode.checkChild(ChildNode, current_slot_offset, current_channel_offset, slot_numbers)
 
   if parent_Flag is 0 :
     # need to delete other parent dedicated slot.
-    ParentNode.parentPostQuery(ChildNode, current_timeslot, current_channel_offset, resource, query, parent_Flag)
+    ParentNode.parentPostQuery(ChildNode, current_slot_offset, current_channel_offset, slot_numbers, parent_Flag)
     return 0
   elif parent_Flag is 1 :
       # if parent add new child, need to add slot.
       return 1
     pass
   elif parent_Flag is 2 :
-    ParentNode.parentPostQuery(ChildNode, current_timeslot, current_channel_offset, resource, query, parent_Flag)
+    ParentNode.parentPostQuery(ChildNode, current_slot_offset, current_channel_offset, slot_numbers, parent_Flag)
     return 0
 
 
