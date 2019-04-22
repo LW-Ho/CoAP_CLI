@@ -17,9 +17,9 @@ class SlotOperation(object):
     # for parent node to post other child node.
     def parentPostQuery(self, childID, current_timeslot_offset, current_channel_offset, current_slot_numbers, delFlag):
       childKey = childID.getName()
-      slot_offset = child_dict.get(childID)[0]
-      channel_offset = child_dict.get(childID)[1]
-      slot_numbers = child_dict.get(childID)[2]
+      slot_offset = self.child_dict.get(childID)[0]
+      channel_offset = self.child_dict.get(childID)[1]
+      slot_numbers = self.child_dict.get(childID)[2]
 
       if delFlag is 2:
         if testing_flag :
@@ -35,17 +35,21 @@ class SlotOperation(object):
         pass
 
       elif delFlag is 0 :
-        query = "slot="+str(current_timeslot_offset)+"&numbers="+str(current_slot_numbers)
-        delquery = "&delslot="+str(slot_offset)+"&delnumbers="+str(slot_numbers)
-        
-        query = query + delquery
+        if current_timeslot_offset is 0 and current_channel_offset is 0 and current_slot_numbers is 0 :
+          query = "delslot="+str(slot_offset)+"&delnumbers="+str(slot_numbers)
+        else :
+          query = "slot="+str(current_timeslot_offset)+"&numbers="+str(current_slot_numbers)
+          delquery = "&delslot="+str(slot_offset)+"&delnumbers="+str(slot_numbers)
+          
+          query = query + delquery
 
-        child_dict[childID][0] = current_timeslot_offset
-        child_dict[childID][1] = current_channel_offset
-        child_dict[childID][2] = current_slot_numbers
+        self.child_dict[childID][0] = current_timeslot_offset
+        self.child_dict[childID][1] = current_channel_offset
+        self.child_dict[childID][2] = current_slot_numbers
 
-        # to notification it's parent need add/del new slot.
-        self.need_to_added_deled_slot = 1
+        if childID.getChild_numbers is self.child_dict[childID][3]:
+          # to notification it's parent need add/del new slot.
+          self.need_to_added_deled_slot = 1
 
 
         if testing_flag :
@@ -57,10 +61,11 @@ class SlotOperation(object):
     
     def delChildKey(self, childKey):
       # child node will call it parent to update child_dict.
-      for childid in self.child_dict:
+      for childid in self.child_dict.keys():
         if cmp(childid.getName(), childKey) is 0:
           if testing_flag :
-            print "Deleted child was successful."+str(childid.getName())
+            print "Deleted child was successful."+str(childid.getName())+" by "+str(self.nodeKey)
+          self.parentPostQuery(childid, 0, 0, 0, 0)
           self.child_dict.pop(childid)
 
     def checkParent(self, parentID):
@@ -86,8 +91,23 @@ class SlotOperation(object):
     def checkChild(self, childID, current_slot_offset, current_channel_offset, slot_numbers):
       if childID not in self.child_dict:
         print "add new child : "+childID.getName()+" by "+str(self.nodeKey)
-        self.child_dict[childID] = [current_slot_offset, current_channel_offset, slot_numbers]
-      
+        self.child_dict[childID] = [current_slot_offset, current_channel_offset, slot_numbers, childID.getChild_numbers()]
+
+        if testing_flag :
+          print "childID get Child Numbers : "+str(childID.getChild_numbers())+" and old child numbers : "+str(self.child_dict[childID][3])
+
+      else :
+        if cmp(type(childID.getChild_numbers()), type(self.child_dict[childID][3])) is 0: # match same as type is int.
+          if cmp(int(childID.getChild_numbers()),int(self.child_dict[childID][3])) is 1: # not match
+            if testing_flag :
+              print "childID get Child Numbers : "+str(childID.getChild_numbers())+" and old child numbers : "+str(self.child_dict[childID][3])
+            self.child_dict[childID][3] = int(childID.getChild_numbers)
+            self.parentPostQuery(childID, current_slot_offset, current_channel_offset, slot_numbers, 0)
+            return 1
+
+    def getChild_numbers(self):
+      return len(self.child_dict)
+
     # get nodeKey name.
     def getName(self):
       return str(self.nodeKey)

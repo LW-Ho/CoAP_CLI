@@ -171,7 +171,6 @@ def childparentControl(parentKey, childKey, slot_of_numbers):
       # got already exists the parentID
       if cmp(parentKey,parentid.getName()) is 0 :
         parentNode = parentid
-        parentNode.updateSlotNumbers(slot_of_numbers)
   
   if childKey not in node_Name_list :
     if testing_flag :
@@ -186,17 +185,20 @@ def childparentControl(parentKey, childKey, slot_of_numbers):
 
   return parentNode, childNode
 
-def parentFlag_control(ParentNode, ChildNode, current_slot_offset, current_channel_offset, slot_numbers, resource, query):
+def parentFlag_control(ParentNode, ChildNode, current_slot_offset, current_channel_offset, slot_numbers):
   # get parent flag event.
   parent_Flag = ChildNode.checkParent(ParentNode)
   # add a child for it's parent node_list.
-  ParentNode.checkChild(ChildNode, current_slot_offset, current_channel_offset, slot_numbers)
-
+  topology_Flag = ParentNode.checkChild(ChildNode, current_slot_offset, current_channel_offset, slot_numbers)
+  
   if parent_Flag is 0 :
     # need to delete other parent dedicated slot.
     ParentNode.parentPostQuery(ChildNode, current_slot_offset, current_channel_offset, slot_numbers, parent_Flag)
     return 0
   elif parent_Flag is 1 :
+    if topology_Flag is 1 :
+      return 0
+    else :
       # if parent add new child, need to add slot.
       return 1
     pass
