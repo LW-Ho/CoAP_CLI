@@ -37,19 +37,21 @@ class SlotOperation(object):
       elif delFlag is 0 :
         if current_timeslot_offset is 0 and current_channel_offset is 0 and current_slot_numbers is 0 :
           query = "delslot="+str(slot_offset)+"&delnumbers="+str(slot_numbers)
+          self.need_to_added_deled_slot = 1
         else :
           query = "slot="+str(current_timeslot_offset)+"&numbers="+str(current_slot_numbers)
           delquery = "&delslot="+str(slot_offset)+"&delnumbers="+str(slot_numbers)
           
           query = query + delquery
+          self.need_to_added_deled_slot = 1
 
         self.child_dict[childID][0] = current_timeslot_offset
         self.child_dict[childID][1] = current_channel_offset
         self.child_dict[childID][2] = current_slot_numbers
 
-        if childID.getChild_numbers is self.child_dict[childID][3]:
-          # to notification it's parent need add/del new slot.
-          self.need_to_added_deled_slot = 1
+        # if childID.getChild_numbers is self.child_dict[childID][3]:
+        #   # to notification it's parent need add/del new slot.
+        #   self.need_to_added_deled_slot = 1
 
 
         if testing_flag :
@@ -101,7 +103,7 @@ class SlotOperation(object):
           if cmp(int(childID.getChild_numbers()),int(self.child_dict[childID][3])) is 1: # not match
             if testing_flag :
               print "childID get Child Numbers : "+str(childID.getChild_numbers())+" and old child numbers : "+str(self.child_dict[childID][3])
-            self.child_dict[childID][3] = int(childID.getChild_numbers)
+            self.child_dict[childID][3] = int(childID.getChild_numbers())
             self.parentPostQuery(childID, current_slot_offset, current_channel_offset, slot_numbers, 0)
             return 1
 
