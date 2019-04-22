@@ -107,3 +107,6 @@ venv.bak/
 
 # config
 config.cfg
+
+# VScode seeting file
+.vscode
