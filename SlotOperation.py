@@ -41,18 +41,12 @@ class SlotOperation(object):
         else :
           query = "slot="+str(current_timeslot_offset)+"&numbers="+str(current_slot_numbers)
           delquery = "&delslot="+str(slot_offset)+"&delnumbers="+str(slot_numbers)
-          
           query = query + delquery
           self.need_to_added_deled_slot = 1
 
         self.child_dict[childID][0] = current_timeslot_offset
         self.child_dict[childID][1] = current_channel_offset
         self.child_dict[childID][2] = current_slot_numbers
-
-        # if childID.getChild_numbers is self.child_dict[childID][3]:
-        #   # to notification it's parent need add/del new slot.
-        #   self.need_to_added_deled_slot = 1
-
 
         if testing_flag :
           print "Got changed event, will be delete slot and then added slot in one step."+" show force query : "+query

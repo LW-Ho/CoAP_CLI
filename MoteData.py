@@ -17,6 +17,7 @@ class MoteData(Base):
     start_asn = Column(Integer)
     end_asn = Column(Integer)
     packet_tcflow = Column(Integer)
+    lcoal_queue = Column(Integer)
     event_counter = Column(Integer)
     event_threshold = Column(Integer)
     event_threshold_last_change = Column(Integer)
@@ -30,26 +31,27 @@ class MoteData(Base):
 
     def __str__(self):
         output = []
-        output += ['mote    : {0}'.format(self.mote)]
-        output += ['priority: {0}'.format(self.packet_tcflow)]
-        output += ['startAsn: {0}'.format(self.start_asn)]
-        output += ['endAsn  : {0}'.format(self.end_asn)]
-        output += ['ec      : {0}'.format(self.event_counter)]
-        output += ['et      : {0}'.format(self.event_threshold)]
-        output += ['etlc    : {0}'.format(self.event_threshold_last_change)]
-        output += ['pc      : {0}'.format(self.packet_counter)]
-        output += ['parent  : {0}'.format(self.parent_address)]
-        output += ['rank    : {0}'.format(self.rank)]
-        output += ['p_etx   : {0}'.format(self.parent_link_etx)]
-        output += ['p_rssi  : {0}'.format(self.parent_link_rssi)]
+        output += ['mote        : {0}'.format(self.mote)]
+        output += ['priority    : {0}'.format(self.packet_tcflow)]
+        output += ['local_queue : {0}'.format(self.local_queue)]
+        output += ['startAsn    : {0}'.format(self.start_asn)]
+        output += ['endAsn      : {0}'.format(self.end_asn)]
+        output += ['ec          : {0}'.format(self.event_counter)]
+        output += ['et          : {0}'.format(self.event_threshold)]
+        output += ['etlc        : {0}'.format(self.event_threshold_last_change)]
+        output += ['pc          : {0}'.format(self.packet_counter)]
+        output += ['parent      : {0}'.format(self.parent_address)]
+        output += ['rank        : {0}'.format(self.rank)]
+        output += ['p_etx       : {0}'.format(self.parent_link_etx)]
+        output += ['p_rssi      : {0}'.format(self.parent_link_rssi)]
         return '\n'.join(output)
 
     @classmethod
-    def make_from_bytes(cls, mote, data):
+    def make_from_bytes(cls, mote, data, flag):
         packet_format = [
             "<xx",  # start_flag
             "B",    # packet_tcflow
-            "x",   # alignment_padding[1]
+            "B",    # local_queue
             "I",    # start_asn
             "I",    # end_asn
             "I",    # event_counter
@@ -69,15 +71,19 @@ class MoteData(Base):
         mote_data = MoteData(
             mote=mote,
             packet_tcflow=packet_item[0],
-            start_asn=packet_item[1],
-            end_asn=packet_item[2],
-            event_counter=packet_item[3],
-            event_threshold=packet_item[4],
-            event_threshold_last_change=packet_item[5],
-            packet_counter=packet_item[6],
-            parent_address="".join("{:02x}".format(ord(c)) for c in packet_item[7:9]),
-            rank=packet_item[9],
-            parent_link_etx=packet_item[10],
-            parent_link_rssi=packet_item[11],
+            local_queue=packet_item[1],
+            start_asn=packet_item[2],
+            end_asn=packet_item[3],
+            event_counter=packet_item[4],
+            event_threshold=packet_item[5],
+            event_threshold_last_change=packet_item[6],
+            packet_counter=packet_item[7],
+            parent_address="".join("{:02x}".format(ord(c)) for c in packet_item[8:10]),
+            rank=packet_item[10],
+            parent_link_etx=packet_item[11],
+            parent_link_rssi=packet_item[12],
         )
-        return mote_data
+        if flag :
+            return packet_item[1]
+        else :
+            return mote_data

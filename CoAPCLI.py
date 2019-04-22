@@ -135,7 +135,7 @@ class CoAPCLI(Cmd):
     try:
       node = args[0]
       resource = str(args[1])
-      coapObserve = CoAPObserve(node=node, resource="g/"+resource, object_callback=object_callback)
+      coapObserve = CoAPObserve(node=node, resource="res/"+resource, object_callback=object_callback)
       coapObserve.printName()
       coapObserve.setDaemon(True)
       coapObserve.start()
@@ -159,7 +159,7 @@ class CoAPCLI(Cmd):
     
     try :
       for node in result:
-        coapObserve = CoAPObserve(node=node, resource="g/bcollect", object_callback=object_callback)
+        coapObserve = CoAPObserve(node=node, resource="res/bcollect", object_callback=object_callback)
         coapObserve.printName()
         coapObserve.setDaemon(True)
         coapObserve.start()
@@ -255,8 +255,6 @@ class CoAPCLI(Cmd):
     else:
       sys.exit(1)
     
-      
-        
 if __name__=="__main__":
   optional_mysqlDB()
   collect_cli = CoAPCLI()
