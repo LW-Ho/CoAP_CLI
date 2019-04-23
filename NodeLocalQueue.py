@@ -34,19 +34,16 @@ def getNodeLocalQueue(node):
   global nodeName
   nodeName = node
   resource = "res/bcollect"
-  flag = 1
-  while (flag)
-    try:
-      coap_client = HelperClient(server=(node, port))
-      start = time.time()
-      coap_client.post(path=resource, payload='', callback=message_callback, timeout=60)
-      coap_client.stop()
-      elapsed = time.time() - start
-      flag = 0
-      print "%s  successful delivery, %.2f seconds." %(node, elapsed)
-      print "Got the local queue : %d " %(local_queue_numbers)
-      return local_queue_numbers
-    except:
-      coap_client.stop()
-      print node+" did not successfully send out."
+  try:
+    coap_client = HelperClient(server=(node, port))
+    start = time.time()
+    coap_client.post(path=resource, payload='', callback=message_callback, timeout=60)
+    coap_client.stop()
+    elapsed = time.time() - start
+    print "%s  successful delivery, %.2f seconds." %(node, elapsed)
+    print "Got the local queue : %d " %(local_queue_numbers)
+    return local_queue_numbers
+  except:
+    coap_client.stop()
+    print node+" did not successfully send out."
 

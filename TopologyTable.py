@@ -61,6 +61,7 @@ def topology_print(dictTemp, host):
 
           sumCounter = get_queue+temp_local_queue
           # check timeslot_offset have larger than TSCH_SLOTFRAME_LENGTH
+
           if cal_timeslot(slot_offset, 1) :
             slot_offset = 10
 
