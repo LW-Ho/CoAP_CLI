@@ -17,7 +17,7 @@ class MoteData(Base):
     start_asn = Column(Integer)
     end_asn = Column(Integer)
     packet_tcflow = Column(Integer)
-    lcoal_queue = Column(Integer)
+    local_queue = Column(Integer)
     event_counter = Column(Integer)
     event_threshold = Column(Integer)
     event_threshold_last_change = Column(Integer)
@@ -84,6 +84,7 @@ class MoteData(Base):
             parent_link_rssi=packet_item[12],
         )
         if flag :
+            print "in moteData : "+str(packet_item[1])
             return packet_item[1]
         else :
             return mote_data

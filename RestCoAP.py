@@ -1,7 +1,13 @@
+import logging
+log = logging.getLogger("NodeLocalQueue")
+import sys
+
 import time
 from coapthon.client.helperclient import HelperClient
 # coap get "coap://[fd00::212:4b00:615:a736]:5683/g/sht21?pp=2&thd=20"
+from MoteData import MoteData
 port = 5683
+local_queue_numbers = 1
 
 def postQueryToNode(node,resource,query):
   query = "?"+query
