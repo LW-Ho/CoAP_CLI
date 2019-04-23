@@ -80,10 +80,18 @@ class CoAPCLI(Cmd):
     if not arg:
       self.stdout.write("Please provide Border router's IP address.\n")
       return
+
+    args = arg.split(' ')
+    try:
+      self.border_router_Addr = args[0]
+      flag = args[1]
+    except:
+      self.stdout.write("Error from getallmotes.\n")
+    
     self.border_router_Addr = arg
     #try:
     self.stdout.write("Current Motes List : \n")
-    self.mote_lists = getAllMotes(self.border_router_Addr) # get motes from border router website.
+    self.mote_lists = getAllMotes(self.border_router_Addr, flag) # get motes from border router website.
     self.stdout.write("====== End of List =======\n")
     # except:
     #   self.stdout.write("Error from getallmotes.\n")

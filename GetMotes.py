@@ -5,7 +5,7 @@ import TopologyTable
 
 topology_list = []
 
-def getAllMotes(host):
+def getAllMotes(host, flag):
   global topology_list
   motes_List = []
   # parent_table = []
@@ -46,8 +46,8 @@ def getAllMotes(host):
       topology_table.append(temp)
       motes_List.append(motesStr[index])
       #print motesStr[index]
-  
-  TopologyTable.set_table(host, topology_table)
+
+  TopologyTable.set_table(host, topology_table, flag)
 
     #fo.close()
   return motes_List # return mote lists
