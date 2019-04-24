@@ -9,12 +9,16 @@ global_counter = 0      # save global queue.
 testing_flag = 1        # testing flag.
 slot_offset = 10          # default timeslot_offset.
 channel_offset = 0      # default channelslot_offset.
-g_init_flag = 0
+g_init_flag = None      # to get node local queue on first search.
 
-def set_table(host, topology_List, init_flag):
+def set_table(host, topology_List):
   global node_list, g_init_flag
-  g_init_flag = init_flag
   print node_list
+  if len(node_list) == 0 :
+    g_init_flag = 1 
+  else :
+    g_init_flag = 0
+
   dictTemp = {}
 
   for item in topology_List:
@@ -56,6 +60,7 @@ def topology_print(dictTemp, host):
           get_queue = parentAndChild(childKey, dictTemp, 1)
           
           temp_local_queue = 1
+          print g_init_flag
           if g_init_flag :
             temp_local_queue = getNodeLocalQueue(childKey)
           
