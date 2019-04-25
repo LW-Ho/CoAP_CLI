@@ -1,7 +1,8 @@
 import RestCoAP
 from SlotOperation import SlotOperation
 from NodeLocalQueue import getNodeLocalQueue
-from core.nodeinfo import NodeInfo
+from core.nodeinfo import saveNodeLQ
+from core.nodeinfo import getNodeLQ
 
 node_list = []          # save the node to list. 
 node_Name_list = []     # save the node name to list, not class.
