@@ -101,6 +101,12 @@ class SlotOperation(object):
             self.parentPostQuery(childID, current_slot_offset, current_channel_offset, slot_numbers, 0)
             return 1
 
+    def getLQ(self):
+      if self.slot_numbers != 1:
+        return self.slot_numbers
+      else :
+        return 1
+
     def getChild_numbers(self):
       return len(self.child_dict)
 

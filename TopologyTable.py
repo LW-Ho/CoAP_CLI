@@ -1,7 +1,7 @@
-#from core.nodeinfo import NodeInfo
 import RestCoAP
 from SlotOperation import SlotOperation
 from NodeLocalQueue import getNodeLocalQueue
+from core.nodeinfo import NodeInfo
 
 node_list = []          # save the node to list. 
 node_Name_list = []     # save the node name to list, not class.
@@ -60,9 +60,11 @@ def topology_print(dictTemp, host):
           get_queue = parentAndChild(childKey, dictTemp, 1)
           
           temp_local_queue = 1
-          print g_init_flag
           if g_init_flag :
             temp_local_queue = getNodeLocalQueue(childKey)
+            NodeInfo.saveNodeLQ(childKey, temp_local_queue)
+          else :
+            temp_local_queue = NodeInfo.getNodeLQ(childKey)
           
           global_counter += temp_local_queue
           sumCounter = get_queue+temp_local_queue
@@ -90,6 +92,9 @@ def topology_print(dictTemp, host):
           temp_local_queue = 1
           if g_init_flag :
             temp_local_queue = getNodeLocalQueue(childKey)
+            NodeInfo.saveNodeLQ(childKey, temp_local_queue)
+          else :
+            temp_local_queue = NodeInfo.getNodeLQ(childKey)
 
           global_counter += temp_local_queue
           
@@ -135,9 +140,12 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
       temp_local_queue = 1
       if g_init_flag :
         temp_local_queue = getNodeLocalQueue(childKey)
-      
+        NodeInfo.saveNodeLQ(childKey, temp_local_queue)
+      else :
+        temp_local_queue = NodeInfo.getNodeLQ(childKey)
+
+      local_queue = temp_local_queue
       global_counter += temp_local_queue
-      sumCounter = get_queue + temp_local_queue
 
       local_queue = sumCounter # return upper layer.
       # check timeslot_offset have larger than TSCH_SLOTFRAME_LENGTH
@@ -165,10 +173,11 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
       temp_local_queue = 1
       if g_init_flag :
         temp_local_queue = getNodeLocalQueue(childKey)
-        
-        
-      local_queue = temp_local_queue
+        NodeInfo.saveNodeLQ(childKey, temp_local_queue)
+      else :
+        temp_local_queue = NodeInfo.getNodeLQ(childKey)
 
+      local_queue = temp_local_queue
       global_counter += temp_local_queue
 
       # check timeslot_offset have larger than TSCH_SLOTFRAME_LENGTH
@@ -177,8 +186,8 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
 
       nothing_flag = None
       parentNode, childNode = childparentControl(parentKey, childKey, temp_local_queue)
-      nothing_flag = parentFlag_control(parentNode, childNode, slot_offset, channel_offset, temp_local_queue)
 
+      nothing_flag = parentFlag_control(parentNode, childNode, slot_offset, channel_offset, temp_local_queue)
       if nothing_flag is 0 :
         slot_offset = slot_offset + temp_local_queue
 
