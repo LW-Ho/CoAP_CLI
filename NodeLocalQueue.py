@@ -49,7 +49,7 @@ def getNodeLocalQueue(node):
   coap_client.get(path="res/bcollect", callback=message_callback, timeout=60)
   while (return_flag) :
     elapsed = time.time() - start
-    print 'Watting time : %d\r' % elapsed,
+    print 'Watting time : %2.2f\r' % elapsed,
     if elapsed > 60 :
       coap_client.close()
       coap_client.get(path="res/bcollect", callback=message_callback, timeout=60)
