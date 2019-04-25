@@ -31,7 +31,7 @@ def message_callback(response):
 
   # will upload data to mysql server.
   try :
-    local_queue_numbers = MoteData.make_from_bytes(response.source[0], response.payload, 1)
+    local_queue_numbers = int(MoteData.make_from_bytes(response.source[0], response.payload, 1))
   except :
     print("Unexpected error: {0}".format(sys.exc_info()[0]))
     #self.stdout.write("Unexpected error:", sys.exc_info()[0])
@@ -39,6 +39,7 @@ def message_callback(response):
 
 def getNodeLocalQueue(node):
   global nodeName, return_flag
+  return_flag = 1
   
   nodeName = node
   print nodeName
@@ -48,7 +49,12 @@ def getNodeLocalQueue(node):
   coap_client.get(path="res/bcollect", callback=message_callback, timeout=60)
   while (return_flag) :
     elapsed = time.time() - start
-    print 'Watting time : %2f\r' % elapsed,
+    print 'Watting time : %d\r' % elapsed,
+    if elapsed > 60 :
+      coap_client.close()
+      coap_client.get(path="res/bcollect", callback=message_callback, timeout=60)
+      start = time.time()
+
   coap_client.close()
   elapsed = time.time() - start
   print "%s  successful delivery, %.2f seconds." %(node, elapsed)
