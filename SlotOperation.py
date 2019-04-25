@@ -21,13 +21,15 @@ class SlotOperation(object):
       channel_offset = self.child_dict.get(childID)[1]
       slot_numbers = self.child_dict.get(childID)[2]
 
+      # TX = 1 / RX = 2
+
       if delFlag is 2:
         if testing_flag :
           print "First Post or Update Parent for new post."
 
-        query = "slot="+str(slot_offset)+"&numbers="+str(slot_numbers)
-
+        query = "slot="+str(slot_offset)+"&numbers="+str(slot_numbers)+"&link=1"
         RestCoAP.postQueryToNode(childKey, self.resource, query)
+        query = "slot="+str(slot_offset)+"&numbers="+str(slot_numbers)+"&link=2"
         RestCoAP.postQueryToNode(self.nodeKey, self.resource, query) # send by self.
 
       elif delFlag is 1 :
@@ -35,25 +37,37 @@ class SlotOperation(object):
         pass
 
       elif delFlag is 0 :
+        self.child_dict[childID][0] = current_timeslot_offset
+        self.child_dict[childID][1] = current_channel_offset
+        self.child_dict[childID][2] = current_slot_numbers
+
+
         if current_timeslot_offset is 0 and current_channel_offset is 0 and current_slot_numbers is 0 :
           query = "delslot="+str(slot_offset)+"&delnumbers="+str(slot_numbers)
           self.need_to_added_deled_slot = 1
+
+          # first delslot, then working will added slot.
+          RestCoAP.postQueryToNode(childID.getName(), self.resource, query)
+          RestCoAP.postQueryToNode(self.nodeKey, self.resource, query) # send by self.
         else :
           query = "slot="+str(current_timeslot_offset)+"&numbers="+str(current_slot_numbers)
           delquery = "&delslot="+str(slot_offset)+"&delnumbers="+str(slot_numbers)
           query = query + delquery
           self.need_to_added_deled_slot = 1
 
-        self.child_dict[childID][0] = current_timeslot_offset
-        self.child_dict[childID][1] = current_channel_offset
-        self.child_dict[childID][2] = current_slot_numbers
+          query = "slot="+str(current_timeslot_offset)+"&numbers="+str(current_slot_numbers)+"&link=1"
+          delquery = "&delslot="+str(slot_offset)+"&delnumbers="+str(slot_numbers)
+          query = query + delquery
+          # first delslot, then working will added slot.
+          RestCoAP.postQueryToNode(childID.getName(), self.resource, query)
+
+          query = "slot="+str(current_timeslot_offset)+"&numbers="+str(current_slot_numbers)+"&link=2"
+          query = query + delquery
+          RestCoAP.postQueryToNode(self.nodeKey, self.resource, query) # send by self.
 
         if testing_flag :
           print "Got changed event, will be delete slot and then added slot in one step."+" show force query : "+query
 
-        # first delslot, then working will added slot.
-        RestCoAP.postQueryToNode(childID.getName(), self.resource, query)
-        RestCoAP.postQueryToNode(self.nodeKey, self.resource, query) # send by self.
     
     def delChildKey(self, childKey):
       # child node will call it parent to update child_dict.

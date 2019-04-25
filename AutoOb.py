@@ -59,11 +59,7 @@ class AutoOb(threading.Thread):
         print (e)
         log.info("Error of count down timer... ")
 
-      if self.countBR > 9:
-        self.refreshBR() # get new routing table from border router.
-        self.countBR = 0
-      else :
-        self.countBR+=1
+      self.refreshBR() # get new routing table from border router.
 
       log.info("Observe ALL Done.")
 
