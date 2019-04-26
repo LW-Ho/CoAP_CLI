@@ -27,9 +27,9 @@ class SlotOperation(object):
         if testing_flag :
           print "First Post or Update Parent for new post."
 
-        query1 = "slot="+str(slot_offset)+"&numbers="+str(slot_numbers)+"&link=1"
+        query1 = "slot="+str(slot_offset)+"&numbers="+str(slot_numbers)+"&link=TX"
         RestCoAP.postQueryToNode(childKey, self.resource, query1)
-        query2 = "slot="+str(slot_offset)+"&numbers="+str(slot_numbers)+"&link=2"
+        query2 = "slot="+str(slot_offset)+"&numbers="+str(slot_numbers)+"&link=RX"
         RestCoAP.postQueryToNode(self.nodeKey, self.resource, query2) # send by self.
 
       elif delFlag is 1 :
@@ -52,13 +52,13 @@ class SlotOperation(object):
         else :
           self.need_to_added_deled_slot = 1
 
-          query1 = "slot="+str(current_timeslot_offset)+"&numbers="+str(current_slot_numbers)+"&link=1"
+          query1 = "slot="+str(current_timeslot_offset)+"&numbers="+str(current_slot_numbers)+"&link=TX"
           delquery1 = "&delslot="+str(slot_offset)+"&delnumbers="+str(slot_numbers)
           query1 = query1 + delquery1
           # first delslot, then working will added slot.
           RestCoAP.postQueryToNode(childID.getName(), self.resource, query1)
 
-          query2 = "slot="+str(current_timeslot_offset)+"&numbers="+str(current_slot_numbers)+"&link=2"
+          query2 = "slot="+str(current_timeslot_offset)+"&numbers="+str(current_slot_numbers)+"&link=RX"
           query2 = query2 + delquery1
           RestCoAP.postQueryToNode(self.nodeKey, self.resource, query2) # send by self.
 
