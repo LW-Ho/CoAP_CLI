@@ -62,9 +62,6 @@ class SlotOperation(object):
           query2 = query2 + delquery1
           RestCoAP.postQueryToNode(self.nodeKey, self.resource, query2) # send by self.
 
-        if testing_flag :
-          print "Got changed event, will be delete slot and then added slot in one step."+" show force query : "+query
-
     
     def delChildKey(self, childKey):
       # child node will call it parent to update child_dict.

@@ -31,7 +31,7 @@ def message_callback(response):
 
   # will upload data to mysql server.
   try :
-    local_queue_numbers = int(MoteData.make_from_bytes(response.source[0], response.payload, 1))
+    local_queue_numbers = MoteData.make_from_bytes(response.source[0], response.payload, 1)
   except :
     print("Unexpected error: {0}".format(sys.exc_info()[0]))
     #self.stdout.write("Unexpected error:", sys.exc_info()[0])
