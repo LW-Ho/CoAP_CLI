@@ -84,7 +84,7 @@ class MoteData(Base):
             parent_link_rssi=packet_item[12],
         )
         if flag :
-            print("%s in moteData : %s" % mote, (str(packet_item[1])))
+            print str(mote)+" in moteData : "+str(packet_item[1])
             return packet_item[1]
         else :
             return mote_data
