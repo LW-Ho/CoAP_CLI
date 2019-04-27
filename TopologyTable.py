@@ -84,7 +84,7 @@ def topology_print(dictTemp, host):
 
           dictTemp.pop(childKey)
           if testing_flag :
-            print childKey+" global queue "+str(get_queue+temp_local_queue)
+            print childKey+" global queue "+str(sumCounter)
         # only child
         else: 
           
@@ -149,7 +149,7 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
       global_counter += temp_local_queue
       sumCounter = get_queue+temp_local_queue
 
-      local_queue = sumCounter # return upper layer.
+      local_queue = local_queue + sumCounter # return upper layer.
       # check timeslot_offset have larger than TSCH_SLOTFRAME_LENGTH
       if cal_timeslot(slot_offset, temp_local_queue) :
         slot_offset = 10
@@ -179,7 +179,7 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
       else :
         temp_local_queue = NodeInfo.getNodeLQ(childKey)
 
-      local_queue = temp_local_queue
+      local_queue = local_queue + temp_local_queue # to save it.
       global_counter += temp_local_queue
 
       # check timeslot_offset have larger than TSCH_SLOTFRAME_LENGTH
