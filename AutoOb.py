@@ -53,7 +53,7 @@ class AutoOb(threading.Thread):
         while count < self.countDown :
           time.sleep(1)
           count += 1
-          print 'timer : %d . \r' % (count). # for testing.
+          print 'timer : %d . \r' % (count) # for testing.
         # time.sleep(int(self.countDown)) # sleep.
       except Exception as e:
         print (e)
