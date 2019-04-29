@@ -180,7 +180,8 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
       for index in range(0,temp_counter+1):
         temp_str = temp_str+"--"
       print temp_str+" "+str(temp_counter+1)+" "+childKey
-      topology_list += [temp_str+" "+str(temp_counter+1)+" "+childKey]
+      temp_counter_str = str(temp_counter+1)
+      topology_list += [temp_str+" "+temp_counter_str+" "+childKey]
 
       temp_local_queue = 1
       if g_init_flag :
