@@ -41,7 +41,7 @@ def topology_print(dictTemp, host):
   for mainKey in dictTemp.keys():
     if mainKey in host:
       print mainKey # host
-      topology_list += ["Root : %s " % mainKey]
+      topology_list += [mainKey]
 
       if len(node_list) is 0:
         hostNode = SlotOperation(nodeKey=mainKey)
@@ -118,6 +118,10 @@ def topology_print(dictTemp, host):
 
   if testing_flag :
     print "All topology global queue "+str(global_counter)
+
+  print ""
+  print '\n'.join(topology_list)
+  print ""
 
   return node_list
 
@@ -198,9 +202,7 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
       nothing_flag = parentFlag_control(parentNode, childNode, slot_offset, channel_offset, temp_local_queue)
       if nothing_flag is 0 :
         slot_offset = slot_offset + temp_local_queue
-        
-  print ""
-  print '\n'.join(topology_list)
+
   return local_queue
 
 def childparentControl(parentKey, childKey, slot_of_numbers):

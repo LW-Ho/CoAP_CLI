@@ -9,7 +9,7 @@ from MoteData import MoteData
 
 port = 5683
 nodeName = None
-local_queue_numbers = 1
+local_queue_numbers = '1'
 return_flag = 1
 
 def message_callback(response):
@@ -58,7 +58,7 @@ def getNodeLocalQueue(node):
   coap_client.close()
   elapsed = time.time() - start
   print "%s  successful delivery, %.2f seconds." %(node, elapsed)
-  print "Got the local queue : %d " %(local_queue_numbers)
+  print "Got the local queue : %s " %(str(local_queue_numbers))
   return_flag = 1
   return local_queue_numbers
   # except:
