@@ -12,6 +12,7 @@ testing_flag = 1        # testing flag.
 slot_offset = 10          # default timeslot_offset.
 channel_offset = 0      # default channelslot_offset.
 g_init_flag = None      # to get node local queue on first search.
+topology_list = []
 
 def set_table(host, topology_List):
   global node_list, g_init_flag
@@ -33,13 +34,14 @@ def set_table(host, topology_List):
   topology_print(dictTemp, host)
 
 def topology_print(dictTemp, host):
-  global global_counter, slot_offset, node_list, channel_offset, node_Name_list
+  global global_counter, slot_offset, node_list, channel_offset, node_Name_list, topology_list
   get_queue = 0
   hostNode = None
   global_counter = 0 # initialize
   for mainKey in dictTemp.keys():
     if mainKey in host:
       print mainKey # host
+      topology_list += ["Root : %s " % mainKey]
 
       if len(node_list) is 0:
         hostNode = SlotOperation(nodeKey=mainKey)
@@ -59,6 +61,7 @@ def topology_print(dictTemp, host):
         if childKey in dictTemp.keys(): 
           
           print "--"+" 1 "+childKey
+          topology_list += ["--"+" 1 "+childKey]
           get_queue = parentAndChild(childKey, dictTemp, 1)
           
           temp_local_queue = 1
@@ -89,6 +92,7 @@ def topology_print(dictTemp, host):
         else: 
           
           print "--"+" 1 "+childKey
+          topology_list += ["--"+" 1 "+childKey]
           
           
           temp_local_queue = 1
@@ -119,7 +123,7 @@ def topology_print(dictTemp, host):
 
 
 def parentAndChild(parentKey, dictTemp, temp_counter):
-  global global_counter, slot_offset, node_list, channel_offset
+  global global_counter, slot_offset, node_list, channel_offset, topology_list
   local_queue = 0
   get_queue = 0
   save_counter = temp_counter
@@ -133,8 +137,9 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
 
       temp_str = ""
       for index in range(0,temp_counter):
-        temp_str = temp_str+"--"  
+        temp_str = temp_str+"--"
       print temp_str+" "+str(temp_counter)+" "+childKey
+      topology_list += [temp_str+" "+str(temp_counter)+" "+childKey]
       get_queue = parentAndChild(childKey, dictTemp, temp_counter)
       # no other child, restore uplayer of numbers.
       temp_counter = save_counter 
@@ -171,6 +176,7 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
       for index in range(0,temp_counter+1):
         temp_str = temp_str+"--"
       print temp_str+" "+str(temp_counter+1)+" "+childKey
+      topology_list += [temp_str+" "+str(temp_counter+1)+" "+childKey]
 
       temp_local_queue = 1
       if g_init_flag :
@@ -192,7 +198,9 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
       nothing_flag = parentFlag_control(parentNode, childNode, slot_offset, channel_offset, temp_local_queue)
       if nothing_flag is 0 :
         slot_offset = slot_offset + temp_local_queue
-
+        
+  print ""
+  print '\n'.join(topology_list)
   return local_queue
 
 def childparentControl(parentKey, childKey, slot_of_numbers):
