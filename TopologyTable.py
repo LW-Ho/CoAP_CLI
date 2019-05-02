@@ -2,6 +2,7 @@ import RestCoAP
 from SlotOperation import SlotOperation
 from NodeLocalQueue import getNodeLocalQueue
 import core.nodeinfo as NodeInfo
+import core.channelinfo as ChannelInfo
 # from core.nodeinfo import saveNodeLQ
 # from core.nodeinfo import getNodeLQ
 
@@ -9,10 +10,12 @@ node_list = []          # save the node to list.
 node_Name_list = []     # save the node name to list, not class.
 global_counter = 0      # save global queue.
 testing_flag = 1        # testing flag.
-slot_offset = 10          # default timeslot_offset.
-channel_offset = 0      # default channelslot_offset.
+# slot_offset = 10          # default timeslot_offset.
+# channel_offset = 0      # default channelslot_offset.
+channel_offset_numbers = 16 # the number is channel offset of total numbers.
 g_init_flag = None      # to get node local queue on first search.
 topology_list = []
+
 
 def set_table(host, topology_List):
   global node_list, g_init_flag
@@ -34,7 +37,7 @@ def set_table(host, topology_List):
   topology_print(dictTemp, host)
 
 def topology_print(dictTemp, host):
-  global global_counter, slot_offset, node_list, channel_offset, node_Name_list, topology_list
+  global global_counter, node_list, node_Name_list, topology_list
   get_queue = 0
   hostNode = None
   global_counter = 0 # initialize
@@ -58,7 +61,7 @@ def topology_print(dictTemp, host):
       for childKey in dictTemp.get(mainKey):
 
         # host's child is other node's parent.
-        if childKey in dictTemp.keys(): 
+        if childKey in dictTemp.keys():
           
           print "--"+" 1 "+childKey
           topology_list += ["--"+" 1 "+childKey]
@@ -75,15 +78,13 @@ def topology_print(dictTemp, host):
           sumCounter = get_queue+temp_local_queue
 
           # check timeslot_offset have larger than TSCH_SLOTFRAME_LENGTH
-          if cal_timeslot(slot_offset, temp_local_queue) :
-            slot_offset = 10
+          # if cal_timeslot(slot_offset, temp_local_queue) :
+          #   slot_offset = 10
+          
+          childparentControl(mainKey, childKey, sumCounter)
 
-          nothing_flag = None
-          parentNode, childNode = childparentControl(mainKey, childKey, sumCounter)
-          nothing_flag = parentFlag_control(parentNode, childNode, slot_offset, channel_offset, sumCounter)
-
-          if nothing_flag is 0 :
-            slot_offset = slot_offset + sumCounter
+          # if nothing_flag is 0 :
+          #   slot_offset = slot_offset + sumCounter
 
           dictTemp.pop(childKey)
           if testing_flag :
@@ -105,16 +106,13 @@ def topology_print(dictTemp, host):
           global_counter += temp_local_queue
           
           # check timeslot_offset have larger than TSCH_SLOTFRAME_LENGTH
-          if cal_timeslot(slot_offset, temp_local_queue) :
-            slot_offset = 10
+          # if cal_timeslot(slot_offset, temp_local_queue) :
+          #   slot_offset = 10
 
-          nothing_flag = None
-          # only check child
-          parentNode, childNode = childparentControl(mainKey, childKey, temp_local_queue)
-          nothing_flag = parentFlag_control(parentNode, childNode, slot_offset, channel_offset, temp_local_queue)
+          childparentControl(mainKey, childKey, temp_local_queue)
 
-          if nothing_flag is 0 :
-            slot_offset = slot_offset + temp_local_queue
+          # if nothing_flag is 0 :
+          #   slot_offset = slot_offset + temp_local_queue
 
   if testing_flag :
     print "All topology global queue "+str(global_counter)
@@ -160,15 +158,13 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
 
       local_queue = local_queue + sumCounter # return upper layer.
       # check timeslot_offset have larger than TSCH_SLOTFRAME_LENGTH
-      if cal_timeslot(slot_offset, temp_local_queue) :
-        slot_offset = 10
+      # if cal_timeslot(slot_offset, temp_local_queue) :
+      #   slot_offset = 10
       
-      nothing_flag = None
-      parentNode, childNode = childparentControl(parentKey, childKey, sumCounter)
-      nothing_flag = parentFlag_control(parentNode, childNode, slot_offset, channel_offset, sumCounter)
+      childparentControl(parentKey, childKey, sumCounter)
 
-      if nothing_flag is 0 :
-        slot_offset = slot_offset + sumCounter
+      # if nothing_flag is 0 :
+      #   slot_offset = slot_offset + sumCounter
       
       if testing_flag :
         print childKey+" global queue "+str(get_queue+1)
@@ -193,15 +189,13 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
       global_counter += temp_local_queue
 
       # check timeslot_offset have larger than TSCH_SLOTFRAME_LENGTH
-      if cal_timeslot(slot_offset, temp_local_queue) :
-        slot_offset = 10
+      # if cal_timeslot(slot_offset, temp_local_queue) :
+      #   slot_offset = 10
 
-      nothing_flag = None
-      parentNode, childNode = childparentControl(parentKey, childKey, temp_local_queue)
+      childparentControl(parentKey, childKey, temp_local_queue)
 
-      nothing_flag = parentFlag_control(parentNode, childNode, slot_offset, channel_offset, temp_local_queue)
-      if nothing_flag is 0 :
-        slot_offset = slot_offset + temp_local_queue
+      # if nothing_flag is 0 :
+      #   slot_offset = slot_offset + temp_local_queue
 
   return local_queue
 
@@ -213,7 +207,7 @@ def childparentControl(parentKey, childKey, slot_of_numbers):
   if parentKey not in node_Name_list :
     if testing_flag :
       print "append "+parentKey+" into node_list"
-    parentNode = SlotOperation(nodeKey=parentKey, slot_numbers=slot_of_numbers, now_slotoffset=slot_offset, now_channeloffset=channel_offset)
+    parentNode = SlotOperation(nodeKey=parentKey)
     node_list.append(parentNode)
     node_Name_list.append(parentNode.getName())
   else :
@@ -225,7 +219,7 @@ def childparentControl(parentKey, childKey, slot_of_numbers):
   if childKey not in node_Name_list :
     if testing_flag :
       print "append "+childKey+" into node_list"
-    childNode = SlotOperation(nodeKey=childKey, slot_numbers=slot_of_numbers, now_slotoffset=slot_offset, now_channeloffset=channel_offset)
+    childNode = SlotOperation(nodeKey=childKey)
     node_list.append(childNode)
     node_Name_list.append(childNode.getName())
   else :
@@ -233,18 +227,24 @@ def childparentControl(parentKey, childKey, slot_of_numbers):
       if cmp(childKey, nodeid.getName()) is 0 :
         childNode = nodeid
 
-  return parentNode, childNode
+  parentFlag_control(parentNode, childNode, slot_of_numbers)
+  # return parentNode, childNode
 
-def parentFlag_control(ParentNode, ChildNode, current_slot_offset, current_channel_offset, slot_numbers):
+def parentFlag_control(ParentNode, ChildNode, slot_of_numbers):
   # get parent flag event.
   parent_Flag = ChildNode.checkParent(ParentNode)
   # add a child for it's parent node_list.
-  topology_Flag = ParentNode.checkChild(ChildNode, current_slot_offset, current_channel_offset, slot_numbers)
+  topology_Flag = ParentNode.checkChild(ChildNode)
   print topology_Flag
   
   if parent_Flag is 0 :
     # need to delete other parent dedicated slot.
-    ParentNode.parentPostQuery(ChildNode, current_slot_offset, current_channel_offset, slot_numbers, parent_Flag)
+    slot_offset = 10
+    while slot_offset > 0 :
+      slot_offset, channel_offset = ChannelInfo.set_channel_list(ChildNode.getName(), ParentNode.getName(), slot_of_numbers)
+      if slot_offset is 0:
+        break
+      ParentNode.parentPostQuery(ChildNode, slot_offset, channel_offset, parent_Flag)
     return 0
   elif parent_Flag is 1 :
     if topology_Flag is 1 :
@@ -254,7 +254,12 @@ def parentFlag_control(ParentNode, ChildNode, current_slot_offset, current_chann
       return 1
     pass
   elif parent_Flag is 2 :
-    ParentNode.parentPostQuery(ChildNode, current_slot_offset, current_channel_offset, slot_numbers, parent_Flag)
+    slot_offset = 10
+    while slot_offset > 0 :
+      slot_offset, channel_offset = ChannelInfo.set_channel_list(ChildNode.getName(), ParentNode.getName(), slot_of_numbers)
+      if slot_offset is 0:
+        break
+    ParentNode.parentPostQuery(ChildNode, slot_offset, channel_offset, parent_Flag)
     return 0
 
 
