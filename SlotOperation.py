@@ -93,13 +93,13 @@ class SlotOperation(object):
         self.child_dict[childID] = [childID.getChild_numbers()]
 
         if testing_flag :
-          print "childID get Child Numbers : "+str(childID.getChild_numbers())+" and old child numbers : "+str(self.child_dict[childID])
+          print "childID get Child Numbers : "+str(childID.getChild_numbers())+" and old child numbers : "+str(self.child_dict[childID][0])
 
       else :
         if cmp(type(childID.getChild_numbers()), type(self.child_dict[childID])) is 0: # match same as type is int.
           if cmp(int(childID.getChild_numbers()),int(self.child_dict[childID])) is 1: # not match
             if testing_flag :
-              print "childID get Child Numbers : "+str(childID.getChild_numbers())+" and old child numbers : "+str(self.child_dict[childID])
+              print "childID get Child Numbers : "+str(childID.getChild_numbers())+" and old child numbers : "+str(self.child_dict[childID][0])
             self.child_dict[childID] = int(childID.getChild_numbers())
             current_slot_offset = 10
             while current_slot_offset > 0 :

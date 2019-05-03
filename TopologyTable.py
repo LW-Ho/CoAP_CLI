@@ -50,6 +50,7 @@ def topology_print(dictTemp, host):
         hostNode = SlotOperation(nodeKey=mainKey)
         node_list.append(hostNode)
         node_Name_list.append(hostNode.getName())
+        ChannelInfo.initial_channel_list(True)
       else :
         for hostID in node_list:
           if cmp(hostID.getName(), mainKey) is 0 :
@@ -239,12 +240,10 @@ def parentFlag_control(ParentNode, ChildNode, slot_of_numbers):
   
   if parent_Flag is 0 :
     # need to delete other parent dedicated slot.
-    slot_offset = 10
-    while slot_offset > 0 :
+    while slot_of_numbers > 0 :
       slot_offset, channel_offset = ChannelInfo.set_channel_list(ChildNode.getName(), ParentNode.getName(), slot_of_numbers)
-      if slot_offset is 0:
-        break
       ParentNode.parentPostQuery(ChildNode, slot_offset, channel_offset, parent_Flag)
+      slot_of_numbers = slot_of_numbers - 1
     return 0
   elif parent_Flag is 1 :
     if topology_Flag is 1 :
@@ -254,12 +253,10 @@ def parentFlag_control(ParentNode, ChildNode, slot_of_numbers):
       return 1
     pass
   elif parent_Flag is 2 :
-    slot_offset = 10
-    while slot_offset > 0 :
+    while slot_of_numbers > 0 :
       slot_offset, channel_offset = ChannelInfo.set_channel_list(ChildNode.getName(), ParentNode.getName(), slot_of_numbers)
-      if slot_offset is 0:
-        break
-    ParentNode.parentPostQuery(ChildNode, slot_offset, channel_offset, parent_Flag)
+      ParentNode.parentPostQuery(ChildNode, slot_offset, channel_offset, parent_Flag)
+      slot_of_numbers = slot_of_numbers - 1
     return 0
 
 
