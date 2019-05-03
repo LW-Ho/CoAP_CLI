@@ -18,11 +18,13 @@ class SlotOperation(object):
     # for parent node to post other child node.
     def parentPostQuery(self, childID, current_timeslot_offset, current_channel_offset, delFlag):
       childKey = childID.getName()
+      print current_timeslot_offset , current_channel_offset
 
       # TX = 1 / RX = 2
       if delFlag is 2:
         if testing_flag :
           print "First Post or Update Parent for new post."
+
         
         query1 = "slot="+str(current_timeslot_offset)+"&chanl="+str(current_channel_offset)+"&numbers="+str(1)+"&link=TX"
         RestCoAP.postQueryToNode(childKey, self.resource, query1)
