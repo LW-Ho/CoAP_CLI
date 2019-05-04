@@ -38,6 +38,7 @@ def set_table(host, topology_List):
 
 def topology_print(dictTemp, host):
   global global_counter, node_list, node_Name_list, topology_list
+  topology_list = []
   get_queue = 0
   hostNode = None
   global_counter = 0 # initialize
@@ -242,7 +243,7 @@ def parentFlag_control(ParentNode, ChildNode, slot_of_numbers):
     # need to delete other parent dedicated slot.
     while slot_of_numbers > 0 :
       slot_offset, channel_offset = ChannelInfo.set_channel_list(ChildNode.getName(), ParentNode.getName(), slot_of_numbers)
-      ParentNode.parentPostQuery(ChildNode, slot_offset, channel_offset, parent_Flag)
+      ParentNode.parentPostQuery(ChildNode.getName(), slot_offset, channel_offset, parent_Flag)
       slot_of_numbers = slot_of_numbers - 1
     return 0
   elif parent_Flag is 1 :
@@ -255,7 +256,7 @@ def parentFlag_control(ParentNode, ChildNode, slot_of_numbers):
   elif parent_Flag is 2 :
     while slot_of_numbers > 0 :
       slot_offset, channel_offset = ChannelInfo.set_channel_list(ChildNode.getName(), ParentNode.getName(), slot_of_numbers)
-      ParentNode.parentPostQuery(ChildNode, slot_offset, channel_offset, parent_Flag)
+      ParentNode.parentPostQuery(ChildNode.getName(), slot_offset, channel_offset, parent_Flag)
       slot_of_numbers = slot_of_numbers - 1
     return 0
 

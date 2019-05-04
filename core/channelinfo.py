@@ -19,12 +19,8 @@ def set_channel_list(childKey, parentKey, slot_numbers):
             break
           if parentKey in strTemp:
             break
-          
           continue
-          # node_channel_list[j][i] = childKey+","+parentKey
-          # slot_numbers = slot_numbers - 1
-          # print j, i
-          # return j, i
+
         else :
           node_channel_list[j][i] = childKey+","+parentKey
           slot_numbers = slot_numbers - 1

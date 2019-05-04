@@ -16,8 +16,7 @@ class SlotOperation(object):
       self.child_dict = {}
       
     # for parent node to post other child node.
-    def parentPostQuery(self, childID, current_timeslot_offset, current_channel_offset, delFlag):
-      childKey = childID.getName()
+    def parentPostQuery(self, childKey, current_timeslot_offset, current_channel_offset, delFlag):
       print current_timeslot_offset , current_channel_offset
 
       # TX = 1 / RX = 2
@@ -41,7 +40,7 @@ class SlotOperation(object):
 
         query1 = "slot="+str(current_timeslot_offset)+"&chanl="+str(current_channel_offset)+"&numbers="+str(1)+"&link=TX"
         # first delslot, then working will added slot.
-        RestCoAP.postQueryToNode(childID.getName(), self.resource, query1)
+        RestCoAP.postQueryToNode(childKey, self.resource, query1)
 
         query2 = "slot="+str(current_timeslot_offset)+"&chanl="+str(current_channel_offset)+"&numbers="+str(1)+"&link=RX"
         RestCoAP.postQueryToNode(self.nodeKey, self.resource, query2) # send by self.
@@ -50,8 +49,15 @@ class SlotOperation(object):
         query = "delslot="+str(current_timeslot_offset)+"&delnumbers="+str(1)
 
         # first delslot, then working will added slot.
-        RestCoAP.postQueryToNode(childID.getName(), self.resource, query)
+        RestCoAP.postQueryToNode(childKey, self.resource, query)
         RestCoAP.postQueryToNode(self.nodeKey, self.resource, query) # send by self.
+
+    def delChildKey_callback(self, childKey):
+      if testing_flag :
+            print "Deleted child was successful."+str(childKey)+" by "+str(self.nodeKey)
+      current_slot_offset, current_channel_offset = ChannelInfo.get_channel_list(childKey, self.nodeKey)
+      self.parentPostQuery(childKey, current_slot_offset, current_channel_offset, 3)
+
 
     
     def delChildKey(self, childKey):
@@ -65,7 +71,9 @@ class SlotOperation(object):
             current_slot_offset, current_channel_offset = ChannelInfo.get_channel_list(childid.getName(), self.nodeKey)
             if current_slot_offset is 0 :
               break
-            self.parentPostQuery(childid, current_slot_offset, current_channel_offset, 3)
+            self.parentPostQuery(childid.getName(), current_slot_offset, current_channel_offset, 3)
+            if self.parentID is not None :
+              self.parentID.delChildKey_callback(self.nodeKey)
 
           self.child_dict.pop(childid)
 
@@ -108,7 +116,7 @@ class SlotOperation(object):
               current_slot_offset, current_channel_offset = ChannelInfo.get_channel_list(childID.getName(), self.nodeKey)
               if current_slot_offset is 0 :
                 break
-              self.parentPostQuery(childID, current_slot_offset, current_channel_offset, 0)
+              self.parentPostQuery(childID.getName(), current_slot_offset, current_channel_offset, 0)
 
             return 1
 
