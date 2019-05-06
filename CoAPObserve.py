@@ -1,8 +1,7 @@
 import threading
 import sys
 from coapthon.client.helperclient import HelperClient
-import core.nodeinfo as NodeInfo
-# from core.nodeinfo import saveNodeInfo
+#import core.nodeinfo as NodeInfo
 
 from MoteData import MoteData
 import logging
@@ -43,8 +42,7 @@ class CoAPObserve(threading.Thread):
           # will upload data to mysql server.
           try :
             mote_data = MoteData.make_from_bytes(response.source[0], response.payload, 0)
-            local_queue = MoteData.make_from_bytes(response.source[0], response.payload, 1) # need save the value, if refresh topology will get the value to check node local queue.
-            NodeInfo.saveNodeLQ(self.node, local_queue)
+            MoteData.make_from_bytes(response.source[0], response.payload, 1) # need save the value, if refresh topology will get the value to check node local queue.
             if mote_data is not None and self.object_callback is not None:
               self.counter_Observing+=1 # counter callback.
               self.object_callback(mote_data) # callback to main function.

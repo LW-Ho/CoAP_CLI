@@ -10,7 +10,7 @@ def set_channel_list(childKey, parentKey, slot_numbers):
   if slot_numbers > 0:
     for j in range(10,151) :
       for i in range(16) :
-        print node_channel_list[j][i]
+        # print node_channel_list[j][i]
         if node_channel_list[j][i] is not 0:
           strTemp = node_channel_list[j][i].split(',')
 

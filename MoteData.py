@@ -6,6 +6,8 @@ import datetime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, DateTime
 
+import core.nodeinfo as NodeInfo
+
 Base = declarative_base()
 
 
@@ -84,7 +86,7 @@ class MoteData(Base):
             parent_link_rssi=packet_item[12],
         )
         if flag :
-          print str(mote)+" in moteData : "+str(packet_item[1])
-          return str(packet_item[1])
+          print str(mote)+" moteData is : "+str(packet_item[1])
+          NodeInfo.saveNodeLQ(mote, packet_item[1])
         else :
           return mote_data
