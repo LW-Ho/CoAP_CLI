@@ -9,7 +9,7 @@ import core.channelinfo as ChannelInfo
 node_list = []          # save the node to list. 
 node_Name_list = []     # save the node name to list, not class.
 global_counter = 0      # save global queue.
-testing_flag = 1        # testing flag.
+testing_flag = 0        # testing flag.
 # slot_offset = 10          # default timeslot_offset.
 # channel_offset = 0      # default channelslot_offset.
 channel_offset_numbers = 16 # the number is channel offset of total numbers.

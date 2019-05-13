@@ -24,7 +24,8 @@ def set_channel_list(childKey, parentKey, slot_numbers):
         else :
           node_channel_list[j][i] = childKey+","+parentKey
           slot_numbers = slot_numbers - 1
-          print j, i
+          print "slot offset : "+str(j)+", channel offset : "+str(i)
+          #print j, i
           return j, i
 
 # slot_offset is j

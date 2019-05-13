@@ -1,7 +1,7 @@
 import RestCoAP
 import core.channelinfo as ChannelInfo
 
-testing_flag = 1
+testing_flag = 0
 
 class SlotOperation(object):
     def __init__(self, nodeKey, parentID=None ,slot_numbers=None, now_slotoffset=None, now_channeloffset=None):
@@ -99,7 +99,7 @@ class SlotOperation(object):
     # if the node is other node's parent, need add to child_dict.
     def checkChild(self, childID):
       if childID not in self.child_dict:
-        print "add new child : "+childID.getName()+" by "+str(self.nodeKey)
+        print str(self.nodeKey)+" add new child "+childID.getName()
         self.child_dict[childID] = [childID.getChild_numbers()]
 
         if testing_flag :

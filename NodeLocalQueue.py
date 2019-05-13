@@ -26,13 +26,12 @@ def message_callback(response):
     print("Payload length: {0}".format(len(response.payload)))
     print("=================================")
     print(">")
-
-  try :
-    MoteData.make_from_bytes(response.source[0], response.payload, 1)
-    return_flag = 0
-  except :
-    print("Unexpected error: {0}".format(sys.exc_info()[0]))
-    print("")
+    try :
+      MoteData.make_from_bytes(response.source[0], response.payload, 1)
+      return_flag = 0
+    except :
+      print("Unexpected error: {0}".format(sys.exc_info()[0]))
+      print("")
 
 def getNodeLocalQueue(node):
   global nodeName, return_flag

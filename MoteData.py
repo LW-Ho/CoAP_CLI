@@ -86,7 +86,7 @@ class MoteData(Base):
             parent_link_rssi=packet_item[12],
         )
         if flag :
-          print str(mote)+" moteData is : "+str(packet_item[1])
+          print str(mote)+" moteData localqu : "+str(packet_item[1])
           NodeInfo.saveNodeLQ(mote, packet_item[1])
         else :
           return mote_data
