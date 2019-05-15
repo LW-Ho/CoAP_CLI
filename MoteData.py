@@ -87,6 +87,6 @@ class MoteData(Base):
         )
         if flag :
           print str(mote)+" moteData localqu : "+str(packet_item[1])
-          NodeInfo.saveNodeLQ(mote, packet_item[1])
+          NodeInfo.updateNodeLQ(mote, packet_item[1])
         else :
           return mote_data

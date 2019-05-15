@@ -54,7 +54,7 @@ class SlotOperation(object):
 
     def delChildKey_callback(self, childKey):
       if testing_flag :
-            print "Deleted child was successful."+str(childKey)+" by "+str(self.nodeKey)
+            print "Deleted child was successful. "+str(childKey)+" by "+str(self.nodeKey)
       current_slot_offset, current_channel_offset = ChannelInfo.get_channel_list(childKey, self.nodeKey)
       self.parentPostQuery(childKey, current_slot_offset, current_channel_offset, 3)
 
@@ -65,7 +65,7 @@ class SlotOperation(object):
       for childid in self.child_dict.keys():
         if cmp(childid.getName(), childKey) is 0:
           if testing_flag :
-            print "Deleted child was successful."+str(childid.getName())+" by "+str(self.nodeKey)
+            print "Deleted child was successful. "+str(childid.getName())+" by "+str(self.nodeKey)
           current_slot_offset = 10
           while current_slot_offset > 0 :
             current_slot_offset, current_channel_offset = ChannelInfo.get_channel_list(childid.getName(), self.nodeKey)
