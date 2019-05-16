@@ -65,6 +65,9 @@ def topology_print(dictTemp, host):
         # host's child is other node's parent.
         if childKey in dictTemp.keys():
 
+          print "--"+" 1 "+childKey
+          topology_list += ["--"+" 1 "+childKey]
+
           get_queue = parentAndChild(childKey, dictTemp, 1)
  
           temp_local_queue = 1
@@ -82,8 +85,7 @@ def topology_print(dictTemp, host):
 
           dictTemp.pop(childKey)
 
-          print "--"+" 1 "+childKey+"\t GQ : "+str(sumCounter)+", LQ : "+str(temp_local_queue)
-          topology_list += ["--"+" 1 "+childKey+"\t GQ : "+str(sumCounter)+", LQ : "+str(temp_local_queue)]
+          
           
         # only child
         else: 
@@ -100,8 +102,8 @@ def topology_print(dictTemp, host):
           # if g_init_flag is 0 :
           #   childparentControl(mainKey, childKey, temp_local_queue)
 
-          print "--"+" 1 "+childKey+"\t GQ : "+str(temp_local_queue)+" , LQ : "+str(temp_local_queue)
-          topology_list += ["--"+" 1 "+childKey+"\t GQ : "+str(temp_local_queue)+" , LQ : "+str(temp_local_queue)]
+          print "--"+" 1 "+childKey)
+          topology_list += ["--"+" 1 "+childKey]
 
   print ""
   print '\n'.join(topology_list)
@@ -147,8 +149,8 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
       temp_str = ""
       for index in range(0,temp_counter):
         temp_str = temp_str+"--"
-      print temp_str+" "+str(temp_counter)+" "+childKey+"\t GQ : "+str(sumCounter)+", LQ : "+str(temp_local_queue)
-      topology_list += [temp_str+" "+str(temp_counter)+" "+childKey+"\t GQ : "+str(sumCounter)+", LQ : "+str(temp_local_queue)]
+      print temp_str+" "+str(temp_counter)+" "+childKey
+      topology_list += [temp_str+" "+str(temp_counter)+" "+childKey]
 
     # end of child.
     else :
@@ -169,8 +171,8 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
       temp_str = ""
       for index in range(0,temp_counter+1):
         temp_str = temp_str+"--"
-      print temp_str+" "+str(temp_counter+1)+" "+childKey+"\t GQ : "+str(temp_local_queue)+" , LQ : "+str(temp_local_queue)
-      topology_list += [temp_str+" "+str(temp_counter+1)+" "+childKey+"\t GQ : "+str(temp_local_queue)+" , LQ : "+str(temp_local_queue)]
+      print temp_str+" "+str(temp_counter+1)+" "+childKey
+      topology_list += [temp_str+" "+str(temp_counter+1)+" "+childKey]
 
   return local_queue
 
@@ -272,7 +274,10 @@ def parentFlag_control(ParentNode, ChildNode, slot_of_numbers):
     if topology_Flag is 1 :
       return 0
     else :
-      # if parent add new child, need to add slot.
+      while slot_of_numbers > 0 :
+        slot_offset, channel_offset = ChannelInfo.set_channel_list(ChildNode.getName(), ParentNode.getName(), slot_of_numbers)
+        ParentNode.parentPostQuery(ChildNode.getName(), slot_offset, channel_offset, parent_Flag)
+        slot_of_numbers = slot_of_numbers - 1
       return 1
     pass
   elif parent_Flag is 2 :

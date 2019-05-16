@@ -104,6 +104,8 @@ class SlotOperation(object):
 
         if testing_flag :
           print "childID get Child Numbers : "+str(childID.getChild_numbers())+" and old child numbers : "+str(self.child_dict[childID][0])
+        
+        return 1
 
       else :
         if cmp(type(childID.getChild_numbers()), type(self.child_dict[childID])) is 0: # match same as type is int.
@@ -119,6 +121,8 @@ class SlotOperation(object):
               self.parentPostQuery(childID.getName(), current_slot_offset, current_channel_offset, 0)
 
             return 1
+          else :
+            return 0
 
     def getChild_numbers(self):
       return len(self.child_dict)
