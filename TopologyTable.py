@@ -1,7 +1,7 @@
 import RestCoAP
 from SlotOperation import SlotOperation
 from NodeLocalQueue import getNodeLocalQueue
-import core.nodeinfo as NodeInfo
+from core.nodeinfo import NodeInfo
 import core.channelinfo as ChannelInfo
 
 node_list = []          # save the node to list. 
@@ -14,7 +14,6 @@ channel_offset_numbers = 16 # the number is channel offset of total numbers.
 g_init_flag = None      # to get node local queue on first search.
 topology_list = []
 border_router_ID = None
-node_dict = {}
 
 
 def set_table(host, topology_List):
@@ -59,9 +58,6 @@ def topology_print(dictTemp, host):
             hostNode = hostID
 
       print node_Name_list
-      NodeInfo.setNodeTable(node_dict)
-      print NodeInfo.getNodeTable()
-      
         
       global_counter += 1
       for childKey in dictTemp.get(mainKey):
