@@ -1,7 +1,6 @@
 import threading
 import sys
 from coapthon.client.helperclient import HelperClient
-#import core.nodeinfo as NodeInfo
 
 from MoteData import MoteData
 import logging

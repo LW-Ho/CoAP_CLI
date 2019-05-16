@@ -1,9 +1,15 @@
-node_dict = {}
+
+node_dict = {}    #to save node information.
 
 # save node localqueue
 def setNodeInfo(nodeKey, parentKey, localQueue, globalQueue):
   global node_dict
-  node_dict[nodeKey] = [parentKey, int(localQueue), int(globalQueue)]
+  if nodeKey not in node_dict.keys():
+    node_dict[nodeKey] = [parentKey, int(localQueue), int(globalQueue)]
+
+def setNodeTable(nodeDict):
+  global node_dict
+  node_dict = nodeDict
   
 def updateNodeParent(nodeKey, parentKey):
   global node_dict
@@ -26,6 +32,7 @@ def getNodeParent(nodeKey):
 # return node local queue
 def getNodeLQ(nodeKey):
   global node_dict
+  print node_dict
   if nodeKey in node_dict.keys():
     # return localqueue by nodeKey.
     return node_dict[nodeKey][1]
@@ -36,7 +43,7 @@ def getNodeLQ(nodeKey):
 def getNodeQU(nodeKey):
   global node_dict
   if nodeKey in node_dict.keys():
-    # return localqueue by nodeKey.
+    # return globalqueue by nodeKey.
     return node_dict[nodeKey][2]
   else :
     # need to get the global queue of numbers.
@@ -44,4 +51,5 @@ def getNodeQU(nodeKey):
 
 def getNodeTable():
   global node_dict
-  return node_dict
+  temp = node_dict
+  return temp

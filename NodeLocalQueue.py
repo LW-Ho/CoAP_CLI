@@ -6,14 +6,15 @@ import time
 from coapthon.client.helperclient import HelperClient
 # coap get "coap://[fd00::212:4b00:615:a736]:5683/g/sht21?pp=2&thd=20"
 from MoteData import MoteData
-import core.nodeinfo as NodeInfo
 
 port = 5683
 nodeName = None
 return_flag = 1
+local_queue_numbers = None
+
 
 def message_callback(response):
-  global return_flag
+  global return_flag, local_queue_numbers
   """
   :type response: coapthon.messages.response.Response
   """
@@ -27,14 +28,15 @@ def message_callback(response):
     print("=================================")
     print(">")
     try :
-      MoteData.make_from_bytes(response.source[0], response.payload, 1)
-      return_flag = 0
+      local_queue_numbers = MoteData.make_from_bytes(response.source[0], response.payload, 1)
+      
     except :
       print("Unexpected error: {0}".format(sys.exc_info()[0]))
       print("")
+    return_flag = 0
 
 def getNodeLocalQueue(node):
-  global nodeName, return_flag
+  global nodeName, return_flag, local_queue_numbers
   return_flag = 1 # to initialized value.
   
   nodeName = node
@@ -55,7 +57,6 @@ def getNodeLocalQueue(node):
     coap_client.close()
     elapsed = time.time() - start
     print "%s  successful delivery, %.2f seconds." %(node, elapsed)
-    local_queue_numbers = NodeInfo.getNodeLQ(node)
     print "Got the local queue : %s " %(str(local_queue_numbers))
     return int(local_queue_numbers)
   except:

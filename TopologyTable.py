@@ -14,6 +14,7 @@ channel_offset_numbers = 16 # the number is channel offset of total numbers.
 g_init_flag = None      # to get node local queue on first search.
 topology_list = []
 border_router_ID = None
+node_dict = {}
 
 
 def set_table(host, topology_List):
@@ -58,6 +59,9 @@ def topology_print(dictTemp, host):
             hostNode = hostID
 
       print node_Name_list
+      NodeInfo.setNodeTable(node_dict)
+      print NodeInfo.getNodeTable()
+      
         
       global_counter += 1
       for childKey in dictTemp.get(mainKey):
@@ -84,9 +88,7 @@ def topology_print(dictTemp, host):
           #   childparentControl(mainKey, childKey, sumCounter)
 
           dictTemp.pop(childKey)
-
-          
-          
+ 
         # only child
         else: 
           
@@ -102,7 +104,7 @@ def topology_print(dictTemp, host):
           # if g_init_flag is 0 :
           #   childparentControl(mainKey, childKey, temp_local_queue)
 
-          print "--"+" 1 "+childKey)
+          print "--"+" 1 "+childKey
           topology_list += ["--"+" 1 "+childKey]
 
   print ""
@@ -177,7 +179,9 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
   return local_queue
 
 def postSchedulingTable():
+  global node_dict
   scheDict = NodeInfo.getNodeTable()
+  node_dict = scheDict
   maxKey = None
 
   while (len(scheDict) > 0) :
@@ -188,9 +192,9 @@ def postSchedulingTable():
 
       if scheDict.has_key(v[0]) and maxKey == v[0]:
         if v[1][1] != 0 :
-        lq = v[1][1]-1
-        gq = v[1][2]-1
-        scheDict[v[0]] = [v[1][0] , lq, gq]
+          lq = v[1][1]-1
+          gq = v[1][2]-1
+          scheDict[v[0]] = [v[1][0] , lq, gq]
         if scheDict.has_key(v[1][0]) and v[1][0] != "1" :
           temp = scheDict.get(v[1][0])
           scheDict[v[1][0]] = [temp[0], temp[1]+1, temp[2]]
@@ -206,10 +210,10 @@ def postSchedulingTable():
 
       elif maxKey is v[1][0]:
 
-      if v[1][1] != 0 :
-        lq = v[1][1]-1
-        gq = v[1][2]-1
-        scheDict[v[0]] = [v[1][0] , lq, gq]
+        if v[1][1] != 0 :
+            lq = v[1][1]-1
+            gq = v[1][2]-1
+            scheDict[v[0]] = [v[1][0] , lq, gq]
         if scheDict.has_key(v[1][0]) and v[1][0] != "1" :
           temp = scheDict.get(v[1][0])
           scheDict[v[1][0]] = [temp[0], temp[1]+1, temp[2]]
@@ -276,7 +280,7 @@ def parentFlag_control(ParentNode, ChildNode, slot_of_numbers):
     else :
       while slot_of_numbers > 0 :
         slot_offset, channel_offset = ChannelInfo.set_channel_list(ChildNode.getName(), ParentNode.getName(), slot_of_numbers)
-        ParentNode.parentPostQuery(ChildNode.getName(), slot_offset, channel_offset, parent_Flag)
+        ParentNode.parentPostQuery(ChildNode.getName(), slot_offset, channel_offset, 0)
         slot_of_numbers = slot_of_numbers - 1
       return 1
     pass

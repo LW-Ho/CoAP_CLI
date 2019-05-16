@@ -6,7 +6,6 @@ from GetMotes import getAllMotes
 import RestCoAP
 from CoAPObserve import CoAPObserve
 from AutoOb import AutoOb
-import TopologyTable
 
 logging.config.fileConfig(os.path.join('logging.conf'))
 log = logging.getLogger("root")
