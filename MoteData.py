@@ -88,8 +88,8 @@ class MoteData(Base):
         )
         if flag :
           print str(mote)+" moteData localqu : "+str(packet_item[1])
-        #   if NodeInfo.getNodeLQ(mote) is not None:
-        #     NodeInfo.updateNodeLQ(mote, packet_item[1])
+          if NodeInfo.getNodeLQ(mote) is not None:
+            NodeInfo.updateNodeLQ(mote, packet_item[1])
           return packet_item[1]
         else :
           return mote_data
