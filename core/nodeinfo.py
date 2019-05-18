@@ -1,26 +1,22 @@
-class NodeInfo(object):
+class NodeInfo:
   def __init__(self):
     self.node_dict = {}
 
   # save node localqueue
-  def setNodeInfo(nodeKey, parentKey, localQueue, globalQueue):
+  def setNodeInfo(self, nodeKey, parentKey, localQueue, globalQueue):
     if nodeKey not in self.node_dict.keys():
       self.node_dict[nodeKey] = [parentKey, int(localQueue), int(globalQueue)]
 
-  def setNodeTable(nodeDict):
-    
-    self.node_dict = nodeDict
-    
-  def updateNodeParent(nodeKey, parentKey):
+  def updateNodeParent(self, nodeKey, parentKey):
     
     self.node_dict[nodeKey][0] = parentKey
 
-  def updateNodeLQ(nodeKey, localQueue):
+  def updateNodeLQ(self, nodeKey, localQueue):
     
     self.node_dict[nodeKey][1] = int(localQueue)
 
   # return node's parentKey
-  def getNodeParent(nodeKey):
+  def getNodeParent(self, nodeKey):
     
     if nodeKey in self.node_dict.keys():
       # return parentKey by nodeKey.
@@ -30,7 +26,7 @@ class NodeInfo(object):
       return None
 
   # return node local queue
-  def getNodeLQ(nodeKey):
+  def getNodeLQ(self, nodeKey):
     
     print self.node_dict
     if nodeKey in self.node_dict.keys():
@@ -40,7 +36,7 @@ class NodeInfo(object):
       # default one value.
       return None
 
-  def getNodeQU(nodeKey):
+  def getNodeQU(self, nodeKey):
     
     if nodeKey in self.node_dict.keys():
       # return globalqueue by nodeKey.
@@ -49,7 +45,6 @@ class NodeInfo(object):
       # need to get the global queue of numbers.
       return None
 
-  def getNodeTable():
+  def getNodeTable(self):
     
-    temp = self.node_dict
-    return temp
+    return self.node_dict.copy()
