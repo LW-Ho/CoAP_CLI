@@ -34,16 +34,50 @@ def get_channel_list(childKey, parentKey):
   global node_channel_list
   current_Str = childKey+","+parentKey
   for j in range(10,151) :
-      for i in range(16) :
-        if node_channel_list[j][i] is not 0:
-          strTemp = node_channel_list[j][i]
-          if cmp(current_Str, strTemp) is 0:
-            # if not set, will return 0
-            print "IN Get_channel_list"
-            node_channel_list[j][i] = 0
-            return j, i
+    for i in range(16) :
+      if node_channel_list[j][i] is not 0:
+        strTemp = node_channel_list[j][i]
+        if cmp(current_Str, strTemp) is 0:
+          # if not set, will return 0
+          print "IN Get_channel_list"
+          node_channel_list[j][i] = 0
+          return j, i
   
   return 0, 0
+
+def peek_get_channel_list(childKey, parentKey, globalQu):
+  global node_channel_list
+  temp_count = 0
+  current_Str = childKey+","+parentKey
+  for j in range(10,151) :
+    for i in range(16) :
+      if node_channel_list[j][i] is not 0:
+        strTemp = node_channel_list[j][i]
+        if cmp(current_Str, strTemp) is 0:
+          if temp_count == globalQu :
+            print "IN Get_channel_list"
+            return j, i
+          else :
+            break
+
+  return 0, 0
+
+def peek_set_channel_list(childKey, parentKey, slot_offset, channel_offset, globalQu):
+  GQ_count = 0
+  if globalQu is None:
+    globalQu = 1
+  current_Str = childKey+","+parentKey
+  while (globalQu != GQ_count) :
+    if node_channel_list[slot_offset][channel_offset] is not 0:
+      strTemp = node_channel_list[slot_offset][channel_offset]
+      if cmp(current_Str, strTemp) is 0:
+        GQ_count += 1
+        if (globalQu == GQ_count) :
+          return True  
+      else :
+        return False
+    else :
+      return False
  
 
 def remove_channel_list(slot_offset, channel_offset):
