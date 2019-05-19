@@ -116,9 +116,13 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
     
     # child still is another child's parent.
     if childKey in dictTemp.keys(): 
-      
       temp_counter += 1
 
+      temp_str = ""
+      for index in range(0,temp_counter):
+        temp_str = temp_str+"--"
+      topology_list += [temp_str+" "+str(temp_counter)+" "+childKey]
+      
       get_queue = parentAndChild(childKey, dictTemp, temp_counter)
       # no other child, restore uplayer of numbers.
       temp_counter = save_counter 
@@ -135,13 +139,12 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
 
       local_queue = local_queue + sumCounter # return upper layer.
 
-      temp_str = ""
-      for index in range(0,temp_counter):
-        temp_str = temp_str+"--"
-      topology_list += [temp_str+" "+str(temp_counter)+" "+childKey]
-
     # end of child.
     else :
+      temp_str = ""
+      for index in range(0,temp_counter+1):
+        temp_str = temp_str+"--"
+      topology_list += [temp_str+" "+str(temp_counter+1)+" "+childKey]
 
       temp_local_queue = NodeInfo.getNodeLQ(childKey)
 
@@ -152,11 +155,6 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
 
       local_queue = local_queue + temp_local_queue # to save it.
       global_counter += temp_local_queue
-
-      temp_str = ""
-      for index in range(0,temp_counter+1):
-        temp_str = temp_str+"--"
-      topology_list += [temp_str+" "+str(temp_counter+1)+" "+childKey]
 
   return local_queue
 
@@ -189,8 +187,10 @@ def postSchedulingTable():
             scheDict.pop(v[0])
             maxKey = None
             break
-        else :
-          break
+          else :
+            if lq == 0:
+              maxKey = None
+            break
 
       elif maxKey == v[1][0]:
 
@@ -205,19 +205,21 @@ def postSchedulingTable():
           
           slotPostControl(v[1][0], v[0], send_count)
           print v[0]+" post to "+v[1][0]+", *"+str(scheDict[v[0]])
-          maxGlobalQueue = 1
-            
+          # replace new maxKey
+          maxKey = v[1][0]
           if lq == 0 and gq == 0:
             print "delete "+v[0]
             scheDict.pop(v[0])
             break
         else :
-          break
-      
-      # else :
-      #   print maxKey
-      #   print scheDict
-      #   print "oops..."
+          if v[1][1] == 0 and v[1][2] != 0:
+            maxKey = v[0]
+          else :
+            maxKey = None
+            break
+      else:
+        #nothing
+        pass
 
 def slotPostControl(parentKey, childKey, send_count):
   # first need to check the child have been changed parent ?
