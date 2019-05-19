@@ -64,7 +64,6 @@ def topology_print(dictTemp, host):
         # host's child is other node's parent.
         if childKey in dictTemp.keys():
 
-          print "--"+" 1 "+childKey
           topology_list += ["--"+" 1 "+childKey]
 
           get_queue = parentAndChild(childKey, dictTemp, 1)
@@ -92,7 +91,6 @@ def topology_print(dictTemp, host):
           
           global_counter += temp_local_queue
 
-          print "--"+" 1 "+childKey
           topology_list += ["--"+" 1 "+childKey]
 
   if operator.eq(temp_list, topology_list) : 
@@ -140,7 +138,6 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
       temp_str = ""
       for index in range(0,temp_counter):
         temp_str = temp_str+"--"
-      print temp_str+" "+str(temp_counter)+" "+childKey
       topology_list += [temp_str+" "+str(temp_counter)+" "+childKey]
 
     # end of child.
@@ -159,7 +156,6 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
       temp_str = ""
       for index in range(0,temp_counter+1):
         temp_str = temp_str+"--"
-      print temp_str+" "+str(temp_counter+1)+" "+childKey
       topology_list += [temp_str+" "+str(temp_counter+1)+" "+childKey]
 
   return local_queue
@@ -179,12 +175,13 @@ def postSchedulingTable():
         if v[1][1] != 0 :
           lq = v[1][1]-1
           gq = v[1][2]-1
-          scheDict[v[0]] = [v[1][0] , lq, gq]
+          send_count = v[1][3]+1
+          scheDict[v[0]] = [v[1][0] , lq, gq, send_count]
           if scheDict.has_key(v[1][0]) and v[1][0] != "1" :
             temp = scheDict.get(v[1][0])
-            scheDict[v[1][0]] = [temp[0], temp[1]+1, temp[2]]
+            scheDict[v[1][0]] = [temp[0], temp[1]+1, temp[2], temp[3]]
 
-          slotPostControl(v[1][0], v[0], 1)
+          slotPostControl(v[1][0], v[0], send_count)
           print v[0]+" post to "+v[1][0]+", "+str(scheDict[v[0]])
 
           if lq == 0 and gq == 0:
@@ -200,12 +197,13 @@ def postSchedulingTable():
         if v[1][1] != 0 :
           lq = v[1][1]-1
           gq = v[1][2]-1
-          scheDict[v[0]] = [v[1][0] , lq, gq]
+          send_count = v[1][3]+1
+          scheDict[v[0]] = [v[1][0] , lq, gq, send_count]
           if scheDict.has_key(v[1][0]) and v[1][0] != "1" :
             temp = scheDict.get(v[1][0])
-            scheDict[v[1][0]] = [temp[0], temp[1]+1, temp[2]]
+            scheDict[v[1][0]] = [temp[0], temp[1]+1, temp[2], temp[3]]
           
-          slotPostControl(v[1][0], v[0], 1)
+          slotPostControl(v[1][0], v[0], send_count)
           print v[0]+" post to "+v[1][0]+", *"+str(scheDict[v[0]])
           maxGlobalQueue = 1
             
@@ -221,23 +219,44 @@ def postSchedulingTable():
       #   print scheDict
       #   print "oops..."
 
-def slotPostControl(parentKey, childKey, slot_of_numbers):
-  slot_offset, channel_offset = ChannelInfo.peek_get_channel_list(childKey, parentKey, 1)
-  if slot_offset == 0 :
-    # a new slot setting.
-    slot_offset, channel_offset = ChannelInfo.set_channel_list(childKey, parentKey, slot_of_numbers)
-    PostQuery(childKey, parentKey, slot_offset, channel_offset, 0, 1)
+def slotPostControl(parentKey, childKey, send_count):
+  # first need to check the child have been changed parent ?
+  parent_flag = 1
 
-  else :
-    # already setting, not chaned.
-    if ChannelInfo.peek_set_channel_list(childKey, parentKey, slot_offset, channel_offset, 1) :
-      # nothing
-      pass
-    # need to edit, trigger topology was changed.
+  while (parent_flag != 0):
+    parent_flag, channel_offset = ChannelInfo.check_parent_changed(childKey, parentKey)
+
+    if parent_flag is 0 :
+      slot_offset, channel_offset = ChannelInfo.peek_get_channel_list(childKey, parentKey, send_count)
+      if slot_offset == 0 :
+        # a new slot setting.
+        print "add channel and slot."
+        slot_offset, channel_offset = ChannelInfo.set_channel_list(childKey, parentKey, 1)
+        PostQuery(childKey, parentKey, slot_offset, channel_offset, 0, 1)
+
+      else :
+        # already setting, not chaned.
+        if ChannelInfo.peek_set_channel_list(childKey, parentKey, slot_offset, channel_offset, send_count) :
+          print "got same slot and channel."
+          # nothing
     else :
-      ChannelInfo.remove_channel_list(slot_offset, channel_offset)
-      new_slot_offset, new_channel_offset = ChannelInfo.set_channel_list(childKey, parentKey, 1)
-      PostQuery(childKey, parentKey, new_slot_offset, new_channel_offset, slot_offset, 2)
+      print "Hello~"
+      # need to edit, trigger topology was changed.
+      remove_slot(childKey, parent_flag ,channel_offset)
+
+
+def remove_slot(childKey, del_slot, del_channel):
+  print "remove slot."+childKey+" "+str(del_slot)+" "+str(del_channel)
+  old_parentKey = ChannelInfo.remove_channel_list(del_slot, del_channel)
+  PostQuery(childKey, old_parentKey, 0, 0, del_slot, 2)
+
+  if cmp(old_parentKey, NodeInfo.getMainKey()) is 0 :
+    return 1
+  else :
+    next_old_parentKey, next_old_slot, next_old_channel = ChannelInfo.peek_next_parent_channel_list(old_parentKey, del_slot, del_channel)
+    remove_slot(old_parentKey, next_old_slot, next_old_channel)
+
+
       
   
 
