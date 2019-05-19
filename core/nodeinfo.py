@@ -5,10 +5,13 @@ def setMainKey(main_Key):
   global mainKey
   mainKey = main_Key
 
+def getMainKey():
+  return mainKey
+
 # save node localqueue
 def setNodeInfo(nodeKey, parentKey, localQueue, globalQueue):
   #if nodeKey not in node_dict.keys():
-  node_dict[nodeKey] = [parentKey, int(localQueue), int(globalQueue)]
+  node_dict[nodeKey] = [parentKey, int(localQueue), int(globalQueue), 0]
 
 def updateNodeParent(nodeKey, parentKey):
   

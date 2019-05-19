@@ -47,7 +47,7 @@ def get_channel_list(childKey, parentKey):
 
 def peek_get_channel_list(childKey, parentKey, globalQu):
   global node_channel_list
-  temp_count = 0
+  temp_count = 1
   current_Str = childKey+","+parentKey
   for j in range(10,151) :
     for i in range(16) :
@@ -55,9 +55,11 @@ def peek_get_channel_list(childKey, parentKey, globalQu):
         strTemp = node_channel_list[j][i]
         if cmp(current_Str, strTemp) is 0:
           if temp_count == globalQu :
+            temp_count += 1
             print "IN Get_channel_list"
             return j, i
           else :
+            temp_count += 1
             break
 
   return 0, 0
@@ -78,9 +80,41 @@ def peek_set_channel_list(childKey, parentKey, slot_offset, channel_offset, glob
         return False
     else :
       return False
+
+def peek_next_parent_channel_list(old_parentKey, del_slot, del_channel):
+  for j in range(del_slot,151) :
+    for i in range(16) :
+      if node_channel_list[j][i] is not 0:
+        strTemp = node_channel_list[j][i].split(',')
+        if cmp(old_parentKey, strTemp[0]) is 0:
+          print "IN Get_channel_list"
+          return strTemp[1], j, i
+        else :
+          break
+
+  return 0, 0, 0
+
+def check_parent_changed(childKey, parentKey):
+  global node_channel_list
+  for j in range(10,151) :
+    for i in range(16) :
+      # print node_channel_list[j][i]
+      if node_channel_list[j][i] is not 0:
+        strTemp = node_channel_list[j][i].split(',')
+
+        # check child and parent both are in node_channel_list ?
+        if childKey in strTemp[0]:
+          if parentKey not in strTemp[1]:
+            print "got the old setting"
+            # the slot and channel will delete.
+            return j, i
+  return 0, 0
+  
+
  
 
 def remove_channel_list(slot_offset, channel_offset):
   global node_channel_list
+  strTemp = node_channel_list[slot_offset][channel_offset].split(',')
   node_channel_list[slot_offset][channel_offset] = 0
-  return True
+  return strTemp[1]
