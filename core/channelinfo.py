@@ -39,7 +39,7 @@ def get_channel_list(childKey, parentKey):
         strTemp = node_channel_list[j][i]
         if cmp(current_Str, strTemp) is 0:
           # if not set, will return 0
-          print "IN Get_channel_list"
+          #print "IN Get_channel_list"
           node_channel_list[j][i] = 0
           return j, i
   
@@ -56,7 +56,7 @@ def peek_get_channel_list(childKey, parentKey, globalQu):
         if cmp(current_Str, strTemp) is 0:
           if temp_count == globalQu :
             temp_count += 1
-            print "IN Get_channel_list"
+            #print "IN Get_channel_list"
             return j, i
           else :
             temp_count += 1
@@ -87,7 +87,7 @@ def peek_next_parent_channel_list(old_parentKey, del_slot, del_channel):
       if node_channel_list[j][i] is not 0:
         strTemp = node_channel_list[j][i].split(',')
         if cmp(old_parentKey, strTemp[0]) is 0:
-          print "IN Get_channel_list"
+          #print "IN Get_channel_list"
           return strTemp[1], j, i
         else :
           break

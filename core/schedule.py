@@ -62,7 +62,7 @@ def recurce_post(current_v, sche_list):
 
 def calculator_queue(current_v, sche_list, operator_flag):
   global scheList, scheDict
-  if current_v[0] != NodeInfo.getMainKey():
+  if current_v != NodeInfo.getMainKey():
     temp = scheDict[current_v]
     lq = temp[1]
     gq = temp[2]
@@ -70,16 +70,17 @@ def calculator_queue(current_v, sche_list, operator_flag):
     if operator_flag is "-" :
       lq -= 1
       gq -= 1
-      scheDict[current_v] = [temp[0], lq, gq, send_count+1]
+      send_count += 1
+      scheDict[current_v] = [temp[0], lq, gq, send_count]
     elif operator_flag is "+" :
       lq += 1
       scheDict[current_v] = [temp[0], lq, gq, send_count]
 
     if lq == 0 and gq == 0:
-      print "Delete "+current_v[0]
-      scheDict.pop(current_v[0])
-      if current_v[0] in maxKey_list:
-        maxKey_list.remove(current_v[0])
+      print "Delete "+current_v
+      scheDict.pop(current_v)
+      if current_v in maxKey_list:
+        maxKey_list.remove(current_v)
     
     if operator_flag is "-" :
       return send_count
