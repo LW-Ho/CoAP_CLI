@@ -3,6 +3,7 @@ from SlotOperation import PostQuery
 from NodeLocalQueue import getNodeLocalQueue
 import core.nodeinfo as NodeInfo
 import core.channelinfo as ChannelInfo
+import core.schedule as SchedulePost
 import operator
 
 node_list = []          # save the node to list. 
@@ -98,7 +99,7 @@ def topology_print(dictTemp, host):
   else :
     temp_list = topology_list
     # post scheduling to all nodes.
-    postSchedulingTable()
+    SchedulePost.StartSchedule(NodeInfo.getNodeTable)
 
   print ""
   print '\n'.join(topology_list)
@@ -157,69 +158,6 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
       global_counter += temp_local_queue
 
   return local_queue
-
-def postSchedulingTable():
-  scheDict = NodeInfo.getNodeTable()
-  maxKey = None
-
-  while (len(scheDict) > 0) :
-    scheList = sorted(scheDict.items(), lambda x, y: cmp(x[1][2], y[1][2]), reverse=True)
-    # print scheList
-    for v in scheList:
-      if maxKey is None:
-        maxKey = v[0]
-
-      if scheDict.has_key(v[0]) and maxKey == v[0]:
-        if v[1][1] != 0 :
-          lq = v[1][1]-1
-          gq = v[1][2]-1
-          send_count = v[1][3]+1
-          scheDict[v[0]] = [v[1][0] , lq, gq, send_count]
-          if scheDict.has_key(v[1][0]) and v[1][0] != "1" :
-            temp = scheDict.get(v[1][0])
-            scheDict[v[1][0]] = [temp[0], temp[1]+1, temp[2], temp[3]]
-
-          slotPostControl(v[1][0], v[0], send_count)
-          print v[0]+" post to "+v[1][0]+", "+str(scheDict[v[0]])
-
-          if lq == 0 and gq == 0:
-            print "delete "+v[0]
-            scheDict.pop(v[0])
-            maxKey = None
-            break
-          else :
-            if lq == 0:
-              maxKey = None
-            break
-
-      elif maxKey == v[1][0]:
-
-        if v[1][1] != 0 :
-          lq = v[1][1]-1
-          gq = v[1][2]-1
-          send_count = v[1][3]+1
-          scheDict[v[0]] = [v[1][0] , lq, gq, send_count]
-          if scheDict.has_key(v[1][0]) and v[1][0] != "1" :
-            temp = scheDict.get(v[1][0])
-            scheDict[v[1][0]] = [temp[0], temp[1]+1, temp[2], temp[3]]
-          
-          slotPostControl(v[1][0], v[0], send_count)
-          print v[0]+" post to "+v[1][0]+", *"+str(scheDict[v[0]])
-          # replace new maxKey
-          maxKey = v[1][0]
-          if lq == 0 and gq == 0:
-            print "delete "+v[0]
-            scheDict.pop(v[0])
-            break
-        else :
-          if v[1][1] == 0 and v[1][2] != 0:
-            maxKey = v[0]
-          else :
-            maxKey = None
-            break
-      else:
-        #nothing
-        pass
 
 def slotPostControl(parentKey, childKey, send_count):
   # first need to check the child have been changed parent ?
