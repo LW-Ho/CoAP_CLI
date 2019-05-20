@@ -99,7 +99,7 @@ def topology_print(dictTemp, host):
   else :
     temp_list = topology_list
     # post scheduling to all nodes.
-    SchedulePost.StartSchedule(NodeInfo.getNodeTable)
+    SchedulePost.StartSchedule(NodeInfo.getNodeTable())
 
   print ""
   print '\n'.join(topology_list)
@@ -162,6 +162,8 @@ def parentAndChild(parentKey, dictTemp, temp_counter):
 def slotPostControl(parentKey, childKey, send_count):
   # first need to check the child have been changed parent ?
   parent_flag = 1
+  
+  #print childKey+"** post to "+parentKey+" send_count : "+str(send_count)
 
   while (parent_flag != 0):
     parent_flag, channel_offset = ChannelInfo.check_parent_changed(childKey, parentKey)
@@ -170,7 +172,7 @@ def slotPostControl(parentKey, childKey, send_count):
       slot_offset, channel_offset = ChannelInfo.peek_get_channel_list(childKey, parentKey, send_count)
       if slot_offset == 0 :
         # a new slot setting.
-        print "add channel and slot."
+        #print "add channel and slot."
         slot_offset, channel_offset = ChannelInfo.set_channel_list(childKey, parentKey, 1)
         PostQuery(childKey, parentKey, slot_offset, channel_offset, 0, 1)
 
