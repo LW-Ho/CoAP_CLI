@@ -81,7 +81,7 @@ def search_maxQueue(LQueue, GQueue, NodeKey, ParentKey) :
 # return max Global Queue from ParentNode
 def calculate_parent_GQ(NodeKey):
   parentKey = scheDict[NodeKey][0]
-  if parentKey != "fd00::1" :
+  if parentKey != NodeInfo.getMainKey() :
     return calculate_parent_GQ(parentKey)
   else :
     return int(scheDict[NodeKey][2])
@@ -105,7 +105,7 @@ def compare_queue():
     for i in range(list_length) :
       tempNodeKey = handup_list[i]
       # check parent's global queue
-      if scheDict[tempNodeKey][0] != "fd00::1" :
+      if scheDict[tempNodeKey][0] != NodeInfo.getMainKey() :
         if list_length > 1:
           if scheDict[tempNodeKey][2] == scheDict[handup_list[i+1]][2] :
             print tempNodeKey, handup_list[i+1]
@@ -127,7 +127,7 @@ def compare_queue():
 def pass_query(NodeKey):
   ParentKey = scheDict[NodeKey][0]
   send_count = 0
-  if ParentKey != "fd00::1" :
+  if ParentKey != NodeInfo.getMainKey() :
     # other Layer, not first
     # update_NodeInfo(NodeKey, "-")
     send_count = update_NodeInfo(NodeKey, "-")
@@ -169,5 +169,5 @@ def update_NodeInfo(NodeKey, operate_flag):
       # print "Delete "+NodeKey, 
       # print scheDict[NodeKey]
       scheDict.pop(NodeKey)
-      
+
     return send_count
