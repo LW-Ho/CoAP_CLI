@@ -40,6 +40,8 @@ def StartSchedule(temp_scheDict):
         else :
           #time.sleep(0.2)
           continue
+  
+  TopologyTable.startPostScheduling()
 
 
 def search_maxQueue(LQueue, GQueue, NodeKey, ParentKey) :
