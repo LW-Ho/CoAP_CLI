@@ -17,6 +17,7 @@ g_init_flag = None      # to get node local queue on first search.
 topology_list = []
 border_router_ID = None
 temp_list = []
+scheduleTable = {}
 
 
 def set_table(host, topology_List):
@@ -174,7 +175,17 @@ def slotPostControl(parentKey, childKey, send_count):
         # a new slot setting.
         #print "add channel and slot."
         slot_offset, channel_offset = ChannelInfo.set_channel_list(childKey, parentKey, 1)
-        PostQuery(childKey, parentKey, slot_offset, channel_offset, 0, 1)
+        if childKey not in scheduleTable:
+          scheduleTable[childKey] = str(slot_offset)+" "+str(channel_offset)+" TX "
+        else :
+          scheduleTable[childKey] += str(slot_offset)+" "+str(channel_offset)+" TX "
+
+        if parentKey not in scheduleTable:
+          scheduleTable[parentKey] = str(slot_offset)+" "+str(channel_offset)+" RX "
+        else :
+          scheduleTable[parentKey] += str(slot_offset)+" "+str(channel_offset)+" RX "
+
+        #PostQuery(childKey, parentKey, slot_offset, channel_offset, 0, 1)
 
       else :
         # already setting, not chaned.
@@ -184,89 +195,29 @@ def slotPostControl(parentKey, childKey, send_count):
     else :
       print "Hello~"
       # need to edit, trigger topology was changed.
-      remove_slot(childKey, parent_flag ,channel_offset)
+#       remove_slot(childKey, parent_flag ,channel_offset)
 
 
-def remove_slot(childKey, del_slot, del_channel):
-  print "remove slot."+childKey+" "+str(del_slot)+" "+str(del_channel)
-  old_parentKey = ChannelInfo.remove_channel_list(del_slot, del_channel)
-  PostQuery(childKey, old_parentKey, 0, 0, del_slot, 2)
+# def remove_slot(childKey, del_slot, del_channel):
+#   print "remove slot."+childKey+" "+str(del_slot)+" "+str(del_channel)
+#   old_parentKey = ChannelInfo.remove_channel_list(del_slot, del_channel)
+#   PostQuery(childKey, old_parentKey, 0, 0, del_slot, 2)
 
-  if cmp(old_parentKey, NodeInfo.getMainKey()) is 0 :
-    return 1
-  else :
-    next_old_parentKey, next_old_slot, next_old_channel = ChannelInfo.peek_next_parent_channel_list(old_parentKey, del_slot, del_channel)
-    remove_slot(old_parentKey, next_old_slot, next_old_channel)
-
-
-      
-  
-
-
-# def childparentControl(parentKey, childKey, slot_of_numbers):
-#   global node_list, node_Name_list
-#   parentNode = None
-#   childNode = None
-
-#   if parentKey not in node_Name_list :
-#     if testing_flag :
-#       print "append "+parentKey+" into node_list"
-#     parentNode = SlotOperation(nodeKey=parentKey)
-#     node_list.append(parentNode)
-#     node_Name_list.append(parentNode.getName())
+#   if cmp(old_parentKey, NodeInfo.getMainKey()) is 0 :
+#     return 1
 #   else :
-#     for parentid in node_list :
-#       # got already exists the parentID
-#       if cmp(parentKey,parentid.getName()) is 0 :
-#         parentNode = parentid
-  
-#   if childKey not in node_Name_list :
-#     if testing_flag :
-#       print "append "+childKey+" into node_list"
-#     childNode = SlotOperation(nodeKey=childKey)
-#     node_list.append(childNode)
-#     node_Name_list.append(childNode.getName())
-#   else :
-#     for nodeid in node_list :
-#       if cmp(childKey, nodeid.getName()) is 0 :
-#         childNode = nodeid
+#     next_old_parentKey, next_old_slot, next_old_channel = ChannelInfo.peek_next_parent_channel_list(old_parentKey, del_slot, del_channel)
+#     remove_slot(old_parentKey, next_old_slot, next_old_channel)
 
-#   parentFlag_control(parentNode, childNode, slot_of_numbers)
-#   # return parentNode, childNode
+def startPostScheduling():
+  while (len(scheduleTable) > 0):
+    for nodeKey in scheduleTable:
+      payload_data = scheduleTable[nodeKey]
+      RestCoAP.postPayloadToNode(nodeKey, "slotframe", payload_data)
+      scheduleTable.pop(nodeKey)
+      break
 
-# def parentFlag_control(ParentNode, ChildNode, slot_of_numbers):
-#   # get parent flag event.
-#   parent_Flag = ChildNode.checkParent(ParentNode)
-#   # add a child for it's parent node_list.
-#   topology_Flag = ParentNode.checkChild(ChildNode)
-#   print topology_Flag
-  
-#   if parent_Flag is 0 :
-#     # need to delete other parent dedicated slot.
-#     while slot_of_numbers > 0 :
-#       slot_offset, channel_offset = ChannelInfo.set_channel_list(ChildNode.getName(), ParentNode.getName(), slot_of_numbers)
-#       ParentNode.parentPostQuery(ChildNode.getName(), slot_offset, channel_offset, parent_Flag)
-#       slot_of_numbers = slot_of_numbers - 1
-#     return 0
-#   elif parent_Flag is 1 :
-#     if topology_Flag is 1 :
-#       return 0
-#     else :
-#       if NodeInfo.getNodeQU(ChildNode.getName()) is not ChannelInfo.peek_get_channel_list(ChildNode.getName(), ParentNode.getName()) :
-#         while slot_of_numbers > 0 :
-#           slot_offset, channel_offset = ChannelInfo.set_channel_list(ChildNode.getName(), ParentNode.getName(), slot_of_numbers)
-#           ParentNode.parentPostQuery(ChildNode.getName(), slot_offset, channel_offset, 0)
-#           slot_of_numbers = slot_of_numbers - 1
-#       return 1
-#     pass
-#   elif parent_Flag is 2 :
-#     while slot_of_numbers > 0 :
-#       slot_offset, channel_offset = ChannelInfo.set_channel_list(ChildNode.getName(), ParentNode.getName(), slot_of_numbers)
-#       ParentNode.parentPostQuery(ChildNode.getName(), slot_offset, channel_offset, parent_Flag)
-#       slot_of_numbers = slot_of_numbers - 1
-#     return 0
-
-
+  return 0
 
 def cal_timeslot(now_time_slot, numbers):
   max_numbers = 151
