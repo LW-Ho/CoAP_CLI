@@ -86,10 +86,4 @@ class MoteData(Base):
             parent_link_etx=packet_item[11],
             parent_link_rssi=packet_item[12],
         )
-        if flag :
-          print str(mote)+" moteData localqu : "+str(packet_item[1])
-          if NodeInfo.getNodeLQ(mote) is not None:
-            NodeInfo.updateNodeLQ(mote, packet_item[1])
-          return packet_item[1]
-        else :
-          return mote_data
+        return mote_data

@@ -1,8 +1,6 @@
 from bs4 import BeautifulSoup
 import requests
 import string
-import TopologyTable
-
 
 def getAllMotes(host):
   motes_List = []
@@ -27,13 +25,10 @@ def getAllMotes(host):
     motesStr = tag.string
     motesStr = motesStr.encode('utf-8') # encode unicode
     motesStr = motesStr.replace(')','')
-    #print motesStr
     motesStr = motesStr.split()
-    #print motesStr
+
 
     for index in range(0, len(motesStr), 4):
-        #fo.write("add "+motesStr[index]+" bcollect\n")
-        #fo.write(motesStr[index]+"\n")
       temp = []
       for parent_index in range(2, len(motesStr), 4):
         parent = motesStr[parent_index]
@@ -43,9 +38,6 @@ def getAllMotes(host):
       temp.append(child)
       topology_table.append(temp)
       motes_List.append(motesStr[index])
-      #print motesStr[index]
 
-  TopologyTable.set_table(host, topology_table)
-    #fo.close()
   return motes_List # return mote lists
 #getAllMotes Done.
