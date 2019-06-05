@@ -6,10 +6,7 @@ import datetime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, DateTime
 
-import core.nodeinfo as NodeInfo
-
 Base = declarative_base()
-nodeinfo = None
 
 
 class MoteData(Base):
@@ -20,7 +17,6 @@ class MoteData(Base):
     start_asn = Column(Integer)
     end_asn = Column(Integer)
     packet_tcflow = Column(Integer)
-    local_queue = Column(Integer)
     event_counter = Column(Integer)
     event_threshold = Column(Integer)
     event_threshold_last_change = Column(Integer)
@@ -36,7 +32,6 @@ class MoteData(Base):
         output = []
         output += ['mote        : {0}'.format(self.mote)]
         output += ['priority    : {0}'.format(self.packet_tcflow)]
-        output += ['local_queue : {0}'.format(self.local_queue)]
         output += ['startAsn    : {0}'.format(self.start_asn)]
         output += ['endAsn      : {0}'.format(self.end_asn)]
         output += ['ec          : {0}'.format(self.event_counter)]
@@ -54,7 +49,6 @@ class MoteData(Base):
         packet_format = [
             "<xx",  # start_flag
             "B",    # packet_tcflow
-            "B",    # local_queue
             "I",    # start_asn
             "I",    # end_asn
             "I",    # event_counter
@@ -74,16 +68,15 @@ class MoteData(Base):
         mote_data = MoteData(
             mote=mote,
             packet_tcflow=packet_item[0],
-            local_queue=packet_item[1],
-            start_asn=packet_item[2],
-            end_asn=packet_item[3],
-            event_counter=packet_item[4],
-            event_threshold=packet_item[5],
-            event_threshold_last_change=packet_item[6],
-            packet_counter=packet_item[7],
-            parent_address="".join("{:02x}".format(ord(c)) for c in packet_item[8:10]),
-            rank=packet_item[10],
-            parent_link_etx=packet_item[11],
-            parent_link_rssi=packet_item[12],
+            start_asn=packet_item[1],
+            end_asn=packet_item[2],
+            event_counter=packet_item[3],
+            event_threshold=packet_item[4],
+            event_threshold_last_change=packet_item[5],
+            packet_counter=packet_item[6],
+            parent_address="".join("{:02x}".format(ord(c)) for c in packet_item[7:9]),
+            rank=packet_item[9],
+            parent_link_etx=packet_item[10],
+            parent_link_rssi=packet_item[11],
         )
         return mote_data
