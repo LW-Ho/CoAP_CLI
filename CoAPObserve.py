@@ -39,19 +39,19 @@ class CoAPObserve(threading.Thread):
             print(">")
 
             # will upload data to mysql server.
-            try :
-              mote_data = MoteData.make_from_bytes(response.source[0], response.payload)
-              # MoteData.make_from_bytes(response.source[0], response.payload, 1) # need save the value, if refresh topology will get the value to check node local queue.
-              if mote_data is not None and self.object_callback is not None:
-                self.counter_Observing+=1 # counter callback.
-                self.object_callback(mote_data) # callback to main function.
-            except :
-              self.flag = True
-              self.coap_client.cancel_observing(response, self.flag)
-              self.coap_client.close()
-              log.info("Unexpected error: {0}".format(sys.exc_info()[0]))
-              #self.stdout.write("Unexpected error:", sys.exc_info()[0])
-              print("")
+          try :
+            mote_data = MoteData.make_from_bytes(response.source[0], response.payload)
+            # MoteData.make_from_bytes(response.source[0], response.payload, 1) # need save the value, if refresh topology will get the value to check node local queue.
+            if mote_data is not None and self.object_callback is not None:
+              self.counter_Observing+=1 # counter callback.
+              self.object_callback(mote_data) # callback to main function.
+          except :
+            self.flag = True
+            self.coap_client.cancel_observing(response, self.flag)
+            self.coap_client.close()
+            log.info("Unexpected error: {0}".format(sys.exc_info()[0]))
+            #self.stdout.write("Unexpected error:", sys.exc_info()[0])
+            print("")
           else :
             if self.cancel_observe:
               """
