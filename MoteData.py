@@ -45,7 +45,7 @@ class MoteData(Base):
         return '\n'.join(output)
 
     @classmethod
-    def make_from_bytes(cls, mote, data, flag):
+    def make_from_bytes(cls, mote, data):
         packet_format = [
             "<xx",  # start_flag
             "B",    # packet_tcflow
