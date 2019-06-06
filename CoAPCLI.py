@@ -62,7 +62,7 @@ def optional_mysqlDB():
 
 class CoAPCLI(Cmd):
   def __init__(self):
-    log.info("Starting CoAP command line to control centralized scheduling...")
+    log.info("Starting CoAP command line to control the Contiki-NG system.")
 
     Cmd.__init__(self)
     self.doc_header = 'Commands: \ngetallmotes \nlist \npost \npostall \nobserve \nobserveall \nobservelist \ndelete \ndeleteall \nquit'
@@ -208,51 +208,13 @@ class CoAPCLI(Cmd):
       for index in self.mote_observe_lists:
         index.stopOb()
         if index.getFlag() is True:
-          log.info("Delete got {0}!".format(index.getName()))
-          self.mote_observe_lists.remove(index)
           index.stop()
+          self.mote_observe_lists.remove(index)
+          log.info("Delete got {0}!".format(index.getName()))
           index = None
-          #index.stop() # stop coap_client
-          #index.join() # release thread.
         else :
           index.stopOb()
 
-
-  # def do_auto(self, arg):
-  #   args = arg.split(' ')
-
-  #   if args[0] == "start":
-  #     if self.autoObserve is None and len(self.mote_lists) != 0 :
-  #       if len(args) == 2:
-  #         self.autoObserve = AutoOb(mote_lists=self.mote_lists, mote_observe_lists=self.mote_observe_lists, countDown=args[1], autoOb_callback=self.autoOb_callback, object_callback=object_callback)
-  #       else:
-  #         self.autoObserve = AutoOb(mote_lists=self.mote_lists, mote_observe_lists=self.mote_observe_lists, autoOb_callback=self.autoOb_callback, object_callback=object_callback)
-  #       self.autoObserve.setDaemon(True)
-  #       self.autoObserve.start()
-  #     elif len(self.mote_lists) == 0:
-  #       self.stdout.write("Please run getallmotes command.\n")
-  #       return
-  #     else:
-  #       self.stdout.write("Running... You can't run again.\n")
-  #       self.stdout.write("You must stop before you can start again.\n")
-  #   elif args[0] == "stop" and self.autoObserve is not None:
-  #     self.autoObserve.stop()
-  #     self.autoObserve = None
-  #     #self.autoObserve.join()
-  #   else:
-  #     self.stdout.write("Need type auto start or auto stop.\n")
-  #     return
-
-  # def autoOb_callback(self, mote_observe_Lists, refreshTopology):
-  #   # using callback function to maintain mote_lists and mote_observe_lists.
-  #   self.mote_observe_lists = mote_observe_Lists
-
-  #   if refreshTopology is True :
-  #     self.mote_lists = getAllMotes(self.border_router_Addr)
-  #     self.stdout.write("Updating Topology...\n")
-  #   else:
-  #     return self.mote_lists
-    
   def do_quit(self, arg):
     log.info("Stopping CoAPCLI...")
 
