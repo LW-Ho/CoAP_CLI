@@ -49,6 +49,7 @@ class MoteData(Base):
         packet_format = [
             "<xx",  # start_flag
             "B",    # packet_tcflow
+            "x",    # padding[1]
             "I",    # start_asn
             "I",    # end_asn
             "I",    # event_counter
