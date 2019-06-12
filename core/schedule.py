@@ -161,7 +161,6 @@ def update_NodeInfo(NodeKey, operate_flag):
     scheDict[NodeKey] = [NodeKey_data[0], P_LQ, P_GQ, send_count]
   elif operate_flag is "-" :
     P_LQ -= 1
-    P_GQ -= 1
     send_count += 1
     scheDict[NodeKey] = [NodeKey_data[0], P_LQ, P_GQ, send_count]
 
