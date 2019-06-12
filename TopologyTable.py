@@ -5,6 +5,7 @@ import core.nodeinfo as NodeInfo
 import core.channelinfo as ChannelInfo
 import core.schedule as SchedulePost
 import operator
+import re
 
 node_list = []          # save the node to list. 
 node_Name_list = []     # save the node name to list, not class.
@@ -213,13 +214,21 @@ def startPostScheduling():
   while (len(scheduleTable) > 0):
     for nodeKey in scheduleTable:
       payload_data = scheduleTable[nodeKey]
-      print nodeKey+" payload : "+payload_data
-      flag = RestCoAP.postPayloadToNode(nodeKey, "slotframe", payload_data)
+      temp_payload = cut_payload(payload_data, 64)
+      flag = False
+      for i in temp_payload:
+        print nodeKey+" payload : "+i
+        flag = RestCoAP.postPayloadToNode(nodeKey, "slotframe", i)
       if flag is True:
         scheduleTable.pop(nodeKey)
       break
 
   return 0
+
+def cut_payload(payload, length):
+    payloadArr = re.findall('.{'+str(length)+'}', payload)
+    payloadArr.append(payload[(len(payloadArr)*length):])
+    return payloadArr
 
 def cal_timeslot(now_time_slot, numbers):
   max_numbers = 151
