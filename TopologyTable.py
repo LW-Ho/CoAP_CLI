@@ -214,10 +214,10 @@ def startPostScheduling():
   while (len(scheduleTable) > 0):
     for nodeKey in scheduleTable:
       payload_data = scheduleTable[nodeKey]
+      print nodeKey+" payload : "+payload_data
       temp_payload = cut_payload(payload_data, 48)
       flag = False
       for i in temp_payload:
-        print nodeKey+" payload : "+i
         flag = RestCoAP.postPayloadToNode(nodeKey, "slotframe", i)
       if flag is True:
         scheduleTable.pop(nodeKey)
