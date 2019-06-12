@@ -19,7 +19,7 @@ def postPayloadToNode(node, resource, payload_data):
     return True
   except:
     coap_client.close()
-    print node+" did not successfully send out."
+    print node+" did not successfully send out, retry again."
     return False
 
 def postQueryToNode(node,resource,query):
