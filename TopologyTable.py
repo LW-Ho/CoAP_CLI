@@ -214,7 +214,7 @@ def startPostScheduling():
   while (len(scheduleTable) > 0):
     for nodeKey in scheduleTable:
       payload_data = scheduleTable[nodeKey]
-      temp_payload = cut_payload(payload_data, 64)
+      temp_payload = cut_payload(payload_data, 48)
       flag = False
       for i in temp_payload:
         print nodeKey+" payload : "+i
