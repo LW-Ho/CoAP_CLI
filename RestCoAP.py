@@ -12,7 +12,7 @@ def postPayloadToNode(node, resource, payload_data):
   try:
     coap_client = HelperClient(server=(node, port))
     start = time.time()
-    coap_client.post(path=resource, payload=payload_data ,timeout=60)
+    coap_client.post(path=resource, payload=payload_data ,timeout=20)
     coap_client.close()
     elapsed = time.time() - start
     print "%s  successful delivery, %.2f seconds." %(node, elapsed-1)
