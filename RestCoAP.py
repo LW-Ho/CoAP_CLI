@@ -16,9 +16,11 @@ def postPayloadToNode(node, resource, payload_data):
     coap_client.close()
     elapsed = time.time() - start
     print "%s  successful delivery, %.2f seconds." %(node, elapsed-1)
+    return True
   except:
     coap_client.close()
     print node+" did not successfully send out."
+    return False
 
 def postQueryToNode(node,resource,query):
   query = "?"+query
