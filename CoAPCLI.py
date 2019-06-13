@@ -32,7 +32,6 @@ def object_callback(mote_data):
     try:
         #log.info("Got new object_callback")
         #log.debug(mote_data)
-
         if flag_DB :
           #log.info("Got new object_callback in flag_DB")
           session = Session()
@@ -43,6 +42,7 @@ def object_callback(mote_data):
         import sys
         log.critical("Unexpected error:{0}".format(sys.exc_info()[0]))
         log.critical("Unexpected error:{0}".format(sys.exc_info()[1]))
+        session.rollback()
 
 def optional_mysqlDB():
   global flag_DB
