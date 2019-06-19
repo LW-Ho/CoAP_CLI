@@ -181,14 +181,14 @@ def slotPostControl(parentKey, childKey, send_count):
         #print "add channel and slot."
         slot_offset, channel_offset = ChannelInfo.set_channel_list(childKey, parentKey, 1)
         if childKey not in scheduleTable:
-          scheduleTable[childKey] = str(slot_offset)+" "+str(channel_offset)+" TX "
+          scheduleTable[childKey] = str(slot_offset)+":"+str(channel_offset)+":TX:"
         else :
-          scheduleTable[childKey] += str(slot_offset)+" "+str(channel_offset)+" TX "
+          scheduleTable[childKey] += str(slot_offset)+":"+str(channel_offset)+":TX:"
 
         if parentKey not in scheduleTable:
-          scheduleTable[parentKey] = str(slot_offset)+" "+str(channel_offset)+" RX "
+          scheduleTable[parentKey] = str(slot_offset)+":"+str(channel_offset)+":RX:"
         else :
-          scheduleTable[parentKey] += str(slot_offset)+" "+str(channel_offset)+" RX "
+          scheduleTable[parentKey] += str(slot_offset)+":"+str(channel_offset)+":RX:"
 
       else :
         # already setting, not chaned.
@@ -202,7 +202,7 @@ def slotPostControl(parentKey, childKey, send_count):
 def startPostScheduling():
   endASN = NodeInfo.getASN()
   resource = "slotframe"
-  if endASN is not None:
+  if endASN is not 0:
     # running 15 slotframe
     endASN += 2265
     resource = "slotframe?asn="+str(endASN)
@@ -212,15 +212,18 @@ def startPostScheduling():
       print nodeKey+" payload : "+payload_data
       temp_payload = cut_payload(payload_data, 48)
       flag = False
-      for num, payload in enumerate(payload_data)
-        if num == 0 :
-          flag = RestCoAP.postPayloadToNode(nodeKey, resource+"&option=2", temp_payload)
+      for i in range(len(temp_payload)):
+        if i == 0 :
+          if endASN is not 0:
+            flag = RestCoAP.postPayloadToNode(nodeKey, resource+"&option=2", temp_payload)
+          else :
+            flag = RestCoAP.postPayloadToNode(nodeKey, resource+"?option=2", temp_payload)
         else :
           flag = RestCoAP.postPayloadToNode(nodeKey, resource, temp_payload)
-        if flag is True:
-          scheduleTable.pop(nodeKey)
-        break
-    return 0
+      if flag is True:
+        scheduleTable.pop(nodeKey)
+      break
+  return 0
 
 def cut_payload(payload, length):
     payloadArr = re.findall('.{'+str(length)+'}', payload)
