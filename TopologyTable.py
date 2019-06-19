@@ -208,6 +208,8 @@ def slotPostControl(parentKey, childKey, send_count):
 
 def startPostScheduling():
   endASN = NodeInfo.getASN()
+  # running 15 slotframe
+  endASN += 2265
   resource = "slotframe?asn="+str(endASN)
   while (len(scheduleTable) > 0):
     for nodeKey in scheduleTable:
