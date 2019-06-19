@@ -18,6 +18,7 @@ g_init_flag = None      # to get node local queue on first search.
 topology_list = []
 border_router_ID = None
 temp_list = []
+old_temp_list = []
 scheduleTable = {}
 old_scheuleTable = {}
 
@@ -101,6 +102,8 @@ def topology_print(dictTemp, host):
     pass
   else :
     temp_list = topology_list
+    # init channel list
+    ChannelInfo.initial_channel_list(True)
     # post scheduling to all nodes.
     SchedulePost.StartSchedule(NodeInfo.getNodeTable())
 
@@ -193,53 +196,32 @@ def slotPostControl(parentKey, childKey, send_count):
           print "got same slot and channel."
           # nothing
     else :
-      print "Hello~"
+      print "Got a bad boy ~ "+str(parent_flag)+" "+str(channel_offset)
       # need to edit, trigger topology was changed.
-      if childKey not in old_scheuleTable:
-        old_scheuleTable[childKey] = str(parent_flag)+" "+str(channel_offset)+" X "
-      else :
-        old_scheuleTable[childKey] += str(parent_flag)+" "+str(channel_offset)+" X "
-
-      if parentKey not in old_scheuleTable:
-        old_scheuleTable[parentKey] = str(parent_flag)+" "+str(channel_offset)+" X "
-      else :
-        old_scheuleTable[parentKey] += str(parent_flag)+" "+str(channel_offset)+" X "
-
 
 def startPostScheduling():
   endASN = NodeInfo.getASN()
-  # running 15 slotframe
-  endASN += 2265
-  resource = "slotframe?asn="+str(endASN)
+  resource = "slotframe"
+  if endASN is not None:
+    # running 15 slotframe
+    endASN += 2265
+    resource = "slotframe?asn="+str(endASN)
   while (len(scheduleTable) > 0):
     for nodeKey in scheduleTable:
       payload_data = scheduleTable[nodeKey]
       print nodeKey+" payload : "+payload_data
       temp_payload = cut_payload(payload_data, 48)
       flag = False
-      for i in temp_payload:
-        flag = RestCoAP.postPayloadToNode(nodeKey, resource, i)
-      if flag is True:
-        scheduleTable.pop(nodeKey)
-      break
+      for num, payload in enumerate(payload_data)
+        if num == 0 :
+          flag = RestCoAP.postPayloadToNode(nodeKey, resource+"&option=2", temp_payload)
+        else :
+          flag = RestCoAP.postPayloadToNode(nodeKey, resource, temp_payload)
+        if flag is True:
+          scheduleTable.pop(nodeKey)
+        break
+    return 0
 
-  return 0
-
-def startPostDelOldScheduling():
-  resource = "slotframe?option=2"
-  while (len(old_scheuleTable) > 0):
-    for nodeKey in old_scheuleTable:
-      payload_data = old_scheuleTable[nodeKey]
-      print nodeKey+" DEL payload : "+payload_data
-      temp_payload = cut_payload(payload_data, 48)
-      flag = False
-      for i in temp_payload:
-        flag = RestCoAP.postPayloadToNode(nodeKey, resource, i)
-      if flag is True:
-        old_scheuleTable.pop(nodeKey)
-      break
-
-  return 0
 def cut_payload(payload, length):
     payloadArr = re.findall('.{'+str(length)+'}', payload)
     payloadArr.append(payload[(len(payloadArr)*length):])

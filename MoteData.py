@@ -88,9 +88,9 @@ class MoteData(Base):
         )
         if flag :
           print str(mote)+" moteData localqu : "+str(packet_item[1])+" End ASN : "+str(packet_item[3])
+          NodeInfo.updateASN(packet_item[3]) # update ASN, need return to node, want to control slotframe offset.
           if NodeInfo.getNodeLQ(mote) is not None:
             NodeInfo.updateNodeLQ(mote, packet_item[1])
-            NodeInfo.updateASN(packet_item[3]) # update ASN, need return to node, want to control slotframe offset.
           return packet_item[1]
         else :
           return mote_data

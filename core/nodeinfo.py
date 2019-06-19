@@ -59,7 +59,7 @@ def getNodeTable():
   return node_dict.copy()
 
 def updateASN(asn):
-  endASN = asn
+  endASN = int(asn)
 
 def getASN():
   return endASN

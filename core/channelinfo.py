@@ -111,9 +111,6 @@ def check_parent_changed(childKey, parentKey):
             return j, i
   return 0, 0
   
-
- 
-
 def remove_channel_list(slot_offset, channel_offset):
   global node_channel_list
   strTemp = node_channel_list[slot_offset][channel_offset].split(',')

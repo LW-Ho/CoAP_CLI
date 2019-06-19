@@ -40,7 +40,7 @@ def StartSchedule(temp_scheDict):
         else :
           #time.sleep(0.2)
           continue
-  TopologyTable.startPostDelOldScheduling()
+  
   TopologyTable.startPostScheduling()
 
 
