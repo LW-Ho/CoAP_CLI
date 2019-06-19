@@ -1,6 +1,7 @@
 
 node_dict = {}
 mainKey = None
+endASN = None
 def setMainKey(main_Key):
   global mainKey
   mainKey = main_Key
@@ -56,3 +57,9 @@ def getNodeQU(nodeKey):
 
 def getNodeTable():
   return node_dict.copy()
+
+def updateASN(asn):
+  endASN = asn
+
+def getASN():
+  return endASN

@@ -107,6 +107,7 @@ def check_parent_changed(childKey, parentKey):
           if parentKey not in strTemp[1]:
             print "got the old setting"
             # the slot and channel will delete.
+            node_channel_list[j][i] = 0 # reset to 0
             return j, i
   return 0, 0
   

@@ -56,7 +56,7 @@ def getNodeLocalQueue(node):
 
     coap_client.close()
     elapsed = time.time() - start
-    print "%s  successful delivery, %.2f seconds." %(node, elapsed-1)
+    print "\n%s  successful delivery, %.2f seconds." %(node, elapsed-1)
     print "Got the local queue : %s " %(str(local_queue_numbers))
     return int(local_queue_numbers)
   except:

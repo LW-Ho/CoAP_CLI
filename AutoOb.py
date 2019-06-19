@@ -47,14 +47,13 @@ class AutoOb(threading.Thread):
         except Exception as e:
           print (e)
           log.info("Error of observe, have more threading... ")
-
-      count = 0
+      temp_time = 0
       try:
-        while count < self.countDown :
-          time.sleep(1)
-          count += 1
-          print "timer : %d . \r" % count # for testing.
-        # time.sleep(int(self.countDown)) # sleep.
+        start = time.time()
+        while (temp_time < self.countDown):
+          temp_time = time.time() - start
+          print 'Watting time : %2.2fs\r' % temp_time, # for testing.
+        # time.sleep this function will be sleep to dead.
       except Exception as e:
         print (e)
         log.info("Error of count down timer... ")

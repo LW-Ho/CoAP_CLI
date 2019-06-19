@@ -40,7 +40,7 @@ def StartSchedule(temp_scheDict):
         else :
           #time.sleep(0.2)
           continue
-  
+  TopologyTable.startPostDelOldScheduling()
   TopologyTable.startPostScheduling()
 
 
@@ -168,8 +168,6 @@ def update_NodeInfo(NodeKey, operate_flag):
     
     if P_LQ == 0 and send_count == P_GQ:
       # pop the node.
-      # print "Delete "+NodeKey, 
-      # print scheDict[NodeKey]
       scheDict.pop(NodeKey)
 
     return send_count

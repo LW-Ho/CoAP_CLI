@@ -19,6 +19,7 @@ topology_list = []
 border_router_ID = None
 temp_list = []
 scheduleTable = {}
+old_scheuleTable = {}
 
 
 def set_table(host, topology_List):
@@ -186,8 +187,6 @@ def slotPostControl(parentKey, childKey, send_count):
         else :
           scheduleTable[parentKey] += str(slot_offset)+" "+str(channel_offset)+" RX "
 
-        #PostQuery(childKey, parentKey, slot_offset, channel_offset, 0, 1)
-
       else :
         # already setting, not chaned.
         if ChannelInfo.peek_set_channel_list(childKey, parentKey, slot_offset, channel_offset, send_count) :
@@ -196,21 +195,20 @@ def slotPostControl(parentKey, childKey, send_count):
     else :
       print "Hello~"
       # need to edit, trigger topology was changed.
-#       remove_slot(childKey, parent_flag ,channel_offset)
+      if childKey not in old_scheuleTable:
+        old_scheuleTable[childKey] = str(parent_flag)+" "+str(channel_offset)+" X "
+      else :
+        old_scheuleTable[childKey] += str(parent_flag)+" "+str(channel_offset)+" X "
 
+      if parentKey not in old_scheuleTable:
+        old_scheuleTable[parentKey] = str(parent_flag)+" "+str(channel_offset)+" X "
+      else :
+        old_scheuleTable[parentKey] += str(parent_flag)+" "+str(channel_offset)+" X "
 
-# def remove_slot(childKey, del_slot, del_channel):
-#   print "remove slot."+childKey+" "+str(del_slot)+" "+str(del_channel)
-#   old_parentKey = ChannelInfo.remove_channel_list(del_slot, del_channel)
-#   PostQuery(childKey, old_parentKey, 0, 0, del_slot, 2)
-
-#   if cmp(old_parentKey, NodeInfo.getMainKey()) is 0 :
-#     return 1
-#   else :
-#     next_old_parentKey, next_old_slot, next_old_channel = ChannelInfo.peek_next_parent_channel_list(old_parentKey, del_slot, del_channel)
-#     remove_slot(old_parentKey, next_old_slot, next_old_channel)
 
 def startPostScheduling():
+  endASN = NodeInfo.getASN()
+  resource = "slotframe?asn="+str(endASN)
   while (len(scheduleTable) > 0):
     for nodeKey in scheduleTable:
       payload_data = scheduleTable[nodeKey]
@@ -218,23 +216,29 @@ def startPostScheduling():
       temp_payload = cut_payload(payload_data, 48)
       flag = False
       for i in temp_payload:
-        flag = RestCoAP.postPayloadToNode(nodeKey, "slotframe", i)
+        flag = RestCoAP.postPayloadToNode(nodeKey, resource, i)
       if flag is True:
         scheduleTable.pop(nodeKey)
       break
 
   return 0
 
+def startPostDelOldScheduling():
+  resource = "slotframe?option=2"
+  while (len(old_scheuleTable) > 0):
+    for nodeKey in old_scheuleTable:
+      payload_data = old_scheuleTable[nodeKey]
+      print nodeKey+" DEL payload : "+payload_data
+      temp_payload = cut_payload(payload_data, 48)
+      flag = False
+      for i in temp_payload:
+        flag = RestCoAP.postPayloadToNode(nodeKey, resource, i)
+      if flag is True:
+        old_scheuleTable.pop(nodeKey)
+      break
+
+  return 0
 def cut_payload(payload, length):
     payloadArr = re.findall('.{'+str(length)+'}', payload)
     payloadArr.append(payload[(len(payloadArr)*length):])
     return payloadArr
-
-def cal_timeslot(now_time_slot, numbers):
-  max_numbers = 151
-  now_time_slot_offset = now_time_slot + numbers
-
-  if now_time_slot_offset > max_numbers :
-    return 1
-  else :
-    return 0
