@@ -215,11 +215,11 @@ def startPostScheduling():
       for i in range(len(temp_payload)):
         if i == 0 :
           if endASN is not 0:
-            flag = RestCoAP.postPayloadToNode(nodeKey, resource+"&option=2", temp_payload)
+            flag = RestCoAP.postPayloadToNode(nodeKey, resource+"&option=2", temp_payload[i])
           else :
-            flag = RestCoAP.postPayloadToNode(nodeKey, resource+"?option=2", temp_payload)
+            flag = RestCoAP.postPayloadToNode(nodeKey, resource+"?option=2", temp_payload[i])
         else :
-          flag = RestCoAP.postPayloadToNode(nodeKey, resource, temp_payload)
+          flag = RestCoAP.postPayloadToNode(nodeKey, resource, temp_payload[i])
       if flag is True:
         scheduleTable.pop(nodeKey)
       break
