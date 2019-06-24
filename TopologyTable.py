@@ -1,4 +1,5 @@
 import RestCoAP
+from AllPost import AutoPost
 from SlotOperation import PostQuery
 from NodeLocalQueue import getNodeLocalQueue
 import core.nodeinfo as NodeInfo
@@ -209,20 +210,10 @@ def startPostScheduling():
   while (len(scheduleTable) > 0):
     for nodeKey in scheduleTable:
       payload_data = scheduleTable[nodeKey]
-      print nodeKey+" payload : "+payload_data
-      temp_payload = cut_payload(payload_data, 48)
-      flag = False
-      for i in range(len(temp_payload)):
-        if i == 0 :
-          if endASN is not 0:
-            flag = RestCoAP.postPayloadToNode(nodeKey, resource+"&option=2", temp_payload[i])
-          else :
-            flag = RestCoAP.postPayloadToNode(nodeKey, resource+"?option=2", temp_payload[i])
-        else :
-          flag = RestCoAP.postPayloadToNode(nodeKey, resource, temp_payload[i])
-      if flag is True:
-        scheduleTable.pop(nodeKey)
+      AutoPost(nodeKey, payload_data, resource, endASN)
+      scheduleTable.pop(nodeKey)
       break
+
   return 0
 
 def cut_payload(payload, length):
