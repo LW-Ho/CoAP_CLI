@@ -9,6 +9,7 @@ port = 5683
 
 def postPayloadToNode(node, resource, payload_data):
   resource = "res/"+resource
+  print resource
   try:
     coap_client = HelperClient(server=(node, port))
     start = time.time()
