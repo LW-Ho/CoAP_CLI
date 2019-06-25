@@ -67,7 +67,7 @@ class AutoOb(threading.Thread):
       for node in self.mote_observe_lists:
         # print str(node.getName())+" -> Counter Ob : "+str(node.getCountOb())+", Counter Ck : "+str(node.getCountCk())
         print "%s  -> Counter Ob : %s , Counter Ck : %s " % (node.getName(), node.getCountOb(), node.getCountCk())
-        if (node.getCountOb() - node.getCountCk()) > 1: # threshold number.
+        if (node.getCountOb() - node.getCountCk()) > 2: # threshold number.
           node.saveCountCk(node.getCountOb()) # record fresh count number.
         else:
           node.stop()

@@ -1,5 +1,6 @@
 import threading
 import sys
+import time
 from coapthon.client.helperclient import HelperClient
 
 from MoteData import MoteData
@@ -68,6 +69,7 @@ class CoAPObserve(threading.Thread):
     log.info("CoAP Observe \"{0}\" started.".format(self.name))
     print("")
     self.coap_client = HelperClient(server=(self.node, self.port))
+    time.sleep(10)
     self.coap_client.observe(path=self.resource, callback=self.message_callback)
     return
 
@@ -80,7 +82,7 @@ class CoAPObserve(threading.Thread):
         self.coap_client.close()
       except:
         print("Cannot join thread before it is started...")
-      return
+    return
 
   def printName(self):
     log.info("Node Name : {0}".format(self.node))

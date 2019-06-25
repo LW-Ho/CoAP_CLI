@@ -214,9 +214,4 @@ def startPostScheduling():
       scheduleTable.pop(nodeKey)
       break
 
-  return 0
-
-def cut_payload(payload, length):
-    payloadArr = re.findall('.{'+str(length)+'}', payload)
-    payloadArr.append(payload[(len(payloadArr)*length):])
-    return payloadArr
+  return 1
