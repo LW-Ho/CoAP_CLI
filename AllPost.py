@@ -1,9 +1,10 @@
 import threading
 import RestCoAP
 import re
+import time
 
 import logging
-log = logging.getLogger("CoAP Post")
+log = logging.getLogger("AllPost")
 
 class AutoPost(threading.Thread):
   def __init__(self, nodeKey, payload_data, resource, endASN, node=None, group=None, target=None, verbose=None):
@@ -16,7 +17,7 @@ class AutoPost(threading.Thread):
     return
 
   def run(self):
-    log.info("Starting Post to %s with Payload Data %s .", self.nodeKey, self.payload_data)
+    log.info("Starting Post to {0} with Payload Data {1} .".format(self.nodeKey, self.payload_data))
     while self.signal is False:
       temp_payload = self.cut_payload(self.payload_data, 48)
       for i in range(len(temp_payload)):
@@ -31,9 +32,7 @@ class AutoPost(threading.Thread):
       self.stop()
       
   def stop(self):
-    log.info("Stoping Post Payload to %s .", self.nodeKey)
-    if self.isAlive():
-      self.join()
+    log.info("Stoping Post Payload to {0} .".format(self.nodeKey))
 
   def cut_payload(self, payload, length):
     payloadArr = re.findall('.{'+str(length)+'}', payload)

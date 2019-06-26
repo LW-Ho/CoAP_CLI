@@ -210,7 +210,7 @@ def startPostScheduling():
   while (len(scheduleTable) > 0):
     for nodeKey in scheduleTable:
       payload_data = scheduleTable[nodeKey]
-      AutoPost(nodeKey, payload_data, resource, endASN)
+      AutoPost(nodeKey, payload_data, resource, endASN).start()
       scheduleTable.pop(nodeKey)
       break
 

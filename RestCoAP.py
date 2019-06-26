@@ -9,18 +9,18 @@ port = 5683
 
 def postPayloadToNode(node, resource, payload_data):
   resource = "res/"+resource
-  print resource
+  log.info("{0} : {1}, payload -> {2}".format(node, resource, payload_data))
   try:
     coap_client = HelperClient(server=(node, port))
     start = time.time()
     coap_client.post(path=resource, payload=payload_data ,timeout=30)
     coap_client.close()
     elapsed = time.time() - start
-    print "%s  successful delivery, %.2f seconds." %(node, elapsed-1)
+    log.info("{} successful delivery, {:.2f} seconds. ".format(node, elapsed-1))
     return True
   except:
     coap_client.close()
-    print node+" did not successfully send out, retry again."
+    log.info("{0} did not successfully send out, retry again.".format(node))
     return False
 
 def postQueryToNode(node,resource,query):
@@ -32,10 +32,10 @@ def postQueryToNode(node,resource,query):
     coap_client.post(path=resource, payload='' ,timeout=30)
     coap_client.close()
     elapsed = time.time() - start
-    print "%s  successful delivery, %.2f seconds." %(node, elapsed-1)
+    log.info("{} successful delivery, {0:.2f} seconds. ".format(node, elapsed-1))
   except:
     coap_client.close()
-    print node+" did not successfully send out."
+    log.info("{0} did not successfully send out, retry again.".format(node))
 
 def postToAllNode(List,resource,query):
   query = "?"+query
@@ -48,11 +48,11 @@ def postToAllNode(List,resource,query):
       coap_client.post(path=resource, payload='' ,timeout=30)
       coap_client.close()
       elapsed = time.time() - start
-      print "%s  successful delivery, %.2f seconds." %(node, elapsed-1)
+      log.info("{} successful delivery, {0:.2f} seconds. ".format(node, elapsed-1))
 
     except:
       coap_client.close()
-      print node+" did not successfully send out."
+      log.info("{0} did not successfully send out, retry again.".format(node))
       pass
 
   return

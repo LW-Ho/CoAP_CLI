@@ -5,7 +5,7 @@ from CoAPObserve import CoAPObserve
 from GetMotes import getAllMotes
 
 import logging
-log = logging.getLogger("CoAPObserve")
+log = logging.getLogger("AutoObserve")
 
 class AutoOb(threading.Thread):
   def __init__(self, mote_lists, mote_observe_lists, countDown=None, node=None, group=None, target=None, verbose=None, autoOb_callback=None, object_callback=None):
