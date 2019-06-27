@@ -32,7 +32,7 @@ def postQueryToNode(node,resource,query):
     coap_client.post(path=resource, payload='' ,timeout=30)
     coap_client.close()
     elapsed = time.time() - start
-    log.info("{} successful delivery, {0:.2f} seconds. ".format(node, elapsed-1))
+    log.info("{} successful delivery, {:.2f} seconds. ".format(node, elapsed-1))
   except:
     coap_client.close()
     log.info("{0} did not successfully send out, retry again.".format(node))
@@ -48,7 +48,7 @@ def postToAllNode(List,resource,query):
       coap_client.post(path=resource, payload='' ,timeout=30)
       coap_client.close()
       elapsed = time.time() - start
-      log.info("{} successful delivery, {0:.2f} seconds. ".format(node, elapsed-1))
+      log.info("{} successful delivery, {:.2f} seconds. ".format(node, elapsed-1))
 
     except:
       coap_client.close()
