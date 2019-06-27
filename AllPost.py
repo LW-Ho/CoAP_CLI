@@ -21,6 +21,7 @@ class AutoPost(threading.Thread):
     while self.signal is False:
       temp_payload = self.cut_payload(self.payload_data, 48)
       for i in range(len(temp_payload)):
+        time.sleep(0.1)
         if i == 0:
           if self.endASN is not 0:
             self.signal = RestCoAP.postPayloadToNode(self.nodeKey, self.resource+"&option=2", temp_payload[i])
