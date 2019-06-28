@@ -5,6 +5,7 @@ from NodeLocalQueue import getNodeLocalQueue
 import core.nodeinfo as NodeInfo
 import core.channelinfo as ChannelInfo
 import core.schedule as SchedulePost
+import time
 import operator
 import re
 
@@ -182,14 +183,14 @@ def slotPostControl(parentKey, childKey, send_count):
         #print "add channel and slot."
         slot_offset, channel_offset = ChannelInfo.set_channel_list(childKey, parentKey, 1)
         if childKey not in scheduleTable:
-          scheduleTable[childKey] = str(slot_offset)+":"+str(channel_offset)+":TX:"
+          scheduleTable[childKey] = str(slot_offset)+" "+str(channel_offset)+" TX"
         else :
-          scheduleTable[childKey] += str(slot_offset)+":"+str(channel_offset)+":TX:"
+          scheduleTable[childKey] += " "+str(slot_offset)+" "+str(channel_offset)+" TX"
 
         if parentKey not in scheduleTable:
-          scheduleTable[parentKey] = str(slot_offset)+":"+str(channel_offset)+":RX:"
+          scheduleTable[parentKey] = str(slot_offset)+" "+str(channel_offset)+" RX"
         else :
-          scheduleTable[parentKey] += str(slot_offset)+":"+str(channel_offset)+":RX:"
+          scheduleTable[parentKey] += " "+str(slot_offset)+" "+str(channel_offset)+" RX"
 
       else :
         # already setting, not chaned.
@@ -210,6 +211,7 @@ def startPostScheduling():
   while (len(scheduleTable) > 0):
     for nodeKey in scheduleTable:
       payload_data = scheduleTable[nodeKey]
+      time.sleep(0.5)
       AutoPost(nodeKey, payload_data, resource, endASN).start()
       scheduleTable.pop(nodeKey)
       break

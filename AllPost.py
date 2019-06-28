@@ -17,11 +17,12 @@ class AutoPost(threading.Thread):
     return
 
   def run(self):
-    log.info("Starting Post to {0} with Payload Data {1} .".format(self.nodeKey, self.payload_data))
+    #log.info("Starting Post to {0} with Payload Data {1} .".format(self.nodeKey, self.payload_data))
+    counter = 0
     while self.signal is False:
       temp_payload = self.cut_payload(self.payload_data, 48)
+      counter += 1
       for i in range(len(temp_payload)):
-        time.sleep(0.1)
         if i == 0:
           if self.endASN is not 0:
             self.signal = RestCoAP.postPayloadToNode(self.nodeKey, self.resource+"&option=2", temp_payload[i])
@@ -29,6 +30,8 @@ class AutoPost(threading.Thread):
             self.signal = RestCoAP.postPayloadToNode(self.nodeKey, self.resource+"?option=2", temp_payload[i])
         else :
           self.signal = RestCoAP.postPayloadToNode(self.nodeKey, self.resource, temp_payload[i])
+      if counter == 3:
+        self.signal = True
     if self.signal is True:
       self.stop()
       

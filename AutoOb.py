@@ -39,6 +39,7 @@ class AutoOb(threading.Thread):
       # try :
       for node in result:
         try:
+          time.sleep(1)
           coapObserve = CoAPObserve(node=node, resource="res/bcollect", object_callback=self.object_callback)
           coapObserve.printName()
           coapObserve.setDaemon(True)
