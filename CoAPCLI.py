@@ -90,7 +90,7 @@ class CoAPCLI(Cmd):
     #try:
     self.stdout.write("Current Motes List : \n")
     self.mote_lists = getAllMotes(self.border_router_Addr) # get motes from border router website.
-    self.stdout.write("====== End of List =======\n")
+    # self.stdout.write("====== End of List =======\n")
     # except:
     #   self.stdout.write("Error from getallmotes.\n")
 

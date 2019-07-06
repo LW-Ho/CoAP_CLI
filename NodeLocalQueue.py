@@ -21,7 +21,6 @@ def message_callback(response):
   if response is not None:
     print("")
     print("Got new message -> {0}".format(nodeName))
-    
     packet_content = ":".join("{:02x}".format(ord(c)) for c in response.payload)
     print(packet_content)
     print("Payload length: {0}".format(len(response.payload)))
@@ -31,6 +30,7 @@ def message_callback(response):
       local_queue_numbers = MoteData.make_from_bytes(response.source[0], response.payload, 1)
       
     except :
+      local_queue_numbers = 1
       print("Unexpected error: {0}".format(sys.exc_info()[0]))
       print("")
     return_flag = 0

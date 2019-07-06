@@ -61,7 +61,7 @@ def topology_print(dictTemp, host):
         # node_list.append(hostNode)
         #node_Name_list.append(hostNode.getName())
         ChannelInfo.initial_channel_list(True)
-
+      #NodeInfo.setNullNodeTable()
       NodeInfo.setMainKey(mainKey)
       #print node_Name_list
         
@@ -101,17 +101,23 @@ def topology_print(dictTemp, host):
           topology_list += ["--"+" 1 "+childKey]
 
   if operator.eq(temp_list, topology_list) : 
+    print ""
+    print '\n'.join(topology_list)
+    print ""
     pass
   else :
     temp_list = topology_list
+
+    print ""
+    print '\n'.join(topology_list)
+    print ""
+
     # init channel list
     ChannelInfo.initial_channel_list(True)
     # post scheduling to all nodes.
     SchedulePost.StartSchedule(NodeInfo.getNodeTable())
 
-  print ""
-  print '\n'.join(topology_list)
-  print ""
+
 
   return node_list
 
@@ -208,12 +214,38 @@ def startPostScheduling():
     # running 15 slotframe
     endASN += 2265
     resource = "slotframe?asn="+str(endASN)
+
+  # while (len(scheduleTable) > 0):
+  #   for nodeKey in scheduleTable:
+  #     payload_data = scheduleTable[nodeKey]
+  #     temp_payload = cut_payload(payload_data, 48)
+  #     signal = False
+  #     for i in range(len(temp_payload)):
+  #       if i == 0:
+  #         if endASN is not 0:
+  #           signal = RestCoAP.postPayloadToNode(nodeKey, resource+"&option=2", temp_payload[i])
+  #         else :
+  #           signal = RestCoAP.postPayloadToNode(nodeKey, resource+"?option=2", temp_payload[i])
+  #       else :
+  #         signal = RestCoAP.postPayloadToNode(nodeKey, resource, temp_payload[i])
+  #     if signal is True:
+  #       scheduleTable.pop(nodeKey)
+  #     break
+  count = 0
   while (len(scheduleTable) > 0):
     for nodeKey in scheduleTable:
+      if count is 2 :
+        time.sleep(2)
+        count = 0
+      count += 1
       payload_data = scheduleTable[nodeKey]
-      time.sleep(0.5)
+      #time.sleep(0.5)
       AutoPost(nodeKey, payload_data, resource, endASN).start()
       scheduleTable.pop(nodeKey)
       break
-
   return 1
+
+# def cut_payload(payload, length):
+#   payloadArr = re.findall('.{'+str(length)+'}', payload)
+#   payloadArr.append(payload[(len(payloadArr)*length):])
+#   return payloadArr

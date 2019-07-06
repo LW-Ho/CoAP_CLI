@@ -1,5 +1,6 @@
 
 node_dict = {}
+old_node_dict = {}
 mainKey = None
 endASN = 0
 def setMainKey(main_Key):
@@ -55,7 +56,16 @@ def getNodeQU(nodeKey):
     # need to get the global queue of numbers.
     return None
 
+def setTempNodeTable():
+  global old_node_dict, node_dict
+  if len(node_dict) != 0:
+    old_node_dict.copy
+
+
 def getNodeTable():
+  # global old_node_dict
+  # if len(old_node_dict) == 0 :
+  #   old_node_dict = node_dict.copy()
   return node_dict.copy()
 
 def updateASN(asn):

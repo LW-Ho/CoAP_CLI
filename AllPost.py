@@ -30,7 +30,7 @@ class AutoPost(threading.Thread):
             self.signal = RestCoAP.postPayloadToNode(self.nodeKey, self.resource+"?option=2", temp_payload[i])
         else :
           self.signal = RestCoAP.postPayloadToNode(self.nodeKey, self.resource, temp_payload[i])
-      if counter == 3:
+      if counter == 10:
         self.signal = True
     if self.signal is True:
       self.stop()

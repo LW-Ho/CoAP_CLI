@@ -161,12 +161,13 @@ def update_NodeInfo(NodeKey, operate_flag):
     scheDict[NodeKey] = [NodeKey_data[0], P_LQ, P_GQ, send_count]
   elif operate_flag is "-" :
     P_LQ -= 1
+    P_GQ -= 1
     send_count += 1
     scheDict[NodeKey] = [NodeKey_data[0], P_LQ, P_GQ, send_count]
 
     print NodeKey+" Post to "+str(NodeKey_data[0])
     
-    if P_LQ == 0 and send_count == P_GQ:
+    if P_LQ == 0 and P_GQ == 0:
       # pop the node.
       scheDict.pop(NodeKey)
 

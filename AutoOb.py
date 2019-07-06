@@ -28,6 +28,7 @@ class AutoOb(threading.Thread):
       self.countDown = 60
 
     while self.signal :
+      time.sleep(self.countDown/2)
       s1 = set(self.mote_lists)
       temp = []
 
@@ -39,7 +40,7 @@ class AutoOb(threading.Thread):
       # try :
       for node in result:
         try:
-          time.sleep(1)
+          #time.sleep(1)
           coapObserve = CoAPObserve(node=node, resource="res/bcollect", object_callback=self.object_callback)
           coapObserve.printName()
           coapObserve.setDaemon(True)
@@ -50,7 +51,7 @@ class AutoOb(threading.Thread):
           log.info("Error of observe, have more threading... ")
       # temp_time = 0
       try:
-        time.sleep(self.countDown)
+        time.sleep(self.countDown/2)
         # start = time.time()
         # while (temp_time < self.countDown):
         #   temp_time = time.time() - start
@@ -69,7 +70,7 @@ class AutoOb(threading.Thread):
       for node in self.mote_observe_lists:
         # print str(node.getName())+" -> Counter Ob : "+str(node.getCountOb())+", Counter Ck : "+str(node.getCountCk())
         print "%s  -> Counter Ob : %s , Counter Ck : %s " % (node.getName(), node.getCountOb(), node.getCountCk())
-        if (node.getCountOb() - node.getCountCk()) > 2: # threshold number.
+        if (node.getCountOb() - node.getCountCk()) > 0: # threshold number.
           node.saveCountCk(node.getCountOb()) # record fresh count number.
         else:
           node.stop()
