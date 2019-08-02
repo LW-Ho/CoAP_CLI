@@ -1,4 +1,5 @@
 node_channel_list = []
+start_Timeslots = 50
 
 def initial_channel_list(Flag):
   global node_channel_list
@@ -8,7 +9,7 @@ def initial_channel_list(Flag):
 def set_channel_list(childKey, parentKey, slot_numbers):
   global node_channel_list
   if slot_numbers > 0:
-    for j in range(10,151,2) :
+    for j in range(start_Timeslots,151,2) :
       for i in range(16) :
         # print node_channel_list[j][i]
         if node_channel_list[j][i] is not 0:
@@ -33,7 +34,7 @@ def set_channel_list(childKey, parentKey, slot_numbers):
 def get_channel_list(childKey, parentKey):
   global node_channel_list
   current_Str = childKey+","+parentKey
-  for j in range(10,151,2) :
+  for j in range(start_Timeslots,151,2) :
     for i in range(16) :
       if node_channel_list[j][i] is not 0:
         strTemp = node_channel_list[j][i]
@@ -49,7 +50,7 @@ def peek_get_channel_list(childKey, parentKey, globalQu):
   global node_channel_list
   temp_count = 1
   current_Str = childKey+","+parentKey
-  for j in range(10,151,2) :
+  for j in range(start_Timeslots,151,2) :
     for i in range(16) :
       if node_channel_list[j][i] is not 0:
         strTemp = node_channel_list[j][i]
@@ -96,7 +97,7 @@ def peek_next_parent_channel_list(old_parentKey, del_slot, del_channel):
 
 def check_parent_changed(childKey, parentKey):
   global node_channel_list
-  for j in range(10,151,2) :
+  for j in range(start_Timeslots,151,2) :
     for i in range(16) :
       # print node_channel_list[j][i]
       if node_channel_list[j][i] is not 0:

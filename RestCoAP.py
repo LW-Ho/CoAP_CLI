@@ -16,7 +16,7 @@ def postPayloadToNode(node, resource, payload_data):
     coap_client.post(path=resource, payload=payload_data ,timeout=30)
     coap_client.close()
     elapsed = time.time() - start
-    log.info("{} successful delivery, {:.2f} seconds. ".format(node, (elapsed-1)*2))
+    log.info("{} successful delivery, {:.2f} seconds. ".format(node, (elapsed-1)))
     return True
   except:
     coap_client.close()

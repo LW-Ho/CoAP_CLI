@@ -23,6 +23,7 @@ temp_list = []
 old_temp_list = []
 scheduleTable = {}
 old_scheuleTable = {}
+change_topology = -1
 
 
 def set_table(host, topology_List):
@@ -99,19 +100,25 @@ def topology_print(dictTemp, host):
           global_counter += temp_local_queue
 
           topology_list += ["--"+" 1 "+childKey]
-
+  global change_topology
   if operator.eq(temp_list, topology_list) : 
     print ""
     print '\n'.join(topology_list)
     print ""
+    print '\n'
+    print "change topology count : "+str(change_topology)
+    print '\n'
     pass
   else :
+    change_topology = change_topology + 1
     temp_list = topology_list
 
     print ""
     print '\n'.join(topology_list)
     print ""
-
+    print '\n'
+    print "change topology count : "+str(change_topology)
+    print '\n'
     # init channel list
     ChannelInfo.initial_channel_list(True)
     # post scheduling to all nodes.
@@ -213,6 +220,8 @@ def startPostScheduling():
   if endASN is not 0:
     # running 15 slotframe
     endASN += 2265
+    if endASN % 10 is 0:
+      endASN += 1  
     resource = "slotframe?asn="+str(endASN)
 
   # while (len(scheduleTable) > 0):
@@ -234,12 +243,12 @@ def startPostScheduling():
   count = 0
   while (len(scheduleTable) > 0):
     for nodeKey in scheduleTable:
-      if count is 2 :
-        time.sleep(2)
-        count = 0
-      count += 1
+      # if count is 2 :
+      #   time.sleep(2)
+      #   count = 0
+      # count += 1
       payload_data = scheduleTable[nodeKey]
-      #time.sleep(0.5)
+      time.sleep(0.2)
       AutoPost(nodeKey, payload_data, resource, endASN).start()
       scheduleTable.pop(nodeKey)
       break

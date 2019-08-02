@@ -21,6 +21,7 @@ class MoteData(Base):
     end_asn = Column(Integer)
     packet_tcflow = Column(Integer)
     local_queue = Column(Integer)
+    change_parent = Column(Integer)
     event_counter = Column(Integer)
     event_threshold = Column(Integer)
     event_threshold_last_change = Column(Integer)
@@ -37,6 +38,7 @@ class MoteData(Base):
         output += ['mote        : {0}'.format(self.mote)]
         output += ['priority    : {0}'.format(self.packet_tcflow)]
         output += ['local_queue : {0}'.format(self.local_queue)]
+        output += ['change      : {0}'.format(self.change_parent)]
         output += ['startAsn    : {0}'.format(self.start_asn)]
         output += ['endAsn      : {0}'.format(self.end_asn)]
         output += ['ec          : {0}'.format(self.event_counter)]
@@ -59,7 +61,8 @@ class MoteData(Base):
             "I",    # end_asn
             "I",    # event_counter
             "B",    # event_threshold
-            "xxx",  # alignment_padding[3]
+            "B",    # change_parent
+            "xx",  # alignment_padding[2]
             "I",    # event_threshold_last_change
             "I",    # packet_counter
             "cc",   # parent_address
@@ -75,16 +78,17 @@ class MoteData(Base):
             mote=mote,
             packet_tcflow=packet_item[0],
             local_queue=packet_item[1],
+            change_parent=packet_item[6],
             start_asn=packet_item[2],
             end_asn=packet_item[3],
             event_counter=packet_item[4],
             event_threshold=packet_item[5],
-            event_threshold_last_change=packet_item[6],
-            packet_counter=packet_item[7],
-            parent_address="".join("{:02x}".format(ord(c)) for c in packet_item[8:10]),
-            rank=packet_item[10],
-            parent_link_etx=packet_item[11],
-            parent_link_rssi=packet_item[12],
+            event_threshold_last_change=packet_item[7],
+            packet_counter=packet_item[8],
+            parent_address="".join("{:02x}".format(ord(c)) for c in packet_item[9:11]),
+            rank=packet_item[11],
+            parent_link_etx=packet_item[12],
+            parent_link_rssi=packet_item[13],
         )
         if flag :
           # print str(mote)+" moteData localqu : "+str(packet_item[1])+" End ASN : "+str(packet_item[3])
